@@ -20,10 +20,9 @@ class Scrollable
   protected:
     void notifyDirty(bool b);
     void scrollTop();
-    ScrollArea *m_area;
 
   private:
     Signal<void, bool> m_sigDirty;
-
+    ScrollArea *m_area;
 };
 

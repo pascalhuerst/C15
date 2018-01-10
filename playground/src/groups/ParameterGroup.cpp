@@ -131,9 +131,9 @@ ParameterGroup::tParameterPtr ParameterGroup::appendParameter (Parameter *p)
   return p;
 }
 
-sigc::connection ParameterGroup::onGroupChanged (slot<void> slot)
+void ParameterGroup::onGroupChanged (slot<void> slot)
 {
-  return m_signalGroupChanged.connectAndInit(slot);
+  m_signalGroupChanged.connect (slot);
 }
 
 ParameterGroup::tUpdateID ParameterGroup::onChange ()
@@ -185,12 +185,7 @@ void ParameterGroup::writeDocument (Writer &writer, tUpdateID knownRevision) con
 void ParameterGroup::undoableClear (UNDO::Scope::tTransactionPtr transaction)
 {
   for (auto p : getParameters ())
-  {
-    if(!p->isLocked())
-    {
-      p->loadDefault (transaction);
-    }
-  }
+    p->loadDefault (transaction);
 }
 
 void ParameterGroup::undoableReset (UNDO::Scope::tTransactionPtr transaction, Initiator initiator)
@@ -202,12 +197,7 @@ void ParameterGroup::undoableReset (UNDO::Scope::tTransactionPtr transaction, In
 void ParameterGroup::undoableRandomize (UNDO::Scope::tTransactionPtr transaction, Initiator initiator, double amount)
 {
   for (auto p : getParameters ())
-  {
-    if(!p->isLocked())
-    {
-      p->undoableRandomize (transaction, initiator, amount);
-    }
-  }
+    p->undoableRandomize (transaction, initiator, amount);
 }
 
 void ParameterGroup::undoableSetType (UNDO::Scope::tTransactionPtr transaction, PresetType oldType, PresetType desiredType)
@@ -223,34 +213,5 @@ void ParameterGroup::check ()
     p->check ();
     getUndoScope ().reset ();
   }
-}
-
-void ParameterGroup::undoableLock(UNDO::Scope::tTransactionPtr transaction)
-{
-  for(auto p : getParameters())
-    p->undoableLock(transaction);
-}
-
-void ParameterGroup::undoableUnlock(UNDO::Scope::tTransactionPtr transaction)
-{
-  for(auto p : getParameters())
-    p->undoableUnlock(transaction);
-}
-
-void ParameterGroup::undoableToggleLock(UNDO::Scope::tTransactionPtr transaction)
-{
-  if(areAllParametersLocked())
-    undoableUnlock(transaction);
-  else
-    undoableLock(transaction);
-}
-
-bool ParameterGroup::areAllParametersLocked() const
-{
-  for(auto p : getParameters())
-    if(!p->isLocked())
-      return false;
-
-  return true;
 }
 

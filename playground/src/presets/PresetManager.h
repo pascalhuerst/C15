@@ -98,8 +98,6 @@ class PresetManager : public ContentSection
 
     void sanitizeBankClusterRelations(UNDO::Scope::tTransactionPtr transaction);
 
-    Glib::ustring getDiffString(tPresetPtr preset1, tPresetPtr preset2);
-
   protected:
     void onTransactionAdded ();
     virtual tUpdateID onChange () override;

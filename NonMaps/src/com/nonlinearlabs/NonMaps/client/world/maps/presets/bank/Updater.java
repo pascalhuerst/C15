@@ -45,9 +45,7 @@ public class Updater {
 
 	private void updateDateOfLastChange(Node bank) {
 		String d = ServerProxy.getChildText(bank, "date-of-last-change");
-		String state = ServerProxy.getChildText(bank, "state");
 		this.bank.setDateOfLastChange(d);
-		this.bank.setImportExportState(state);
 	}
 
 	private void handleEmptyBank() {

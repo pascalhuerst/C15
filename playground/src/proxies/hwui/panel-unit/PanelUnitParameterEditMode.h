@@ -41,12 +41,12 @@ class PanelUnitParameterEditMode: public UsageMode, public sigc::trackable
 
     void onParamSelectionChanged (Parameter * oldParam, Parameter * newParam);
 
-    bool tryParameterToggleOnMacroControl(vector<gint32> ids, Parameter * selParam);
+    bool tryParameterToggleOnMacroControl (list<gint32> ids, Parameter * selParam);
 
-    tAction createParameterSelectAction(vector<gint32> toggleAudioIDs);
+    tAction createParameterSelectAction (list<gint32> toggleAudioIDs);
     tAction createParameterSelectAction (gint32 audioID);
 
-    bool toggleParameterSelection(vector<gint32> ids, bool state);
+    bool toggleParameterSelection (list<gint32> ids, bool state);
     bool setParameterSelection (gint32 audioID, bool state);
 
     bool isShowingParameterScreen () const;

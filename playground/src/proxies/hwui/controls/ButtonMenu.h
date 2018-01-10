@@ -20,13 +20,11 @@ class ButtonMenu : public ControlWithChildren
     size_t getSelectedButton () const;
     void setHighlight(bool isHighlight) override;
     void toggle ();
-    void antiToggle();
 
     void doAction();
 
   protected:
     void clearActions();
-    void setItemTitle(size_t i, const Glib::ustring &caption);
 
   private:
     void bruteForce ();

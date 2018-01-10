@@ -19,7 +19,6 @@ class ModulateableParameterSelectLayout2 : public ParameterSelectLayout2, public
     ModulateableParameterSelectLayout2 ();
 
     virtual void copyFrom (Layout *other) override;
-    void installMcAmountScreen();
 
   protected:
     virtual void init () override;
@@ -41,21 +40,10 @@ class ModulateableParameterSelectLayout2 : public ParameterSelectLayout2, public
       CarouselLowerBound
     };
 
-    void setMode(Mode desiredMode);
     void toggleMode (Mode desiredMode);
+    void setMode (Mode desiredMode);
     bool hasModulationSource () const;
 
     Mode m_mode = Mode::ParameterValue;
     Overlay *m_modeOverlay = nullptr;
-};
-
-
-class ModulateableParameterEditLayout2 : public ParameterEditLayout2, public ModulateableParameterLayout2
-{
-  public:
-    typedef ParameterEditLayout2 super1;
-    typedef ModulateableParameterLayout2 super2;
-
-    ModulateableParameterEditLayout2 ();
-    virtual ButtonMenu *createMenu (const Rect &rect) override;
 };

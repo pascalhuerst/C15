@@ -54,15 +54,9 @@ void PresetManagerLayout::setup()
 
   clear();
 
-  if (Application::get().getPresetManager()->getEditBuffer()->hasLocks())
-  {
-    m_groupLocking = addControl(new InvertedLabel("L", Rect(8, 26, 48, 12)));
-    m_groupLocking->setHighlight(true);
-  }
-
   if(m_focusAndMode.focus == UIFocus::Banks)
   {
-      setupBankFocus();
+    setupBankFocus();
   }
   else
   {
@@ -92,8 +86,6 @@ void PresetManagerLayout::setupBankFocus()
 
 void PresetManagerLayout::setupBankEdit()
 {
-  remove(m_groupLocking);
-  m_groupLocking = nullptr;
   addControl(new BankAndPresetNumberLabel(Rect(0, 1, 64, 14)));
   addControl(new InvertedLabel("Edit", Rect(8, 26, 48, 12)))->setHighlight(true);
   m_menu = addControl(new BankEditButtonMenu(Rect(195, 1, 58, 62)));
@@ -114,8 +106,6 @@ void PresetManagerLayout::setupBankSelect()
 
 void PresetManagerLayout::setupBankStore()
 {
-  remove(m_groupLocking);
-  m_groupLocking = nullptr;
   addControl(new BankAndPresetNumberLabel(Rect(0, 1, 64, 14)));
   addControl(new InvertedLabel("Store", Rect(8, 26, 48, 12)))->setHighlight(true);
   m_menu = addControl(new AppendOverwriteInsertButtonMenu(*this, Rect(195, 1, 58, 62)));
@@ -202,16 +192,7 @@ bool PresetManagerLayout::onButton(int i, bool down, ButtonModifiers modifiers)
 
       case BUTTON_D:
         if(m_menu)
-        {
-        if (modifiers[SHIFT] == 1)
-        {
-          m_menu->antiToggle();
-        }
-        else
-        {
           m_menu->toggle();
-        }
-        }
         else if(m_autoLoad)
           Application::get().getSettings()->getSetting<AutoLoadSelectedPreset>()->toggle();
 

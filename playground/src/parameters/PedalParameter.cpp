@@ -20,22 +20,23 @@
 #include <proxies/lpc/LPCProxy.h>
 #include <xml/Writer.h>
 
-void PedalParameter::writeDocProperties(Writer &writer, UpdateDocumentContributor::tUpdateID knownRevision) const
+
+void PedalParameter::writeDocProperties (Writer &writer, UpdateDocumentContributor::tUpdateID knownRevision) const
 {
-  Parameter::writeDocProperties(writer, knownRevision);
-  writer.writeTextElement("pedal-mode", to_string(m_mode));
+  Parameter::writeDocProperties (writer, knownRevision);
+  writer.writeTextElement ("pedal-mode", to_string (m_mode));
 }
 
-void PedalParameter::undoableSetPedalMode(UNDO::Scope::tTransactionPtr transaction, PedalModes mode)
+void PedalParameter::undoableSetPedalMode (UNDO::Scope::tTransactionPtr transaction, PedalModes mode)
 {
   if(mode != STAY && mode != RETURN_TO_ZERO && mode != RETURN_TO_CENTER)
     mode = STAY;
 
-  if(m_mode != mode)
+  if (m_mode != mode)
   {
-    auto swapData = UNDO::createSwapData(mode);
+    auto swapData = UNDO::createSwapData (mode);
 
-    transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
+    transaction->addSimpleCommand ([ = ] (UNDO::Command::State) mutable
     {
       swapData->swapWith (m_mode);
       getValue().setScaleConverter (createScaleConverter ());
@@ -57,20 +58,20 @@ void PedalParameter::undoableSetPedalMode(UNDO::Scope::tTransactionPtr transacti
   }
 }
 
-void PedalParameter::setRoutersModeAccordingToReturnMode()
+void PedalParameter::setRoutersModeAccordingToReturnMode ()
 {
-  bool routersAreBoolean = getReturnMode() == ReturnMode::None;
-  ParameterGroupSet* groups = dynamic_cast<ParameterGroupSet*>(getParentGroup()->getParent());
-  auto mappings = dynamic_cast<MacroControlMappingGroup*>(groups->getParameterGroupByID("MCM"));
-  for(auto router : mappings->getModulationRoutingParametersFor(this))
+  bool routersAreBoolean = getReturnMode () == ReturnMode::None;
+  ParameterGroupSet* groups = dynamic_cast<ParameterGroupSet*> (getParentGroup ()->getParent ());
+  auto mappings = dynamic_cast<MacroControlMappingGroup*> (groups->getParameterGroupByID ("MCM"));
+  for (auto router : mappings->getModulationRoutingParametersFor (this))
   {
-    router->getValue().setIsBoolean(routersAreBoolean);
+    router->getValue ().setIsBoolean (routersAreBoolean);
   }
 }
 
-tControlPositionValue PedalParameter::getDefValueAccordingToMode() const
+tControlPositionValue PedalParameter::getDefValueAccordingToMode () const
 {
-  switch(getReturnMode())
+  switch (getReturnMode ())
   {
     case ReturnMode::None:
       return 0.5;
@@ -83,79 +84,79 @@ tControlPositionValue PedalParameter::getDefValueAccordingToMode() const
   return 0.0;
 }
 
-bool PedalParameter::shouldWriteDocProperties(UpdateDocumentContributor::tUpdateID knownRevision) const
+bool PedalParameter::shouldWriteDocProperties (UpdateDocumentContributor::tUpdateID knownRevision) const
 {
-  return Parameter::shouldWriteDocProperties(knownRevision) || knownRevision <= m_updateIdWhenModeChanged;
+  return Parameter::shouldWriteDocProperties (knownRevision) || knownRevision <= m_updateIdWhenModeChanged;
 }
 
-const ScaleConverter *PedalParameter::createScaleConverter() const
+const ScaleConverter *PedalParameter::createScaleConverter () const
 {
-  if(m_mode == RETURN_TO_CENTER)
-    return ScaleConverter::get<LinearBipolar100PercentScaleConverter>();
+  if (m_mode == RETURN_TO_CENTER)
+    return ScaleConverter::get<LinearBipolar100PercentScaleConverter> ();
 
-  return ScaleConverter::get<Linear100PercentScaleConverter>();
+  return ScaleConverter::get<Linear100PercentScaleConverter> ();
 }
 
-void PedalParameter::undoableSetPedalMode(UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &mode)
+void PedalParameter::undoableSetPedalMode (UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &mode)
 {
-  if(mode == "stay")
-    undoableSetPedalMode(transaction, PedalParameter::STAY);
-  else if(mode == "return-to-zero")
-    undoableSetPedalMode(transaction, PedalParameter::RETURN_TO_ZERO);
-  else if(mode == "return-to-center")
-    undoableSetPedalMode(transaction, PedalParameter::RETURN_TO_CENTER);
+  if (mode == "stay")
+    undoableSetPedalMode (transaction, PedalParameter::STAY);
+  else if (mode == "return-to-zero")
+    undoableSetPedalMode (transaction, PedalParameter::RETURN_TO_ZERO);
+  else if (mode == "return-to-center")
+    undoableSetPedalMode (transaction, PedalParameter::RETURN_TO_CENTER);
 }
 
-void PedalParameter::undoableIncPedalMode(UNDO::Scope::tTransactionPtr transaction)
+void PedalParameter::undoableIncPedalMode (UNDO::Scope::tTransactionPtr transaction)
 {
   int e = (int) m_mode;
   e++;
 
-  if(e >= NUM_PEDAL_MODES)
+  if (e >= NUM_PEDAL_MODES)
     e = 0;
 
-  undoableSetPedalMode(transaction, (PedalParameter::PedalModes) e);
+  undoableSetPedalMode (transaction, (PedalParameter::PedalModes) e);
 }
 
-void PedalParameter::onPresetSentToLpc() const
+void PedalParameter::onPresetSentToLpc () const
 {
-  Parameter::onPresetSentToLpc();
-  sendModeToLpc();
+  Parameter::onPresetSentToLpc ();
+  sendModeToLpc ();
 }
 
-void PedalParameter::sendModeToLpc() const
+void PedalParameter::sendModeToLpc () const
 {
-  if(dynamic_cast<const EditBuffer *>(getParentGroup()->getParent()))
+  if (dynamic_cast<const EditBuffer *> (getParentGroup ()->getParent ()))
   {
-    uint16_t id = mapParameterIdToLPCSetting();
+    uint16_t id = mapParameterIdToLPCSetting ();
     uint16_t v = (uint16_t) m_mode;
-    Application::get().getLPCProxy()->sendSetting(id, v);
+    Application::get ().getLPCProxy ()->sendSetting (id, v);
   }
 }
 
-uint16_t PedalParameter::mapParameterIdToLPCSetting() const
+uint16_t PedalParameter::mapParameterIdToLPCSetting () const
 {
-  switch(getID())
+  switch (getID ())
   {
-    case HardwareSourcesGroup::getPedal1ParameterID():
+    case HardwareSourcesGroup::getPedal1ParameterID ():
       return LPCSettingIDs::PEDAL_1_MODE;
 
-    case HardwareSourcesGroup::getPedal2ParameterID():
+    case HardwareSourcesGroup::getPedal2ParameterID ():
       return LPCSettingIDs::PEDAL_2_MODE;
 
-    case HardwareSourcesGroup::getPedal3ParameterID():
+    case HardwareSourcesGroup::getPedal3ParameterID ():
       return LPCSettingIDs::PEDAL_3_MODE;
 
-    case HardwareSourcesGroup::getPedal4ParameterID():
+    case HardwareSourcesGroup::getPedal4ParameterID ():
       return LPCSettingIDs::PEDAL_4_MODE;
   }
 
-  throw exception();
+  throw exception ();
 }
 
-PhysicalControlParameter::ReturnMode PedalParameter::getReturnMode() const
+PhysicalControlParameter::ReturnMode PedalParameter::getReturnMode () const
 {
-  switch(m_mode)
+  switch (m_mode)
   {
     case STAY:
       return ReturnMode::None;
@@ -171,32 +172,29 @@ PhysicalControlParameter::ReturnMode PedalParameter::getReturnMode() const
   return ReturnMode::None;
 }
 
-PedalParameter::PedalModes PedalParameter::getPedalMode() const
+PedalParameter::PedalModes PedalParameter::getPedalMode () const
 {
   return m_mode;
 }
 
-void PedalParameter::copyFrom(UNDO::Scope::tTransactionPtr transaction, Parameter * other)
+void PedalParameter::copyFrom (UNDO::Scope::tTransactionPtr transaction, Parameter * other)
 {
-  if(!isLocked())
-  {
-    super::copyFrom(transaction, other);
+  super::copyFrom (transaction, other);
 
-    if(auto pedal = dynamic_cast<PedalParameter*>(other))
-    {
-      undoableSetPedalMode(transaction, pedal->getPedalMode());
-    }
+  if (auto pedal = dynamic_cast<PedalParameter*> (other))
+  {
+    undoableSetPedalMode (transaction, pedal->getPedalMode ());
   }
 }
 
-bool PedalParameter::hasBehavior() const
+bool PedalParameter::hasBehavior () const
 {
   return true;
 }
 
-Glib::ustring PedalParameter::getCurrentBehavior() const
+Glib::ustring PedalParameter::getCurrentBehavior () const
 {
-  switch(m_mode)
+  switch (m_mode)
   {
     case STAY:
       return "Non-Return";
@@ -209,56 +207,56 @@ Glib::ustring PedalParameter::getCurrentBehavior() const
 
   }
 
-  return PhysicalControlParameter::getCurrentBehavior();
+  return PhysicalControlParameter::getCurrentBehavior ();
 }
 
-void PedalParameter::undoableStepBehavior(UNDO::Scope::tTransactionPtr transaction, int direction)
+void PedalParameter::undoableStepBehavior (UNDO::Scope::tTransactionPtr transaction, int direction)
 {
   int e = (int) m_mode;
   e += direction;
 
-  if(e >= NUM_PEDAL_MODES)
+  if (e >= NUM_PEDAL_MODES)
     e = 0;
-  else if(e < 0)
+  else if (e < 0)
     e = RETURN_TO_CENTER;
 
-  undoableSetPedalMode(transaction, (PedalParameter::PedalModes) e);
+  undoableSetPedalMode (transaction, (PedalParameter::PedalModes) e);
 }
 
-DFBLayout *PedalParameter::createLayout(FocusAndMode focusAndMode) const
+DFBLayout *PedalParameter::createLayout (FocusAndMode focusAndMode) const
 {
-  switch(focusAndMode.mode)
+  switch (focusAndMode.mode)
   {
     case UIMode::Info:
-      return new ParameterInfoLayout();
+      return new ParameterInfoLayout ();
 
     case UIMode::Edit:
-      return new PedalParameterEditLayout2();
+      return new PedalParameterEditLayout2 ();
 
     case UIMode::Select:
     default:
-      return new PedalParameterSelectLayout2();
+      return new PedalParameterSelectLayout2 ();
   }
 
-  return super::createLayout(focusAndMode);
+  return super::createLayout (focusAndMode);
 }
 
-shared_ptr<PedalType> PedalParameter::getAssociatedPedalTypeSetting() const
+shared_ptr<PedalType> PedalParameter::getAssociatedPedalTypeSetting () const
 {
   int key = 1;
 
-  if(getID() == HardwareSourcesGroup::getPedal2ParameterID())
+  if (getID () == HardwareSourcesGroup::getPedal2ParameterID ())
     key = 2;
-  else if(getID() == HardwareSourcesGroup::getPedal3ParameterID())
+  else if (getID () == HardwareSourcesGroup::getPedal3ParameterID ())
     key = 3;
-  else if(getID() == HardwareSourcesGroup::getPedal4ParameterID())
+  else if (getID () == HardwareSourcesGroup::getPedal4ParameterID ())
     key = 4;
 
-  auto str = ustring::format("Pedal", key, "Type");
-  return dynamic_pointer_cast<PedalType>(Application::get().getSettings()->getSetting(str));
+  auto str = ustring::format ("Pedal", key, "Type");
+  return dynamic_pointer_cast<PedalType> (Application::get ().getSettings ()->getSetting (str));
 }
 
-void PedalParameter::loadDefault(UNDO::Scope::tTransactionPtr transaction)
+void PedalParameter::loadDefault (UNDO::Scope::tTransactionPtr transaction)
 {
   super::loadDefault(transaction);
   undoableSetPedalMode(transaction, PedalModes::STAY);

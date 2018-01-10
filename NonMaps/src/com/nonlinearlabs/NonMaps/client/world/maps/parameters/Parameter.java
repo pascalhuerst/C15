@@ -57,7 +57,6 @@ public abstract class Parameter extends LayoutResizingVertical {
 	private QuantizedClippedValue value;
 	private JavaScriptObject stringizer;
 	private Name name;
-	private boolean isLocked = false;
 	protected QuantizedClippedValue.IncrementalChanger currentParameterChanger = null;
 
 	public Parameter(MapsLayout parent) {
@@ -208,8 +207,8 @@ public abstract class Parameter extends LayoutResizingVertical {
 	@Override
 	public Control mouseDrag(Position oldPoint, Position newPoint, boolean fine) {
 		EditParameterSetting s = getWorld().getViewport().getOverlay().getSetup().getEditParameterDragSetting();
-		boolean noDrag = s.getSettingsControl().getChoiceString().equals("Never") || getWorld().isSpaceDown();
-		
+		boolean noDrag = s.getSettingsControl().getChoiceString().equals("Never");
+
 		if (isSelected() && !noDrag) {
 
 			double xPix = newPoint.getX() - oldPoint.getX();
@@ -223,9 +222,6 @@ public abstract class Parameter extends LayoutResizingVertical {
 				currentParameterChanger.changeBy(fine, pix);
 
 			return this;
-		}
-		else if(noDrag) {
-			return getWorld().mouseDrag(oldPoint, newPoint, fine);
 		}
 
 		return null;
@@ -302,13 +298,6 @@ public abstract class Parameter extends LayoutResizingVertical {
 
 	void update(Node n) {
 		NodeList paramChildren = n.getChildNodes();
-		String locked = n.getAttributes().getNamedItem("locked").getNodeValue();
-		boolean isLocked = locked.equals("1");
-
-		if (isLocked != this.isLocked) {
-			this.isLocked = isLocked;
-			invalidate(INVALIDATION_FLAG_UI_CHANGED);
-		}
 
 		for (int j = 0; j < paramChildren.getLength(); j++) {
 			Node child = paramChildren.item(j);
@@ -435,10 +424,6 @@ public abstract class Parameter extends LayoutResizingVertical {
 	public String getGroupName() {
 		ParameterGroupIface group = (ParameterGroupIface) getParameterGroup();
 		return group.getName().getLongName();
-	}
-
-	public boolean isLocked() {
-		return isLocked;
 	}
 
 }

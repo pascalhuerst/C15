@@ -15,7 +15,6 @@ import com.nonlinearlabs.NonMaps.client.world.overlay.Overlay;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayControl;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayLayout;
 import com.nonlinearlabs.NonMaps.client.world.overlay.belt.EditBufferDraggingButton;
-import com.nonlinearlabs.NonMaps.client.world.overlay.Label;
 
 public class BeltPreset extends OverlayLayout implements IPreset {
 
@@ -34,8 +33,6 @@ public class BeltPreset extends OverlayLayout implements IPreset {
 
 		number = addChild(new PresetNumber(this));
 		name = addChild(new PresetName(this));
-		((Label)name).setFontHeightInMM(4);
-		((Label)number).setFontHeightInMM(4);
 	}
 
 	@Override

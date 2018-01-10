@@ -87,8 +87,3 @@ void Control::drawBackground (FrameBuffer &fb)
   setBackgroundColor (fb);
   fb.fillRect (getPosition());
 }
-
-int Control::getHeight() const
-{
-  return m_rect.getHeight();
-}

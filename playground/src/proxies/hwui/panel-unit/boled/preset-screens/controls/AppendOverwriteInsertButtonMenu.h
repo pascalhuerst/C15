@@ -27,9 +27,9 @@ class AppendOverwriteInsertButtonMenu : public ButtonMenu
 
     shared_ptr<Preset> overwritePreset (shared_ptr<Preset> preset);
     shared_ptr<Preset> overwritePreset (tTransactionPtr scope, shared_ptr<Preset> preset);
-    void insertPreset (shared_ptr<PresetBank> bank, size_t pos, bool modified);
-    void appendPreset (shared_ptr<PresetBank> bank, bool modified);
-    void pushRenameScreen ();
+    tTransactionPtr insertPreset (shared_ptr<PresetBank> bank, size_t pos, bool modified);
+    tTransactionPtr appendPreset (shared_ptr<PresetBank> bank, bool modified);
+    void pushRenameScreen (tTransactionPtr scope);
     bool animate ();
 
     void append(shared_ptr<PresetBank> bank, bool modified);

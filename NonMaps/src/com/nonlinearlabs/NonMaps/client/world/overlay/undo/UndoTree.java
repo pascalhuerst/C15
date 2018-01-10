@@ -103,7 +103,7 @@ public class UndoTree extends OverlayLayout implements TransitionDamper.Client {
 	}
 
 	public double getScrollbarDimension() {
-		return Millimeter.toPixels(1);
+		return Millimeter.toPixels(2);
 	}
 
 	public void update(Node node) {
@@ -131,10 +131,10 @@ public class UndoTree extends OverlayLayout implements TransitionDamper.Client {
 			undo.setupCurrentRoute();
 		}
 
-		scrollToCurrentUndoStep(true);
+		scrollToCurrentUndoStep();
 	}
 
-	public void scrollToCurrentUndoStep(boolean animate) {
+	public void scrollToCurrentUndoStep() {
 		UndoTransaction undo = root.findTransaction(undoID);
 
 		if (undo == null)
@@ -156,44 +156,36 @@ public class UndoTree extends OverlayLayout implements TransitionDamper.Client {
 			else if (pixRect.getBottom() > getPixRect().getBottom())
 				targetY += getPixRect().getBottom() - pixRect.getBottom();
 
-			if (pixRect.getLeft() < getPixRect().getLeft() || pixRect.getRight() > getPixRect().getRight()) {
-				double undoTransactionsCenter = pixRect.getCenterPoint().getX();
-				double windowsCenter = getPixRect().getCenterPoint().getX();
-				double transactionDiffFromCenter = undoTransactionsCenter - windowsCenter;
-				targetX -= transactionDiffFromCenter;
-			}
+			if (pixRect.getLeft() < getPixRect().getLeft())
+				targetX += getPixRect().getLeft() - pixRect.getLeft();
+			else if (pixRect.getRight() > getPixRect().getRight())
+				targetX += getPixRect().getRight() - pixRect.getRight();
 
 			if (targetX != scrollOffset.getWidth() || targetY != scrollOffset.getHeight()) {
-				if (animate) {
-					scrollAnimation = new Animator(500);
-					final Animator thisAnimator = scrollAnimation;
+				scrollAnimation = new Animator(500);
+				final Animator thisAnimator = scrollAnimation;
 
-					scrollAnimation.addSubAnimation(scrollOffset.getHeight(), targetY, new Client() {
+				scrollAnimation.addSubAnimation(scrollOffset.getHeight(), targetY, new Client() {
 
-						@Override
-						public void animate(double v) {
-							if (thisAnimator == scrollAnimation) {
-								scrollOffset.setHeight(v);
-								invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
-							}
+					@Override
+					public void animate(double v) {
+						if (thisAnimator == scrollAnimation) {
+							scrollOffset.setHeight(v);
+							invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
 						}
-					});
+					}
+				});
 
-					scrollAnimation.addSubAnimation(scrollOffset.getWidth(), targetX, new Client() {
+				scrollAnimation.addSubAnimation(scrollOffset.getWidth(), targetX, new Client() {
 
-						@Override
-						public void animate(double v) {
-							if (thisAnimator == scrollAnimation) {
-								scrollOffset.setWidth(v);
-								invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
-							}
+					@Override
+					public void animate(double v) {
+						if (thisAnimator == scrollAnimation) {
+							scrollOffset.setWidth(v);
+							invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
 						}
-					});
-				} else {
-					scrollOffset.setHeight(targetY);
-					scrollOffset.setWidth(targetX);
-					invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
-				}
+					}
+				});
 			}
 		}
 	}
@@ -459,7 +451,7 @@ public class UndoTree extends OverlayLayout implements TransitionDamper.Client {
 		invalidate(INVALIDATION_FLAG_SCROLLED);
 		return this;
 	}
-
+	
 	@Override
 	public Control mouseUp(Position eventPoint) {
 		swishAnimation.run();

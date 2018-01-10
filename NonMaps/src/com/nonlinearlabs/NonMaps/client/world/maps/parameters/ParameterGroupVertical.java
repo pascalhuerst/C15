@@ -28,19 +28,6 @@ public abstract class ParameterGroupVertical extends LayoutResizingVertical impl
 	}
 
 	@Override
-	public boolean isLocked() {
-		Control c = recurseChildren(new ControlFinder() {
-			@Override
-			public boolean onWayDownFound(Control ctrl) {
-				return (ctrl instanceof Parameter);
-			}
-		});
-
-		Parameter p = (Parameter) c;
-		return p.isLocked();
-	}
-
-	@Override
 	public <T extends MapsControl> T addChild(T child) {
 		if (child instanceof ParameterGroupControls) {
 			super.addChild(new CachingMapsControl(this, child));

@@ -20,16 +20,35 @@ RenamePresetLayout::RenamePresetLayout (tCommitCB commitCB) :
   }
 }
 
+void RenamePresetLayout::setTransactionToCancel (shared_ptr<UNDO::Transaction> transactionToCancelIfCancelled)
+{
+  m_transactionToCancelIfCancelled = transactionToCancelIfCancelled;
+}
+
 void RenamePresetLayout::commit (const Glib::ustring &newName)
 {
   if (m_commitCB)
     m_commitCB (newName);
+
 }
 
 void RenamePresetLayout::cancel ()
 {
   RenameLayout::cancel ();
+
   m_commitCB = {};
+
+  auto scope = Application::get ().getUndoScope ();
+
+  while (m_transactionToCancelIfCancelled && scope->canUndo ())
+  {
+    auto tip = scope->getUndoTransaction ();
+    bool isResponsible = tip == m_transactionToCancelIfCancelled;
+    scope->undoAndHushUp ();
+
+    if (isResponsible)
+      break;
+  }
 }
 
 Glib::ustring RenamePresetLayout::getInitialText () const

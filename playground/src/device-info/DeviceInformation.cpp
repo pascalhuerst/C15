@@ -62,7 +62,7 @@ void DeviceInformation::writeDocument (Writer &writer, UpdateDocumentContributor
 {
   bool changed = knownRevision < getUpdateIDOfLastChange ();
 
-  writer.writeTag("device-information", Attribute("changed", changed), [&]()
+  writer.writeTag ("device-information", Attribute ("changed", changed), [&]()
   {
     if (changed)
     {

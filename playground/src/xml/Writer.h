@@ -51,7 +51,7 @@ class Writer
       implWriteTag (name, { }, w);
     }
 
-    void writeTag(const Glib::ustring &name, const Attribute &a, const tTagContentWriter &w)
+    void writeTag (const Glib::ustring &name, const Attribute &a, const tTagContentWriter &w)
     {
       implWriteTag (name, { a }, w);
     }

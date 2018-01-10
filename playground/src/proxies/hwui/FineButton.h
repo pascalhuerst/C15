@@ -25,8 +25,6 @@ public:
   bool getModifierState () const;
   bool setState (FineButtonStates s) override;
   bool onTimeout ();
-    bool onlyTemporary();
-    void setShiftedWhilePressDown(bool down);
 
 private:
   FineButton (const FineButton& other) = delete;
@@ -34,7 +32,6 @@ private:
 
   bool m_buttonState;
   bool m_modifierState;
-    bool m_shifted;
   sigc::connection m_timeout;
 };
 

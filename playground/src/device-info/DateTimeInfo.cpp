@@ -7,7 +7,6 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <tools/TimeTools.h>
 
 DateTimeInfo::DateTimeInfo (DeviceInformation *parent) :
     DeviceInformationItem (parent)
@@ -27,8 +26,10 @@ void DateTimeInfo::writeDocument (Writer &writer, UpdateDocumentContributor::tUp
   writer.writeTextElement ("date-time", get ());
 }
 
-Glib::ustring DateTimeInfo::formatTime(const std::string &format, int64_t diff)
+Glib::ustring DateTimeInfo::formatTime (const std::string &format) const
 {
+  auto diff = Application::get ().getSettings ()->getSetting<DateTimeAdjustment> ()->get ();
+
   std::stringstream ss;
   std::time_t t = std::time (nullptr) + diff;
   std::tm tm = *std::localtime (&t);
@@ -38,22 +39,12 @@ Glib::ustring DateTimeInfo::formatTime(const std::string &format, int64_t diff)
 
 Glib::ustring DateTimeInfo::get () const
 {
-  return formatTime("%FT%T%z", Application::get().getSettings()->getSetting<DateTimeAdjustment>()->get());
-}
-
-Glib::ustring DateTimeInfo::getIsoStringOfNow()
-{
-  return formatTime("%FT%T%z", 0);
-}
-
-Glib::ustring DateTimeInfo::getDisplayStringFromIso(const Glib::ustring & iso)
-{
-  return formatTime(iso, "%F %R");
+  return formatTime ("%FT%T%z");
 }
 
 Glib::ustring DateTimeInfo::getDisplayString () const
 {
-  return formatTime("%x %X", Application::get().getSettings()->getSetting<DateTimeAdjustment>()->get());
+  return formatTime ("%x %X");
 }
 
 Glib::ustring DateTimeInfo::formatTime (uint64_t secondsSinceUnixEpoch, const Glib::ustring &format)

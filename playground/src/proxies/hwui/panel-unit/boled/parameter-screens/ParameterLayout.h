@@ -50,7 +50,6 @@ class ParameterEditLayout2 : public virtual ParameterLayout2
   public:
     typedef ParameterLayout2 super;
     ParameterEditLayout2 ();
-    virtual ~ParameterEditLayout2 ();
 
   protected:
     virtual void init () override;

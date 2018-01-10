@@ -143,9 +143,4 @@ class BankHeader extends OverlayLayout {
 		}
 		return super.onContextMenu(pos);
 	}
-	
-	public void setFontHeightInMM(int mm)
-	{
-		((BankTitle)title).setFontHeightInMM(mm);
-	}
 }

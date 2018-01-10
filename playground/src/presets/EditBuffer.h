@@ -25,7 +25,6 @@ class EditBuffer : public Preset
     void undoableSelectParameter (const Glib::ustring &id);
     void undoableSelectParameter (uint16_t id);
     void undoableSelectParameter (Parameter *p);
-    void undoableSelectParameter(UNDO::Scope::tTransactionPtr transaction, Parameter *p);
     Parameter *getSelected () const;
 
     void undoableLoad (UNDO::Scope::tTransactionPtr transaction, shared_ptr<Preset> preset);
@@ -37,10 +36,6 @@ class EditBuffer : public Preset
     void undoableInitSound (UNDO::Scope::tTransactionPtr transaction);
     void undoableSetDefaultValues (UNDO::Scope::tTransactionPtr transaction, Preset *values);
 
-    void undoableLockAllGroups(UNDO::Scope::tTransactionPtr transaction);
-    void undoableUnlockAllGroups(UNDO::Scope::tTransactionPtr transaction);
-    void undoableToggleGroupLock(UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &groupId);
-
     void writeDocument (Writer &writer, tUpdateID knownRevision) const override;
     Glib::ustring getUUIDOfLastLoadedPreset () const;
     PresetManager *getParent ();
@@ -50,9 +45,6 @@ class EditBuffer : public Preset
     virtual void copyFrom (UNDO::Scope::tTransactionPtr transaction, Preset *other, bool ignoreUUIDs) override;
 
     virtual tUpdateID onChange () override;
-
-    bool hasLocks();
-
 
     // CALLBACKS
     sigc::connection onSelectionChanged (slot<void, Parameter *, Parameter *> s);
@@ -67,14 +59,13 @@ class EditBuffer : public Preset
     bool isSelectedPresetLoadedAndUnModified();
 
   private:
-    bool doesAnyParameterHaveALock();
     virtual UNDO::Scope &getUndoScope () override;
 
     void setParameter (size_t id, double cpValue);
 
     EditBuffer (UpdateDocumentContributor *parent);
 
-
+    void undoableSelectParameter (UNDO::Scope::tTransactionPtr transaction, Parameter *p);
     void undoableSelectParameter (UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &id);
 
     void setModulationSource (int src);

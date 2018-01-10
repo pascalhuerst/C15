@@ -69,6 +69,9 @@ class Up extends Gesture implements Gesture.NeedsFocus, Gesture.HasPosition {
 
 		boolean ret = !wasLongPressHandled && !moveHandled && sameReceiver && hit;
 
+		if (!ret)
+			Tracer.log("Up: was no click: " + wasLongPressHandled + moveHandled + sameReceiver + hit);
+
 		return ret;
 	}
 

@@ -28,7 +28,6 @@
 #include <device-settings/Setting.h>
 #include <proxies/hwui/TwoStateLED.h>
 #include <tools/StateMachine.h>
-#include <proxies/hwui/HWUIEnums.h>
 #include <algorithm>
 #include <functional>
 #include <iterator>
@@ -48,7 +47,6 @@ const constexpr auto SVFilterFMAB = 155;
 
 PanelUnitParameterEditMode::PanelUnitParameterEditMode()
 {
-
   Application::get().getSettings()->getSetting<SignalFlowIndicationSetting>()->onChange(
       sigc::hide(sigc::mem_fun(this, &PanelUnitParameterEditMode::bruteForceUpdateLeds)));
 }
@@ -106,11 +104,8 @@ void PanelUnitParameterEditMode::setup()
 {
   m_mappings.forEachButton([=](int buttonID, std::list<int> parameterIDs)
   {
-    std::vector<int> para
-    { parameterIDs.begin(), parameterIDs.end()};
-
     if(buttonID != 75 && buttonID != 79 && buttonID != 83 && buttonID != 87)
-    setupButtonConnection (buttonID, createParameterSelectAction (para));
+    setupButtonConnection (buttonID, createParameterSelectAction (parameterIDs));
   });
 
   setupButtonConnection(75, bind(&PanelUnitParameterEditMode::handleMacroControlButton, this, std::placeholders::_3, 243));
@@ -175,8 +170,7 @@ bool PanelUnitParameterEditMode::handleMacroControlButton(bool state, int mcPara
   auto &mcStateMachine = getMacroControlAssignmentStateMachine();
   mcStateMachine.setCurrentMCParameter(mcParamId);
 
-  bool isAlreadySelected = Application::get().getPresetManager()->getEditBuffer()->getSelected()->getID() == mcParamId &&
-					Application::get().getHWUI()->getFocusAndMode().focus == UIFocus::Parameters;
+  bool isAlreadySelected = Application::get().getPresetManager()->getEditBuffer()->getSelected()->getID() == mcParamId;
 
   if(state)
     if(mcStateMachine.traverse(isAlreadySelected ? MacroControlAssignmentEvents::MCPressedWhileSelected : MacroControlAssignmentEvents::MCPressedWhileUnselected))
@@ -222,7 +216,7 @@ std::list<int> PanelUnitParameterEditMode::getButtonAssignments(int button) cons
   return m_mappings.findParameters(button);
 }
 
-UsageMode::tAction PanelUnitParameterEditMode::createParameterSelectAction(vector<gint32> toggleAudioIDs)
+UsageMode::tAction PanelUnitParameterEditMode::createParameterSelectAction(list<gint32> toggleAudioIDs)
 {
 #if _TESTS
 
@@ -237,15 +231,18 @@ UsageMode::tAction PanelUnitParameterEditMode::createParameterSelectAction(vecto
 
 #endif
 
+  if(toggleAudioIDs.size() == 1)
+    return createParameterSelectAction(*toggleAudioIDs.begin());
+
   return bind(&PanelUnitParameterEditMode::toggleParameterSelection, this, toggleAudioIDs, std::placeholders::_3);
 }
 
 UsageMode::tAction PanelUnitParameterEditMode::createParameterSelectAction(gint32 audioID)
 {
-  return bind(&PanelUnitParameterEditMode::toggleParameterSelection, this, vector<gint32>(audioID), std::placeholders::_3);
+  return bind(&PanelUnitParameterEditMode::setParameterSelection, this, audioID, std::placeholders::_3);
 }
 
-bool PanelUnitParameterEditMode::toggleParameterSelection(vector<gint32> ids, bool state)
+bool PanelUnitParameterEditMode::toggleParameterSelection(list<gint32> ids, bool state)
 {
   shared_ptr<EditBuffer> editBuffer = Application::get().getPresetManager()->getEditBuffer();
   auto firstParameterInList = editBuffer->findParameterByID(ids.front());
@@ -316,19 +313,13 @@ bool PanelUnitParameterEditMode::switchToNormalModeInCurrentParameterLayout()
   return false;
 }
 
-bool PanelUnitParameterEditMode::tryParameterToggleOnMacroControl(vector<gint32> ids, Parameter * selParam)
+bool PanelUnitParameterEditMode::tryParameterToggleOnMacroControl(list<gint32> ids, Parameter * selParam)
 {
   if(auto mc = dynamic_cast<MacroControlParameter *>(selParam))
   {
-    list<gint32> a;
-    for (auto x : ids)
+    if(mc->isSourceOfTargetIn(ids))
     {
-      a.push_back(x);
-    }
-
-    if (mc->isSourceOfTargetIn(a))
-    {
-      for (gint32 targetId : a)
+      for(gint32 targetId : ids)
       {
         if(mc->isSourceOf(targetId))
         {

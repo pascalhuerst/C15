@@ -233,6 +233,12 @@ Carousel *MacroControlParameterSelectLayout2::createCarousel (const Rect &rect)
 
 bool MacroControlParameterSelectLayout2::onButton (int i, bool down, ButtonModifiers modifiers)
 {
+  if (down && BUTTON_EDIT == i)
+  {
+    Application::get ().getHWUI ()->undoableSetFocusAndMode (UIMode::Edit);
+    return true;
+  }
+
   if(BUTTON_D == i && getMode() == Mode::MacroControlValue)
   {
     toggleMode (Mode::PlayControlAmount);

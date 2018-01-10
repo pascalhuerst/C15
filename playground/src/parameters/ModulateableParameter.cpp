@@ -15,45 +15,45 @@
 
 static TestDriver<ModulateableParameter> tests;
 
-ModulateableParameter::ModulateableParameter(ParameterGroup *group, uint16_t id, const ScaleConverter *scaling, tDisplayValue def,
-                                             tControlPositionValue coarseDenominator, tControlPositionValue fineDenominator) :
-    Parameter(group, id, scaling, def, coarseDenominator, fineDenominator),
-    m_modulationAmount(0),
-    m_modSource(NONE)
+ModulateableParameter::ModulateableParameter (ParameterGroup *group, uint16_t id, const ScaleConverter *scaling, tDisplayValue def,
+                                              tControlPositionValue coarseDenominator, tControlPositionValue fineDenominator) :
+    Parameter (group, id, scaling, def, coarseDenominator, fineDenominator),
+    m_modulationAmount (0),
+    m_modSource (NONE)
 {
 }
 
-ModulateableParameter::~ModulateableParameter()
+ModulateableParameter::~ModulateableParameter ()
 {
 }
 
-size_t ModulateableParameter::getHash() const
+size_t ModulateableParameter::getHash () const
 {
-  size_t hash = super::getHash();
-  hash_combine(hash, m_modulationAmount);
-  hash_combine(hash, (int) m_modSource);
+  size_t hash = super::getHash ();
+  hash_combine (hash, m_modulationAmount);
+  hash_combine (hash, (int) m_modSource);
   return hash;
 }
 
-tDisplayValue ModulateableParameter::getModulationAmount() const
+tDisplayValue ModulateableParameter::getModulationAmount () const
 {
   return m_modulationAmount;
 }
 
-void ModulateableParameter::writeToLPC(MessageComposer &cmp) const
+void ModulateableParameter::writeToLPC (MessageComposer &cmp) const
 {
-  Parameter::writeToLPC(cmp);
-  cmp << getModulationSourceAndAmountPacked();
+  Parameter::writeToLPC (cmp);
+  cmp << getModulationSourceAndAmountPacked ();
 }
 
-uint16_t ModulateableParameter::getModulationSourceAndAmountPacked() const
+uint16_t ModulateableParameter::getModulationSourceAndAmountPacked () const
 {
-  if(getModulationSource() == NONE)
+  if (getModulationSource () == NONE)
     return 0;
 
-  gint16 scaled = round(m_modulationAmount * getModulationAmountFineDenominator());
+  gint16 scaled = round (m_modulationAmount * getModulationAmountFineDenominator ());
   gint16 abs = (scaled < 0) ? -scaled : scaled;
-  gint16 src = getModulationSource();
+  gint16 src = getModulationSource ();
 
   g_assert(src > 0);
   src--;
@@ -64,13 +64,13 @@ uint16_t ModulateableParameter::getModulationSourceAndAmountPacked() const
   return toSend;
 }
 
-void ModulateableParameter::setModulationAmount(UNDO::Scope::tTransactionPtr transaction, const tDisplayValue &amount)
+void ModulateableParameter::setModulationAmount (UNDO::Scope::tTransactionPtr transaction, const tDisplayValue &amount)
 {
-  if(m_modulationAmount != amount)
+  if (m_modulationAmount != amount)
   {
-    auto swapData = UNDO::createSwapData(amount);
+    auto swapData = UNDO::createSwapData (amount);
 
-    transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
+    transaction->addSimpleCommand ([ = ] (UNDO::Command::State) mutable
     {
       swapData->swapWith (m_modulationAmount);
       getValue().resetSaturation ();
@@ -81,32 +81,29 @@ void ModulateableParameter::setModulationAmount(UNDO::Scope::tTransactionPtr tra
   }
 }
 
-ModulateableParameter::ModulationSource ModulateableParameter::getModulationSource() const
+ModulateableParameter::ModulationSource ModulateableParameter::getModulationSource () const
 {
   return m_modSource;
 }
 
-void ModulateableParameter::copyFrom(UNDO::Scope::tTransactionPtr transaction, Parameter * other)
+void ModulateableParameter::copyFrom (UNDO::Scope::tTransactionPtr transaction, Parameter * other)
 {
-  if(!isLocked())
-  {
-    super::copyFrom(transaction, other);
+  super::copyFrom (transaction, other);
 
-    if(auto p = dynamic_cast<ModulateableParameter *>(other))
-    {
-      setModulationSource(transaction, p->getModulationSource());
-      setModulationAmount(transaction, p->getModulationAmount());
-    }
+  if (auto p = dynamic_cast<ModulateableParameter *> (other))
+  {
+    setModulationSource (transaction, p->getModulationSource ());
+    setModulationAmount (transaction, p->getModulationAmount ());
   }
 }
 
-void ModulateableParameter::setModulationSource(UNDO::Scope::tTransactionPtr transaction, ModulationSource src)
+void ModulateableParameter::setModulationSource (UNDO::Scope::tTransactionPtr transaction, ModulationSource src)
 {
-  if(m_modSource != src)
+  if (m_modSource != src)
   {
-    auto swapData = UNDO::createSwapData(src);
+    auto swapData = UNDO::createSwapData (src);
 
-    transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
+    transaction->addSimpleCommand ([ = ] (UNDO::Command::State) mutable
     {
       if (EditBuffer *edit = dynamic_cast<EditBuffer *> (getParentGroup()->getParent()))
       {
@@ -138,196 +135,192 @@ void ModulateableParameter::setModulationSource(UNDO::Scope::tTransactionPtr tra
   }
 }
 
-void ModulateableParameter::applyLpcMacroControl(tDisplayValue diff)
+void ModulateableParameter::applyLpcMacroControl (tDisplayValue diff)
 {
-  if(isBiPolar())
+  if (isBiPolar ())
     diff *= 2;
 
-  getValue().changeRawValue(Initiator::EXPLICIT_LPC, diff * m_modulationAmount);
+  getValue ().changeRawValue (Initiator::EXPLICIT_LPC, diff * m_modulationAmount);
 }
 
-void ModulateableParameter::undoableSelectModSource(UNDO::Scope::tTransactionPtr transaction, int src)
+void ModulateableParameter::undoableSelectModSource (UNDO::Scope::tTransactionPtr transaction, int src)
 {
   ModulationSource modSrc = (ModulationSource) src;
-  setModulationSource(transaction, modSrc);
+  setModulationSource (transaction, modSrc);
 }
 
-void ModulateableParameter::undoableSetModAmount(UNDO::Scope::tTransactionPtr transaction, double amount)
+void ModulateableParameter::undoableSetModAmount (UNDO::Scope::tTransactionPtr transaction, double amount)
 {
-  setModulationAmount(transaction, amount);
+  setModulationAmount (transaction, amount);
 }
 
-void ModulateableParameter::undoableIncrementMCSelect(int inc)
+void ModulateableParameter::undoableIncrementMCSelect (int inc)
 {
-  auto scope = getUndoScope().startTransaction("Set MC Select for '%0'", getLongName());
-  undoableIncrementMCSelect(scope->getTransaction(), inc);
+  auto scope = getUndoScope ().startTransaction ("Set MC Select for '%0'", getLongName ());
+  undoableIncrementMCSelect (scope->getTransaction (), inc);
 }
 
-void ModulateableParameter::undoableIncrementMCAmount(int inc)
+void ModulateableParameter::undoableIncrementMCAmount (int inc)
 {
-  auto scope = getUndoScope().startContinuousTransaction(getAmountCookie(), "Set MC Amount for '%0'", getGroupAndParameterName());
-  undoableIncrementMCAmount(scope->getTransaction(), inc, ButtonModifiers());
+  auto scope = getUndoScope ().startContinuousTransaction (getAmountCookie (), "Set MC Amount for '%0'", getGroupAndParameterName ());
+  undoableIncrementMCAmount (scope->getTransaction (), inc, ButtonModifiers ());
 }
 
-void *ModulateableParameter::getAmountCookie()
+void *ModulateableParameter::getAmountCookie ()
 {
   return &m_modulationAmount;
 }
 
-void ModulateableParameter::undoableSetMCAmountToDefault()
+void ModulateableParameter::undoableSetMCAmountToDefault ()
 {
   tDisplayValue def = 0.0;
 
-  if(m_modulationAmount != def)
+  if (m_modulationAmount != def)
   {
-    auto scope = getUndoScope().startContinuousTransaction(getAmountCookie(), "Set MC Amount for '%0'", getGroupAndParameterName());
-    setModulationAmount(scope->getTransaction(), def);
+    auto scope = getUndoScope ().startContinuousTransaction (getAmountCookie (), "Set MC Amount for '%0'", getGroupAndParameterName ());
+    setModulationAmount (scope->getTransaction (), def);
   }
 }
 
-void ModulateableParameter::undoableIncrementMCSelect(UNDO::Scope::tTransactionPtr transaction, int inc)
+void ModulateableParameter::undoableIncrementMCSelect (UNDO::Scope::tTransactionPtr transaction, int inc)
 {
-  int src = (int) getModulationSource();
+  int src = (int) getModulationSource ();
   src += inc;
 
-  while(src < 0)
+  while (src < 0)
     src += NUM_CHOICES;
 
-  while(src >= NUM_CHOICES)
+  while (src >= NUM_CHOICES)
     src -= NUM_CHOICES;
 
-  setModulationSource(transaction, (ModulationSource) src);
+  setModulationSource (transaction, (ModulationSource) src);
 }
 
-void ModulateableParameter::undoableIncrementMCAmount(UNDO::Scope::tTransactionPtr transaction, int inc, ButtonModifiers modifiers)
+void ModulateableParameter::undoableIncrementMCAmount (UNDO::Scope::tTransactionPtr transaction, int inc, ButtonModifiers modifiers)
 {
-  tDisplayValue controlVal = getModulationAmount();
+  tDisplayValue controlVal = getModulationAmount ();
   double denominator = modifiers[ButtonModifier::FINE] ? 1000 : 100;
-  int rasterized = round(controlVal * denominator);
-  controlVal = ScaleConverter::getControlPositionRangeBipolar().clip((rasterized + inc) / denominator);
-  setModulationAmount(transaction, controlVal);
+  int rasterized = round (controlVal * denominator);
+  controlVal = ScaleConverter::getControlPositionRangeBipolar ().clip ((rasterized + inc) / denominator);
+  setModulationAmount (transaction, controlVal);
 }
 
-void ModulateableParameter::writeDocProperties(Writer &writer, tUpdateID knownRevision) const
+void ModulateableParameter::writeDocProperties (Writer &writer, tUpdateID knownRevision) const
 {
-  Parameter::writeDocProperties(writer, knownRevision);
-  writer.writeTextElement("modAmount", to_string(m_modulationAmount));
-  writer.writeTextElement("modSrc", to_string(m_modSource));
+  Parameter::writeDocProperties (writer, knownRevision);
+  writer.writeTextElement ("modAmount", to_string (m_modulationAmount));
+  writer.writeTextElement ("modSrc", to_string (m_modSource));
 }
 
-void ModulateableParameter::loadDefault(UNDO::Scope::tTransactionPtr transaction)
+void ModulateableParameter::loadDefault (UNDO::Scope::tTransactionPtr transaction)
 {
-  undoableSelectModSource(transaction, 0);
-  undoableSetModAmount(transaction, 0.0);
-  super::loadDefault(transaction);
+  undoableSelectModSource (transaction, 0);
+  undoableSetModAmount (transaction, 0.0);
+  super::loadDefault (transaction);
 }
 
-void ModulateableParameter::undoableLoadPackedModulationInfo(UNDO::Scope::tTransactionPtr transaction,
-                                                             const Glib::ustring &packedModulationInfo)
+void ModulateableParameter::undoableLoadPackedModulationInfo (UNDO::Scope::tTransactionPtr transaction,
+                                                              const Glib::ustring &packedModulationInfo)
 {
-  auto bits = stoul(packedModulationInfo);
+  auto bits = stoul (packedModulationInfo);
   auto modSrc = (bits & 0xC000) >> 14;
   auto modAmount = bits & 0x1FFF;
   auto negative = bits & 0x2000;
 
-  if(negative && modAmount == 0)
+  if (negative && modAmount == 0)
   {
-    undoableSelectModSource(transaction, 0);
-    undoableSetModAmount(transaction, 0.0);
+    undoableSelectModSource (transaction, 0);
+    undoableSetModAmount (transaction, 0.0);
   }
   else
   {
     auto iModSrc = modSrc + 1;
-    undoableSelectModSource(transaction, iModSrc);
+    undoableSelectModSource (transaction, iModSrc);
 
-    auto fModAmount = (negative ? -1.0 : 1.0) * modAmount / getModulationAmountFineDenominator();
-    undoableSetModAmount(transaction, fModAmount);
+    auto fModAmount = (negative ? -1.0 : 1.0) * modAmount / getModulationAmountFineDenominator ();
+    undoableSetModAmount (transaction, fModAmount);
   }
 }
 
-double ModulateableParameter::getModulationAmountFineDenominator() const
+double ModulateableParameter::getModulationAmountFineDenominator () const
 {
-  auto fineDenominator = getValue().getFineDenominator();
+  auto fineDenominator = getValue ().getFineDenominator ();
 
-  while(fineDenominator > 8000)
+  while (fineDenominator > 8000)
     fineDenominator /= 2;
 
   return fineDenominator;
 }
 
-double ModulateableParameter::getModulationAmountCoarseDenominator() const
+double ModulateableParameter::getModulationAmountCoarseDenominator () const
 {
-  return getValue().getCoarseDenominator();
+  return getValue ().getCoarseDenominator ();
 }
 
-void ModulateableParameter::exportReaktorParameter(stringstream &target) const
+void ModulateableParameter::exportReaktorParameter (stringstream &target) const
 {
-  super::exportReaktorParameter(target);
-  auto packedModulationInfo = getModulationSourceAndAmountPacked();
+  super::exportReaktorParameter (target);
+  auto packedModulationInfo = getModulationSourceAndAmountPacked ();
 
-  if(m_modSource == ModulateableParameter::NONE)
+  if (m_modSource == ModulateableParameter::NONE)
     packedModulationInfo = 0x2000;
 
   target << packedModulationInfo << endl;
 }
 
-Glib::ustring ModulateableParameter::stringizeModulationAmount() const
+Glib::ustring ModulateableParameter::stringizeModulationAmount () const
 {
-  auto amount = getModulationAmount();
+  auto amount = getModulationAmount ();
   LinearBipolar100PercentScaleConverter converter;
-  return converter.getDimension().stringize(converter.controlPositionToDisplay(amount));
+  return converter.getDimension ().stringize (converter.controlPositionToDisplay (amount));
 }
 
-DFBLayout *ModulateableParameter::createLayout(FocusAndMode focusAndMode) const
+DFBLayout *ModulateableParameter::createLayout (FocusAndMode focusAndMode) const
 {
-  switch(focusAndMode.mode)
+  switch (focusAndMode.mode)
   {
     case UIMode::Info:
-      return new ParameterInfoLayout();
+      return new ParameterInfoLayout ();
 
-    case UIMode::Edit:
-      return new ModulateableParameterEditLayout2();
-
-    case UIMode::Select:
     default:
-      return new ModulateableParameterSelectLayout2();
+      break;
   }
 
-  g_return_val_if_reached(nullptr);
+  return new ModulateableParameterSelectLayout2 ();
 }
 
-std::pair<tControlPositionValue, tControlPositionValue> ModulateableParameter::getModulationRange() const
+std::pair<tControlPositionValue, tControlPositionValue> ModulateableParameter::getModulationRange () const
 {
   double modLeft = 0;
   double modRight = 0;
 
-  auto src = getModulationSource();
-  uint16_t srcParamID = MacroControlsGroup::modSrcToParamID(src);
-  auto groupSet = dynamic_cast<const ParameterGroupSet*>(getParentGroup()->getParent());
+  auto src = getModulationSource ();
+  uint16_t srcParamID = MacroControlsGroup::modSrcToParamID (src);
+  auto groupSet = dynamic_cast<const ParameterGroupSet*> (getParentGroup ()->getParent ());
 
-  if(auto srcParam = groupSet->findParameterByID(srcParamID))
+  if (auto srcParam = groupSet->findParameterByID (srcParamID))
   {
-    auto modAmount = getModulationAmount();
-    auto srcValue = srcParam->getValue().getRawValue();
-    auto value = getValue().getRawValue();
+    auto modAmount = getModulationAmount ();
+    auto srcValue = srcParam->getValue ().getRawValue ();
+    auto value = getValue ().getRawValue ();
 
-    if(isBiPolar())
+    if (isBiPolar ())
       modLeft = 0.5 * (value + 1.0) - modAmount * srcValue;
     else
       modLeft = value - modAmount * srcValue;
 
     modRight = modLeft + modAmount;
   }
-  return std::make_pair(modLeft, modRight);
+  return std::make_pair (modLeft, modRight);
 }
 
-std::pair<Glib::ustring, Glib::ustring> ModulateableParameter::getModRangeAsDisplayValues() const
+std::pair<Glib::ustring, Glib::ustring> ModulateableParameter::getModRangeAsDisplayValues () const
 {
-  auto range = getModulationRange();
+  auto range = getModulationRange ();
 
-  auto first = modulationValueToDisplayString(range.first);
-  auto second = modulationValueToDisplayString(range.second);
-  return std::make_pair(first, second);
+  auto first = modulationValueToDisplayString (range.first);
+  auto second = modulationValueToDisplayString (range.second);
+  return std::make_pair (first, second);
 }
 
 Glib::ustring ModulateableParameter::modulationValueToDisplayString(tControlPositionValue v) const
@@ -337,14 +330,14 @@ Glib::ustring ModulateableParameter::modulationValueToDisplayString(tControlPosi
     v = v * 2 - 1;
   }
 
-  auto scaleConverter = getValue().getScaleConverter();
-  auto displayValue = scaleConverter->controlPositionToDisplay(v);
-  return scaleConverter->getDimension().stringize(displayValue);
+  auto scaleConverter = getValue ().getScaleConverter ();
+  auto displayValue = scaleConverter->controlPositionToDisplay (v);
+  return scaleConverter->getDimension ().stringize (displayValue);
 }
 
-void ModulateableParameter::registerTests()
+void ModulateableParameter::registerTests ()
 {
-  g_test_add_func("/ModulateableParameter/1.4pct-to-112lpc", []()
+  g_test_add_func ("/ModulateableParameter/1.4pct-to-112lpc", []()
   {
     class Root : public UpdateDocumentMaster
     {

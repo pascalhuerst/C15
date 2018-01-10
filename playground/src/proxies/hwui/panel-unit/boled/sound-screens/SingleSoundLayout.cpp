@@ -90,8 +90,7 @@ bool SingleSoundLayout::onButton (int i, bool down, ButtonModifiers modifiers)
     else if (i == BUTTON_ENTER)
     {
       action ();
-      if (m_selectedColumn != Column::Randomize)
-        toggleColumn(m_selectedColumn);
+      toggleColumn (m_selectedColumn);
       return true;
     }
     else if (i == BUTTON_DEFAULT)

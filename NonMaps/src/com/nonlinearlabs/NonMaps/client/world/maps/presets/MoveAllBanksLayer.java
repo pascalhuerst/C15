@@ -14,8 +14,6 @@ import com.nonlinearlabs.NonMaps.client.world.maps.NonDimension;
 
 public class MoveAllBanksLayer extends MapsControl {
 
-	private Position start = null;
-	
 	public MoveAllBanksLayer(MapsControl parent) {
 		super(parent);
 	}
@@ -36,17 +34,11 @@ public class MoveAllBanksLayer extends MapsControl {
 
 	@Override
 	public Control mouseDown(Position eventPoint) {
-		start = eventPoint;
 		return this;
 	}
 
 	@Override
 	public Control mouseUp(Position eventPoint) {
-		double x = eventPoint.getX() - start.getX();
-		double y = eventPoint.getY() - start.getY();
-		Dimension d = new Dimension(x, y);
-		NonDimension distance = toNonDimension(d);
-		NonMaps.get().getServerProxy().moveAllBanks(distance);
 		return this;
 	}
 

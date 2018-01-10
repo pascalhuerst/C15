@@ -1,69 +1,21 @@
 package com.nonlinearlabs.NonMaps.client.world.overlay.belt.presets;
 
+import java.util.Iterator;
+
 import com.nonlinearlabs.NonMaps.client.Millimeter;
-import com.nonlinearlabs.NonMaps.client.world.overlay.BankInfoDialog;
+import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayControl;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayLayout;
-import com.nonlinearlabs.NonMaps.client.world.overlay.PresetInfoDialog;
+import com.nonlinearlabs.NonMaps.client.world.overlay.belt.presets.MenuAreaButton.ImageSelection;
 
 class MenuArea extends OverlayLayout {
-
-	class MenuAndInfo extends OverlayLayout {
-
-		MenuAreaButton btn;
-		MenuAreaInfoButton info;
-
-		public MenuAndInfo(OverlayLayout parent, MenuAreaButton btn, MenuAreaInfoButton info) {
-			super(parent);
-
-			this.btn = btn;
-			this.info = info;
-
-			addChild(btn);
-			addChild(info);
-		}
-
-		@Override
-		public void doLayout(double x, double y, double w, double h) {
-			super.doLayout(x, y, w, h);
-			btn.doLayout(0, 0, w - getSmallButtonWidth(), h);
-			info.doLayout(w - getSmallButtonWidth(), 0, getSmallButtonWidth(), h);
-		}
-	}
-
-	private MenuAndInfo presets;
-	private MenuAndInfo banks;
-	private MenuAreaSearchButton search;
 
 	MenuArea(BeltPresetLayout parent) {
 		super(parent);
 
-		presets = addChild(new MenuAndInfo(this, new MenuAreaPresetButton(this), new MenuAreaInfoButton(this) {
-
-			@Override
-			public void toggle() {
-				PresetInfoDialog.toggle();
-			}
-
-			@Override
-			protected State getState() {
-				return PresetInfoDialog.isShown() ? State.Active : State.Enabled;
-			}
-		}));
-
-		banks = addChild(new MenuAndInfo(this, new MenuAreaBankButton(this), new MenuAreaInfoButton(this) {
-
-			@Override
-			public void toggle() {
-				BankInfoDialog.toggle();
-			}
-
-			@Override
-			protected State getState() {
-				return BankInfoDialog.isShown() ? State.Active : State.Enabled;
-			}
-		}));
-
-		search = addChild(new MenuAreaSearchButton(this));
+		addChild(new MenuAreaPresetButton(this));
+		addChild(new MenuAreaBankButton(this));
+		addChild(new MenuAreaSearchButton(this));
+		addChild(new MenuAreaInfoButton(this));
 	}
 
 	@Override
@@ -73,13 +25,93 @@ class MenuArea extends OverlayLayout {
 
 	@Override
 	public void doLayout(double x, double y, double w, double h) {
-		super.doLayout(x, y, w, h);
-		presets.doLayout(0, 0, w / 2, h / 2);
-		banks.doLayout(0, h / 2, w / 2, h / 2);
-		search.doLayout(w / 2, 0, w / 2, h / 2);
+		double margin = getButtonDimension() / 2;
+		double largeButtonWidth = getLargeButtonWidth();
+		double smallButtonWidth = getSmallButtonWidth();
+		double widthForLargeGrid = 2 * largeButtonWidth + margin;
+		double widthForLargeStack = largeButtonWidth;
+		double widthForSmallGrid = 2 * smallButtonWidth + margin;
+		double widthForSmallStack = smallButtonWidth;
+
+		if (w >= widthForLargeGrid) {
+			super.doLayout(x, y, widthForLargeGrid, h);
+			layoutLargeGrid(widthForLargeGrid, h, largeButtonWidth);
+		} else if (w >= widthForSmallGrid) {
+			super.doLayout(x, y, widthForSmallGrid, h);
+			layoutSmallGrid(widthForSmallGrid, h, smallButtonWidth);
+		} else if (w >= widthForLargeStack) {
+			super.doLayout(x, y, widthForLargeStack, h);
+			layoutLargeStack(widthForLargeStack, h, largeButtonWidth);
+		} else {
+			super.doLayout(x, y, widthForSmallStack, h);
+			layoutSmallStack(widthForSmallStack, h, smallButtonWidth);
+		}
 	}
 
 	private double getSmallButtonWidth() {
-		return Millimeter.toPixels(11);
+		return Millimeter.toPixels(10);
 	}
+
+	private double getLargeButtonWidth() {
+		return Millimeter.toPixels(31);
+	}
+
+	private void layoutSmallStack(double w, double h, double smallButtonWidth) {
+		layoutStack(w, h, smallButtonWidth, ImageSelection.Small);
+	}
+
+	private void layoutLargeStack(double w, double h, double largeButtonWidth) {
+		layoutStack(w, h, largeButtonWidth, ImageSelection.Large);
+	}
+
+	private void layoutSmallGrid(double w, double h, double smallButtonWidth) {
+		layoutGrid(w, h, smallButtonWidth, ImageSelection.Small);
+	}
+
+	private void layoutLargeGrid(double w, double h, double largeButtonWidth) {
+		layoutGrid(w, h, largeButtonWidth, ImageSelection.Large);
+	}
+
+	private void layoutGrid(double w, double h, double buttonWidth, ImageSelection imageSelection) {
+		double margin = getButtonDimension() / 2;
+		int numChildren = 4;
+		Iterator<OverlayControl> it = getChildren().iterator();
+
+		int numCols = 2;
+		int childrenPerRow = numChildren / numCols;
+		double xPos = 0;
+		double YMargins = (childrenPerRow - 1) * margin;
+
+		for (int col = 0; col < numCols; col++) {
+
+			double yPos = 0;
+
+			for (int row = 0; row < childrenPerRow; row++) {
+				double heightPerChild = (h - YMargins) / childrenPerRow;
+
+				if (it.hasNext()) {
+					MenuAreaButton button = (MenuAreaButton) it.next();
+					button.doLayout(xPos, yPos, buttonWidth, heightPerChild, imageSelection);
+					yPos += heightPerChild + margin;
+				}
+			}
+
+			xPos += buttonWidth + margin;
+		}
+	}
+
+	private void layoutStack(double w, double h, double buttonWidth, ImageSelection selection) {
+		int numChildren = 4;
+		double margin = getButtonDimension() / 2;
+		double margins = (numChildren - 1) * margin;
+		double heightPerChild = (h - margins) / numChildren;
+		double yPos = 0;
+
+		for (OverlayControl c : getChildren()) {
+			MenuAreaButton button = (MenuAreaButton) c;
+			button.doLayout(0, yPos, buttonWidth, heightPerChild, selection);
+			yPos += heightPerChild + margin;
+		}
+	}
+
 }

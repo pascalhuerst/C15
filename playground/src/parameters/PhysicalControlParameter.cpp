@@ -119,16 +119,10 @@ Glib::ustring PhysicalControlParameter::generateName () const
 
 DFBLayout *PhysicalControlParameter::createLayout (FocusAndMode focusAndMode) const
 {
-  switch(focusAndMode.mode)
-  {
-    case UIMode::Info:
-      return new ParameterInfoLayout ();
+  if (focusAndMode.mode == UIMode::Info)
+    return new ParameterInfoLayout ();
 
-    default:
-      return super::createLayout (focusAndMode);
-  }
-
-  g_return_val_if_reached(nullptr);
+  return super::createLayout (focusAndMode);
 }
 
 void PhysicalControlParameter::onSelected ()

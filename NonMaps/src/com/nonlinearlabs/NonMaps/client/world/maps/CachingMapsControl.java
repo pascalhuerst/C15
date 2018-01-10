@@ -182,6 +182,8 @@ public class CachingMapsControl extends MapsLayout {
 			if (now - start >= maxMS)
 				break;
 		}
+
+		Tracer.log("numControlsRedrawn: " + numControlsRedrawn);
 	}
 
 	private long getHash() {

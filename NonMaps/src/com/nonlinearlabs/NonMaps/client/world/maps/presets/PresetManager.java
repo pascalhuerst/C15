@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.xml.client.Document;
@@ -49,11 +48,6 @@ public class PresetManager extends MapsLayout {
 	private int currentFileVersion = 0;
 	private MultiplePresetSelection multiSelection;
 	private MoveAllBanksLayer moveAllBanks;
-	private MoveSomeBanksLayer moveSomeBanks;
-
-	public MoveSomeBanksLayer getMoveSomeBanks() {
-		return moveSomeBanks;
-	}
 
 	public PresetManager(NonLinearWorld parent) {
 		super(parent);
@@ -368,76 +362,39 @@ public class PresetManager extends MapsLayout {
 
 		if (dragProxy.getOrigin() instanceof EditBufferDraggingButton)
 			return this;
-		
+
 		return super.drag(pos, dragProxy);
-	}
-
-	public void updateMultipleRectangle(Position pos) {
-		moveSomeBanks.update(pos);
-		
-		multiSelection.clear();
-		
-		for (Control c : getChildren()) {
-
-			if (c instanceof Bank) {
-				Bank b = (Bank) c;
-				for(Control bc: b.getChildren())
-				{
-					if(bc instanceof Preset)
-					{
-						Preset p = (Preset) bc;
-						if(moveSomeBanks.getPixRect().intersects(p.getPixRect()))
-						{
-							multiSelection.add(p);
-						}
-					}
-				}
-			}
-		}
-		
-		invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
-	}
-
-	public void startMultipleRectangle(Position pos) {
-		startMultiSelectionEmpty();
-		moveSomeBanks = new MoveSomeBanksLayer(this, pos);	
-		invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
-	}
-	
-	public boolean hasMultipleRectangle()
-	{
-		return moveSomeBanks != null;
-	}
-	
-	public void endMultipleRectangle()
-	{
-		moveSomeBanks = null;
-		invalidate(INVALIDATION_FLAG_ANIMATION_PROGRESS);
 	}
 
 	private boolean isAttachTargetToRight(Bank targetBank, Rect dragProxie)
 	{
 		Rect rightDockingRect = targetBank.getPixRect().copy();
-		
-		rightDockingRect.set(rightDockingRect.getRight(), 
-				rightDockingRect.getTop() - getAttachArea(), 
-				getAttachArea(), 
+		rightDockingRect.set(rightDockingRect.getLeft() + rightDockingRect.getWidth() / 2, 
+				rightDockingRect.getTop() - getAttachArea() / 2, 
+				rightDockingRect.getWidth(), 
 				rightDockingRect.getHeight());
 		
-		return rightDockingRect.contains(dragProxie.getLeftTop());
+		if(rightDockingRect.contains(dragProxie.getLeftTop()))
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	private boolean isAttachTargetToBottom(Bank targetBank, Rect dragProxie)
 	{
 		Rect bottomDockingRect = targetBank.getPixRect().copy();
-		
 		bottomDockingRect.set(bottomDockingRect.getLeft(), 
-				bottomDockingRect.getBottom(), 
+				bottomDockingRect.getBottom() - getAttachArea(), 
 				bottomDockingRect.getWidth() / 2, 
-				getAttachArea());
+				getAttachArea() * 2);
 		
 		
-		return bottomDockingRect.contains(dragProxie.getLeftTop());
+		if(bottomDockingRect.contains(dragProxie.getLeftTop()))
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	private Bank indicateAttachTargets(Bank draggedBank, Rect dragProxie) {
@@ -464,7 +421,7 @@ public class PresetManager extends MapsLayout {
 	}
 
 	private double getAttachArea() {
-		return Millimeter.toPixels(5);
+		return Millimeter.toPixels(10);
 	}
 
 	@Override
@@ -925,11 +882,6 @@ public class PresetManager extends MapsLayout {
 		multiSelection = new MultiplePresetSelection(p);
 		return getMultiSelection();
 	}
-	
-	private MultiplePresetSelection startMultiSelectionEmpty() {
-		multiSelection = new MultiplePresetSelection();
-		return getMultiSelection();	
-	}
 
 	public void closeMultiSelection() {
 		if (hasMultiplePresetSelection()) {
@@ -953,8 +905,6 @@ public class PresetManager extends MapsLayout {
 
 	@Override
 	public Control click(Position eventPoint) {
-		NonMaps.get().getNonLinearWorld().setShiftDown(false);
-		
 		if (moveAllBanks != null) {
 			toggleMoveAllBanks();
 			return this;
@@ -976,9 +926,8 @@ public class PresetManager extends MapsLayout {
 		}
 		requestLayout();
 	}
-	
+
 	public void moveAllBanksBy(NonDimension distance) {
-		
 		for (Control c : getChildren()) {
 			if (c instanceof Bank) {
 				Bank b = (Bank) c;
@@ -986,6 +935,7 @@ public class PresetManager extends MapsLayout {
 				np.moveBy(distance);
 				np.snapTo(getSnapGridResolution());
 				b.getNonPosition().moveTo(np);
+				getNonMaps().getServerProxy().onBankPositionChanged(b);
 			}
 		}
 		requestLayout();

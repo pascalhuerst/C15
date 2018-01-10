@@ -2,7 +2,6 @@
 #include <proxies/hwui/panel-unit/boled/parameter-screens/controls/ModuleCaption.h>
 #include <proxies/hwui/panel-unit/boled/parameter-screens/controls/ParameterNameLabel.h>
 #include <proxies/hwui/panel-unit/boled/parameter-screens/controls/ParameterCarousel.h>
-#include <proxies/hwui/panel-unit/boled/parameter-screens/controls/LockedIndicator.h>
 #include <proxies/hwui/panel-unit/boled/preset-screens/controls/InvertedLabel.h>
 #include <proxies/hwui/HWUI.h>
 #include <proxies/hwui/controls/ButtonMenu.h>
@@ -14,8 +13,7 @@ ParameterLayout2::ParameterLayout2 () :
     super (Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled())
 {
   addControl (new ModuleCaption (Rect (0, 0, 64, 13)));
-  addControl (new ParameterNameLabel (Rect (72, 8, 112, 11)));
-  addControl (new LockedIndicator (Rect (68, 0, 4, 13)));
+  addControl (new ParameterNameLabel (Rect (64, 8, 128, 11)));
 }
 
 Parameter * ParameterLayout2::getCurrentParameter () const
@@ -106,20 +104,12 @@ Carousel *ParameterSelectLayout2::getCarousel()
 
 bool ParameterSelectLayout2::onButton (int i, bool down, ButtonModifiers modifiers)
 {
-  if (down)
+  if (down && BUTTON_D == i)
   {
-    switch(i)
-    {
-      case BUTTON_D:
-        if (m_carousel)
-          m_carousel->turn ();
+    if (m_carousel)
+      m_carousel->turn ();
 
-        return true;
-
-      case BUTTON_EDIT:
-        Application::get ().getHWUI ()->undoableSetFocusAndMode (UIMode::Edit);
-        return true;
-    }
+    return true;
   }
 
   return super::onButton (i, down, modifiers);
@@ -129,11 +119,6 @@ ParameterEditLayout2::ParameterEditLayout2 () :
     super ()
 {
   addControl (new InvertedLabel ("Edit", Rect (8, 26, 48, 12)))->setHighlight (true);
-}
-
-ParameterEditLayout2::~ParameterEditLayout2 ()
-{
-
 }
 
 void ParameterEditLayout2::init ()
@@ -153,11 +138,6 @@ bool ParameterEditLayout2::onButton (int i, bool down, ButtonModifiers modifiers
       if (BUTTON_D == i)
       {
         m_menu->toggle ();
-        return true;
-      }
-      if (modifiers[SHIFT] == 1 && BUTTON_D == i)
-      {
-        m_menu->antiToggle();
         return true;
       }
 

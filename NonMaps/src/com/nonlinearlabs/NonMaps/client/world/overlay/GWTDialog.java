@@ -13,7 +13,6 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -48,7 +47,6 @@ public abstract class GWTDialog extends DialogBox implements ScreenResizeListene
 		@Override
 		public void onTouchEnd(TouchEndEvent event) {
 			onMouseUp(getCaption().asWidget(), 0, 0);
-			centerIfOutOfView();
 
 		}
 
@@ -85,7 +83,7 @@ public abstract class GWTDialog extends DialogBox implements ScreenResizeListene
 		registerCloseHandler();
 	}
 
-	protected void pushDialogToFront() {
+	private void pushDialogToFront() {
 		getElement().getStyle().setZIndex(maxZIndexSoFar + 1);
 		close.getElement().getStyle().setZIndex(maxZIndexSoFar + 2);
 		maxZIndexSoFar++;
@@ -159,24 +157,8 @@ public abstract class GWTDialog extends DialogBox implements ScreenResizeListene
 		boolean toMuchUp = (top <= 0);
 		boolean toMuchLeft = (left <= 0);
 
-		while(toMuchDown || toMuchRight || toMuchUp || toMuchLeft) {
-			if (toMuchDown) {
-				setPopupPosition(getPopupLeft(), Window.getClientHeight() - getOffsetHeight());
-				toMuchDown = false;
-			}
-			else if(toMuchRight) {
-				setPopupPosition(Window.getClientWidth() - getOffsetWidth(), getPopupTop());
-				toMuchRight = false;
-			}
-			else if(toMuchUp) {
-				setPopupPosition(getPopupLeft(), 0);
-				toMuchUp = false;
-			}
-			else if(toMuchLeft) {
-				setPopupPosition(0, getPopupTop());
-				toMuchLeft = false;
-			}
-		}
+		if (toMuchDown || toMuchRight || toMuchUp || toMuchLeft)
+			center();
 	}
 
 	protected abstract void commit();

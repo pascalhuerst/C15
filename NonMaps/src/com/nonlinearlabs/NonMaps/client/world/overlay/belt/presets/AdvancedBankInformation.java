@@ -2,7 +2,6 @@ package com.nonlinearlabs.NonMaps.client.world.overlay.belt.presets;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
-import com.nonlinearlabs.NonMaps.client.world.RGB;
 import com.nonlinearlabs.NonMaps.client.world.maps.presets.bank.Bank;
 import com.nonlinearlabs.NonMaps.client.world.overlay.Label;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayLayout;
@@ -11,8 +10,6 @@ public class AdvancedBankInformation extends Label {
 
 	public AdvancedBankInformation(OverlayLayout parent) {
 		super(parent);
-		super.setFontColor(new RGB(120,120,120));
-		super.setFontHeightInMM(5);
 	}
 
 	@Override

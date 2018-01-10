@@ -39,7 +39,6 @@ import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Scale.Scale;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ShapeA.ShapeA;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ShapeB.ShapeB;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Unison.Unison;
-import com.nonlinearlabs.NonMaps.client.world.maps.presets.bank.preset.Preset;
 
 public class ParameterEditor extends LayoutResizingVertical {
 
@@ -50,7 +49,7 @@ public class ParameterEditor extends LayoutResizingVertical {
 	private SynthParameters synthParamsArea;
 	private static ParameterEditor theEditor = null;
 	private HashMap<String, String> attributes = new HashMap<String, String>();
-
+	
 	private class PlayControlsArea extends ResizingHorizontalCenteringLayout {
 
 		private PlayControlsArea(ParameterEditor parent) {
@@ -210,7 +209,7 @@ public class ParameterEditor extends LayoutResizingVertical {
 		}
 		return null;
 	}
-
+	
 	public static ParameterEditor get() {
 		return theEditor;
 	}
@@ -260,7 +259,7 @@ public class ParameterEditor extends LayoutResizingVertical {
 	public void update(Node node, boolean omitOracles) {
 		if (node == null)
 			return;
-
+		
 		if (ServerProxy.didChange(node)) {
 			if (!omitOracles) {
 				Tracer.log("updated parameters from server-sent document");
@@ -367,18 +366,6 @@ public class ParameterEditor extends LayoutResizingVertical {
 		}
 	}
 
-	private void updateParameter(Node n) {
-		if (ServerProxy.didChange(n)) {
-			String id = n.getAttributes().getNamedItem("id").getNodeValue();
-			Parameter sel = findSelectable(Integer.parseInt(id));
-
-			if (sel != null) {
-				Parameter param = (Parameter) sel;
-				param.update(n);
-			}
-		}
-	}
-
 	public ParameterGroupIface findParameterGroup(final String groupID) {
 		Control found = recurseChildren(new ControlFinder() {
 
@@ -394,6 +381,18 @@ public class ParameterEditor extends LayoutResizingVertical {
 		});
 
 		return (ParameterGroupIface) found;
+	}
+
+	private void updateParameter(Node n) {
+		if (ServerProxy.didChange(n)) {
+			String id = n.getAttributes().getNamedItem("id").getNodeValue();
+			Parameter sel = findSelectable(Integer.parseInt(id));
+
+			if (sel != null) {
+				Parameter param = (Parameter) sel;
+				param.update(n);
+			}
+		}
 	}
 
 	private void updateSelection(Node node) {
@@ -454,22 +453,14 @@ public class ParameterEditor extends LayoutResizingVertical {
 	public PlayControls getPlayControls() {
 		return playControls;
 	}
-
+	
 	public boolean isEditorVisible() {
 		return isVisible();
 	}
-
-	public void toggleVisibility() {
+	
+	public void toggleVisibility()
+	{
 		setVisible(!isIntendedVisible());
-	}
-
-	public String getLoadedPresetInfo() {
-		Preset p = NonMaps.get().getNonLinearWorld().getPresetManager().findPreset(loadedPreset);
-
-		if (p != null)
-			return p.getAttribute("Comment");
-
-		return "";
 	}
 
 }

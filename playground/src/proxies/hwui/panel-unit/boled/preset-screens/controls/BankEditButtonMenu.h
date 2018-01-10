@@ -18,34 +18,30 @@ class BankEditButtonMenu : public ButtonMenu
     };
 
   public:
-    BankEditButtonMenu(const Rect &rect);
-    virtual ~BankEditButtonMenu();
+    BankEditButtonMenu (const Rect &rect);
+    virtual ~BankEditButtonMenu ();
 
-    void selectButton(size_t i) override;
+    void selectButton (size_t i) override;
     void rebuildMenu();
 
   private:
-    void rebuildFullMenu();
-    void rebuildNoBankAvailableMenu();
+    BankEditButtonMenu (const BankEditButtonMenu& other);
+    BankEditButtonMenu& operator= (const BankEditButtonMenu&);
 
-    void correctMenuSelection();
-
-    BankEditButtonMenu(const BankEditButtonMenu& other);
-    BankEditButtonMenu& operator=(const BankEditButtonMenu&);
-
-    void newBank();
+    void newBank ();
     void importBank();
-    void renameBank();
+    void renameBank ();
     void exportBank();
-    void copyBank();
-    void pasteBank();
-    void deleteBank();
-    void moveLeft();
-    void moveRight();
+    void copyBank ();
+    void pasteBank ();
+    void deleteBank ();
+    void moveLeft ();
+    void moveRight ();
 
-    static Glib::ustring createValidOutputPath(const Glib::ustring& bankName);
+    Glib::ustring sanitizeExportBankname(std::string str);
+    Glib::ustring createValidOutputPath(const Glib::ustring& bankName);
 
-    static void writeSelectedBankToFile(PresetManager::tBankPtr selBank, const std::string& outFile);
+    void writeSelectedBankToFile(PresetManager::tBankPtr selBank, const std::string& outFile);
     bool interruptToRebuildMenu();
     static FileInfos extractFileInfos(std::experimental::filesystem::directory_entry file);
     static void importBankFromPath(std::experimental::filesystem::directory_entry file);

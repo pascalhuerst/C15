@@ -349,33 +349,21 @@ void HWUI::onButtonPressed (int buttonID, bool state)
 
 void HWUI::setModifiers (int buttonID, bool state)
 {
+  if (buttonID == BUTTON_FINE)
+    if (isFineAllowed())
+		  m_fineButton.setButtonState (state);
+
+  if (m_fineButton.getModifierState ())
+    addModifier (ButtonModifier::FINE);
+  else
+    removeModifier (ButtonModifier::FINE);
+
   if (buttonID == BUTTON_SHIFT)
   {
     if (state)
-    {
-      addModifier(ButtonModifier::SHIFT);
-    }
+      addModifier (ButtonModifier::SHIFT);
     else
-    {
-      removeModifier(ButtonModifier::SHIFT);
-    }
-  }
-
-  if (buttonID == BUTTON_FINE)
-  {
-    if (isFineAllowed())
-    {
-      m_fineButton.setShiftedWhilePressDown(isModifierSet(ButtonModifier::SHIFT));
-      m_fineButton.setButtonState(state);
-    }
-  }
-  if (m_fineButton.getModifierState())
-  {
-    addModifier(ButtonModifier::FINE);
-  }
-  else
-  {
-    removeModifier(ButtonModifier::FINE);
+      removeModifier (ButtonModifier::SHIFT);
   }
 }
 
@@ -410,11 +398,8 @@ bool HWUI::detectAffengriff (int buttonID, bool state)
 
 void HWUI::unsetFineMode ()
 {
-  if (m_fineButton.onlyTemporary())
-  {
-    m_fineButton.setState(TOGGLED_OFF);
-    removeModifier(ButtonModifier::FINE);
-  }
+  m_fineButton.setState (TOGGLED_OFF);
+  removeModifier (ButtonModifier::FINE);
 }
 
 ButtonModifiers HWUI::getButtonModifiers () const

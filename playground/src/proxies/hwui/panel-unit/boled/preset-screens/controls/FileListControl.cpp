@@ -2,12 +2,11 @@
 #include <proxies/hwui/panel-unit/boled/preset-screens/controls/FileListControl.h>
 
 FileListControl::FileListControl(FileTools::FileList&& files) :
-    selectedItem(0), fileList(files), ControlWithChildren(Rect(0, 0, 200, 48))
+    selectedItem(0), fileList(files), ControlWithChildren(Rect(0, 0, 150, 48))
 {
-  upperFile = addControl(new Label("", Rect(0, 0, 200, 12)));
-  middleFile = addControl(new Label("", Rect(0, 12, 200, 12)));
-  bottomFile = addControl(new Label("", Rect(0, 24, 200, 12)));
-  bottomFile2 = addControl(new Label("", Rect(0, 36, 200, 12)));
+  upperFile = addControl(new Label("", Rect(0, 0, 150, 16)));
+  middleFile = addControl(new Label("", Rect(0, 16, 150, 16)));
+  bottomFile = addControl(new Label("", Rect(0, 32, 150, 16)));
 
   middleFile->setHighlight(true);
 
@@ -24,7 +23,6 @@ void FileListControl::setSelection(int index)
   upperFile->setText(getFileNameAtIndex(index - 1));
   middleFile->setText(getFileNameAtIndex(index));
   bottomFile->setText(getFileNameAtIndex(index + 1));
-  bottomFile2->setText(getFileNameAtIndex(index + 2));
 
   selectedItem = index;
 }
@@ -50,24 +48,10 @@ void FileListControl::changeSelection(int change)
 
 fs::directory_entry FileListControl::getSelection() const
 {
-  if (selectedItem < fileList.size())
-    return fileList.at(selectedItem);
-  else
-    return fs::directory_entry();
+  return fileList.at(selectedItem);
 }
 
 int FileListControl::getSelectedIndex() const
 {
   return selectedItem;
-}
-
-bool FileListControl::redraw(FrameBuffer &fb)
-{
-  ControlWithChildren::redraw(fb);
-
-  fb.setColor(FrameBuffer::Colors::C128);
-  const Rect &r = getPosition();
-  fb.drawRect(r.getLeft() + 1, r.getTop() + 1, r.getWidth(), r.getHeight());
-
-  return true;
 }

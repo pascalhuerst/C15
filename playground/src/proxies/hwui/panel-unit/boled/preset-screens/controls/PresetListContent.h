@@ -7,7 +7,7 @@
 #include <memory>
 
 class EmptyBankLabel;
-class Label;
+
 class Application;
 class PresetBank;
 class PresetListEntry;
@@ -34,6 +34,6 @@ class PresetListContent : public ControlWithChildren
     PresetListEntry *m_firstPreset = nullptr;
     PresetListEntry *m_secondPreset = nullptr;
     PresetListEntry *m_thirdPreset = nullptr;
-    Label *m_emptyLabel = nullptr;
+    EmptyBankLabel *m_emptyLabel = nullptr;
 };
 

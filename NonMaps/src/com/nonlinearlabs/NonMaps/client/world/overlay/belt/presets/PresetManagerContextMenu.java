@@ -46,7 +46,7 @@ public class PresetManagerContextMenu extends ContextMenu {
 			});
 		}
 
-		addChild(new ContextMenuItem(this, "Import Bank from file...") {
+		addChild(new ContextMenuItem(this, "Import from file ...") {
 			@Override
 			public Control click(final Position eventPoint) {
 				new TextUpload(new TextUploadedHandler() {
@@ -60,7 +60,7 @@ public class PresetManagerContextMenu extends ContextMenu {
 			}
 		});
 
-		addChild(new ContextMenuItem(this, "Save all Banks as Backup File...") {
+		addChild(new ContextMenuItem(this, "Export all Banks as Backup File ...") {
 			@Override
 			public Control click(Position eventPoint) {
 				String uri = "/presets/download-banks";
@@ -69,7 +69,7 @@ public class PresetManagerContextMenu extends ContextMenu {
 			}
 		});
 
-		addChild(new ContextMenuItem(this, "Restore all Banks from Backup File...") {
+		addChild(new ContextMenuItem(this, "Restore all Banks from Backup File ...") {
 			@Override
 			public Control click(Position eventPoint) {
 				boolean confirm = Window.confirm("This will replace all current banks! Please save the banks with your work as files before restoring the backup.");

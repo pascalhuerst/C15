@@ -15,13 +15,9 @@ DFBLayout *PitchbendParameter::createLayout (FocusAndMode focusAndMode) const
     case UIMode::Info:
       return new ParameterInfoLayout ();
 
-    case UIMode::Edit:
-      return new PitchbendParameterEditLayout2 ();
-
-    case UIMode::Select:
     default:
       return new PitchbendParameterSelectLayout2 ();
   }
 
-  g_return_val_if_reached(nullptr);
+  return super::createLayout (focusAndMode);
 }

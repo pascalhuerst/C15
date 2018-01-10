@@ -1,6 +1,5 @@
 package com.nonlinearlabs.NonMaps.client.world.overlay;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -8,12 +7,6 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -31,7 +24,6 @@ import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.Macro
 public class ParameterInfoDialog extends GWTDialog implements SelectionListener {
 
 	private static ParameterInfoDialog theDialog;
-	private static float infoBoxHeight = 0;
 	private TextArea infoField;
 	private Label parameterNameView;
 	private Label paramNameEditView;
@@ -56,15 +48,6 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 		addContent();
 
 		update(NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome());
-		
-		super.pushDialogToFront();	
-		
-		GWT.log("ParameterInfo soll : " + infoBoxHeight);
-		
-		if(infoBoxHeight != 0)
-		{
-			infoField.setHeight(infoBoxHeight + "px");
-		}
 	}
 
 	@Override
@@ -84,7 +67,7 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 		paramNameEditor.getElement().addClassName("flex-div");
 		paramNameEditor.add(paramNameEditView = new Label());
 		paramNameEditor.add(paramNameEditEditor = new TextBox());
-		paramNameEditEditor.getElement().addClassName("param-name-edit");
+		paramNameEditEditor.getElement().addClassName("grow-flex-10");
 		panel.add(paramNameEditor);
 
 		HTMLPanel infoFieldBox = new HTMLPanel("div", "");
@@ -115,56 +98,6 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 				Parameter s = NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome();
 				if (s != param)
 					update(s);
-			}
-		});
-		
-		infoField.addMouseDownHandler(new MouseDownHandler() 
-		{
-			private HandlerRegistration mouseMoveUpRegistration;
-			private int lastWidth;
-			private int lastHeight;
-
-			@Override
-			public void onMouseDown(MouseDownEvent event) 
-			{
-				lastWidth = getOffsetWidth();
-				lastHeight = getOffsetHeight();
-	
-				if (mouseMoveUpRegistration == null) 
-				{
-					mouseMoveUpRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() 
-					{
-						@Override
-						public void onPreviewNativeEvent(NativePreviewEvent event) 
-						{
-							if (event.getTypeInt() == Event.ONMOUSEMOVE || event.getTypeInt() == Event.ONMOUSEUP) 
-							{
-								int width = getOffsetWidth();
-								int height = getOffsetHeight();
-								if (width != lastWidth || height != lastHeight) 
-								{
-									infoBoxHeight = infoField.getElement().getClientHeight();
-									
-									lastWidth = width;
-									lastHeight = height;
-								}
-	
-								if (event.getTypeInt() == Event.ONMOUSEUP) 
-								{
-									infoBoxHeight = infoField.getElement().getClientHeight();
-									
-									if (mouseMoveUpRegistration != null) 
-									{
-										mouseMoveUpRegistration.removeHandler();
-										mouseMoveUpRegistration = null;
-									}
-								}
-								
-								GWT.log("ParameterInfo resized to:" + infoBoxHeight);
-							}
-						}
-					});
-				}
 			}
 		});
 		

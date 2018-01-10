@@ -43,7 +43,7 @@ public class ShowDeveloperOptions extends Setting {
 
 				setDeveloperOptionsVisibility();
 
-				if (choice == 1 && sendToServer)
+				if (choice == 1)
 					NonMaps.theMaps.getNonLinearWorld().getSettings().setToDefaults();
 			}
 

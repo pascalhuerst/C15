@@ -75,36 +75,6 @@ class PlayControlParameterSelectLayout2 : public ParameterSelectLayout2
     virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
 };
 
-class PlayControlParameterEditLayout2 : public ParameterEditLayout2
-{
-  public:
-    typedef ParameterEditLayout2 super;
-    PlayControlParameterEditLayout2 ();
-
-    virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
-};
-
-
-class PlayControlWithBehaviourEditLayout2 : public PlayControlParameterEditLayout2, public virtual PlayControlParameterLayout2
-{
-  public:
-    typedef PlayControlParameterEditLayout2 super1;
-    typedef PlayControlParameterLayout2 super2;
-
-    PlayControlWithBehaviourEditLayout2 ();
-
-    virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
-    virtual bool onRotary (int inc, ButtonModifiers modifiers) override;
-    bool isModeSupported (uint8_t desiredMode) const override;
-    void setMode (uint8_t desiredMode) override;
-
-  private:
-    enum Mode : uint8_t
-    {
-      Behaviour = 2,
-    };
-};
-
 class RibbonParameterSelectLayout2 : public PlayControlParameterSelectLayout2, public RibbonParameterLayout2
 {
   public:
@@ -138,17 +108,6 @@ class AftertouchParameterSelectLayout2 : public PlayControlParameterSelectLayout
     virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
 };
 
-class AftertouchParameterEditLayout2 : public PlayControlParameterEditLayout2, public AftertouchParameterLayout2
-{
-  public:
-    typedef PlayControlParameterEditLayout2 super1;
-    typedef AftertouchParameterLayout2 super2;
-
-    AftertouchParameterEditLayout2 ();
-    virtual ButtonMenu *createMenu (const Rect &rect) override;
-    virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
-};
-
 class PitchbendParameterSelectLayout2 : public PlayControlParameterSelectLayout2, public PitchbendParameterLayout2
 {
   public:
@@ -160,22 +119,30 @@ class PitchbendParameterSelectLayout2 : public PlayControlParameterSelectLayout2
     virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
 };
 
-class PitchbendParameterEditLayout2 : public PlayControlParameterEditLayout2, public PitchbendParameterLayout2
+class PlayControlParameterEditLayout2 : public ParameterEditLayout2, public virtual PlayControlParameterLayout2
+{
+  public:
+    typedef ParameterEditLayout2 super1;
+    typedef PlayControlParameterLayout2 super2;
+
+    PlayControlParameterEditLayout2 ();
+
+    virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
+    virtual bool onRotary (int inc, ButtonModifiers modifiers) override;
+    bool isModeSupported (uint8_t desiredMode) const override;
+    void setMode (uint8_t desiredMode) override;
+
+  private:
+    enum Mode : uint8_t
+    {
+      Behaviour = 2,
+    };
+};
+
+class RibbonParameterEditLayout2 : public PlayControlParameterEditLayout2, public RibbonParameterLayout2
 {
   public:
     typedef PlayControlParameterEditLayout2 super1;
-    typedef PitchbendParameterLayout2 super2;
-
-    PitchbendParameterEditLayout2 ();
-
-    virtual ButtonMenu *createMenu (const Rect &rect) override;
-    virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
-};
-
-class RibbonParameterEditLayout2 : public PlayControlWithBehaviourEditLayout2, public RibbonParameterLayout2
-{
-  public:
-    typedef PlayControlWithBehaviourEditLayout2 super1;
     typedef RibbonParameterLayout2 super2;
 
     RibbonParameterEditLayout2 ();
@@ -189,10 +156,10 @@ class RibbonParameterEditLayout2 : public PlayControlWithBehaviourEditLayout2, p
     virtual void setMode (uint8_t desiredMode) override;
 };
 
-class PedalParameterEditLayout2 : public PlayControlWithBehaviourEditLayout2, public PedalParameterLayout2
+class PedalParameterEditLayout2 : public PlayControlParameterEditLayout2, public PedalParameterLayout2
 {
   public:
-    typedef PlayControlWithBehaviourEditLayout2 super1;
+    typedef PlayControlParameterEditLayout2 super1;
     typedef PedalParameterLayout2 super2;
 
     PedalParameterEditLayout2 ();

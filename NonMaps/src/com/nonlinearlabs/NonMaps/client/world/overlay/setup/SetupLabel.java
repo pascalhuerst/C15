@@ -33,7 +33,7 @@ public class SetupLabel extends Label {
 
 	@Override
 	public RGB getColorFont() {
-		return new Gray(229);
+		return new Gray(150);
 	}
 
 	public void setText(String txt) {

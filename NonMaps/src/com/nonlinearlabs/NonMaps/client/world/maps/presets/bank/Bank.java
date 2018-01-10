@@ -54,8 +54,6 @@ public class Bank extends LayoutResizingVertical implements Renameable, IBank {
 	
 	private boolean inSelectedCluster = false;
 	private boolean dockingIndicator = false;
-	
-	private String m_saveState = "";
 
 	private enum DropPosition {
 		ABOVE, COVERING, BELOW
@@ -1023,15 +1021,5 @@ public class Bank extends LayoutResizingVertical implements Renameable, IBank {
 
 	public boolean hasSlaves() {
 		return getBottomSlave() != null || getRightSlave() != null;
-	}
-	
-	public void setImportExportState(String state)
-	{
-		m_saveState = state;
-	}
-	
-	public String getImportExportState()
-	{
-		return m_saveState;
 	}
 }

@@ -33,9 +33,6 @@ bool USBStickAvailableView::updateLabel()
 
 bool USBStickAvailableView::usbIsReady()
 {
-#ifdef _DEVELOPMENT_PC
-  return true;
-#endif
   SpawnCommandLine cmd("lsblk");
   return cmd.getStdOutput().find("/mnt/usb-stick") != std::string::npos;
 }

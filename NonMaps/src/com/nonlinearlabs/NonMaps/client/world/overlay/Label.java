@@ -12,20 +12,8 @@ import com.nonlinearlabs.NonMaps.client.world.TextCropper;
 
 public abstract class Label extends OverlayControl {
 
-	double fontHeightInPx = 0;
-	RGB m_linecolor;
-	
-	protected RGB getLineColor() {
-		return m_linecolor;
-	}
-	
-	public void setFontHeightInMM(double fontHeightInMM) {
-		this.fontHeightInPx = Millimeter.toPixels(fontHeightInMM);
-	}
-
 	public Label(OverlayLayout parent) {
 		super(parent);
-		fontHeightInPx = Millimeter.toPixels(4);
 	}
 
 	public abstract String getDrawText(Context2d ctx);
@@ -43,7 +31,7 @@ public abstract class Label extends OverlayControl {
 		ctx.setTextAlign(TextAlign.LEFT);
 		ctx.setFillStyle(getColorFont().toString());
 		setFont(ctx, fontHeightInPixels);
-		
+
 		String text = TextCropper.crop(getDrawText(ctx), ctx, pixRect.getWidth());
 		Position left = pixRect.getCenterPoint();
 
@@ -69,9 +57,6 @@ public abstract class Label extends OverlayControl {
 		String splits[] = text.split("\t");
 
 		if (splits.length == 1) {
-			if(getLineColor() != null)
-				ctx.setFillStyle(getLineColor().toString());
-			
 			ctx.fillText(text, left.getX(), left.getY() + getVerticalFontDisplacement());
 		} else {
 			double x = left.getX();
@@ -100,7 +85,7 @@ public abstract class Label extends OverlayControl {
 	}
 
 	protected double getFontHeight(Rect pixRect) {
-		return fontHeightInPx;
+		return Millimeter.toPixels(4);
 	}
 
 	protected double getVerticalFontDisplacement() {
@@ -114,10 +99,6 @@ public abstract class Label extends OverlayControl {
 				return text;
 
 		return str[str.length - 1];
-	}
-
-	public void setFontColor(RGB rgb) {
-		m_linecolor = rgb;		
 	}
 
 }

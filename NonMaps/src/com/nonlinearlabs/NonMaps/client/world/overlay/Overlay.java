@@ -220,15 +220,14 @@ public class Overlay extends OverlayLayout {
 		return addChild(new DragProxy(this, origin, point));
 	}
 
-	boolean removeDragProxies() {
+	void removeDragProxies() {
 		for (OverlayControl c : getChildren()) {
 			if (c instanceof DragProxy) {
 				removeChild(c);
 				removeDragProxies();
-				return true;
+				return;
 			}
 		}
-		return false;
 	}
 
 	public void removeDragProxy(DragProxy c) {
@@ -297,7 +296,9 @@ public class Overlay extends OverlayLayout {
 	public Control handleGesture(Gesture g) {
 		if (g instanceof Down) {
 			if (!hitsContextMenu(((Down) g).getPosition())) {
-				removeExistingContextMenus();
+				if (removeExistingContextMenus()) {
+					return this;
+				}
 			}
 			if (!hitsGlobalMenu(((Down) g).getPosition())) {
 				collapseGlobalMenu();

@@ -1,7 +1,6 @@
 #include <proxies/hwui/FineButton.h>
 
-FineButton::FineButton() :
-    m_shifted(false)
+FineButton::FineButton ()
 {
   registerTraversal (TOGGLED_OFF, DEPRESSED, TOGGLED_ON);
   registerTraversal (TOGGLED_ON, TIME_ELAPSED, CURRENT_ON);
@@ -47,14 +46,4 @@ bool FineButton::onTimeout ()
 bool FineButton::getModifierState () const
 {
   return getState () != TOGGLED_OFF;
-}
-
-bool FineButton::onlyTemporary()
-{
-  return m_shifted == false;
-}
-
-void FineButton::setShiftedWhilePressDown(bool down)
-{
-  m_shifted = down;
 }

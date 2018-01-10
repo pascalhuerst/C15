@@ -94,13 +94,5 @@ namespace FileTools
     }
     return "";
   }
-
-  static Glib::ustring bytesToHumanreadable(size_t numBytes)
-  {
-    gchar* stringPtr = g_format_size(numBytes);
-    Glib::ustring ret(stringPtr);
-    g_free(stringPtr);
-    return ret;
-  }
 };
 

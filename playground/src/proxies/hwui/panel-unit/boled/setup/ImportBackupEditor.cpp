@@ -26,7 +26,7 @@
 #include "USBStickAvailableView.h"
 #include "device-settings/DebugLevel.h"
 #include <tools/FileTools.h>
-#include <proxies/hwui/panel-unit/boled/file/FileDialogLayout.h>
+#include <proxies/hwui/panel-unit/boled/FileDialogLayout.h>
 
 static const Rect c_fullRightSidePosition(129, 16, 126, 48);
 static constexpr const char *c_backupTargetFile = "/mnt/usb-stick/backup.xml";
@@ -65,7 +65,8 @@ bool ImportBackupEditor::onButton (int i, bool down, ButtonModifiers modifiers)
 {
   if (down)
   {
-    if (i == BUTTON_C && USBStickAvailableView::usbIsReady())
+    if (i == BUTTON_C && USBStickAvailableView::usbIsReady()
+  )
     {
       importBackup ();
       return true;
@@ -95,49 +96,43 @@ bool ImportBackupEditor::filterApplicableFileNames(std::experimental::filesystem
 void ImportBackupEditor::importBackupFileFromPath(std::experimental::filesystem::directory_entry file)
 {
   auto &app = Application::get();
-  auto &boled = app.getHWUI()->getPanelUnit().getEditPanel().getBoled();
+  auto path = generateFileDialogCompliantNameFromPath(file);
 
-  if (file != std::experimental::filesystem::directory_entry())
+  FileInStream in(path, true);
+
+  if (!in.eof())
   {
+    auto scope = app.getUndoScope()->startTransaction("Import Presetmanager Backup");
+    auto pm = app.getPresetManager();
+    auto &boled = app.getHWUI()->getPanelUnit().getEditPanel().getBoled();
 
-    auto path = generateFileDialogCompliantNameFromPath(file);
+    boled.setOverlay(new SplashLayout());
 
-    FileInStream in(path, true);
-
-    if (!in.eof())
+    pm->undoableClear(scope->getTransaction());
+    PresetManagerSerializer serializer(*pm.get());
+    SplashLayout::addStatus("Restoring Backup from File!");
+    XmlReader reader(in, scope->getTransaction());
+    reader.onFileVersionRead([=](int version)
     {
-      auto scope = app.getUndoScope()->startTransaction("Import Presetmanager Backup");
-      auto pm = app.getPresetManager();
-      boled.setOverlay(new SplashLayout());
-
-      pm->undoableClear(scope->getTransaction());
-      PresetManagerSerializer serializer(*pm.get());
-      SplashLayout::addStatus("Restoring Backup from File!");
-      XmlReader reader(in, scope->getTransaction());
-      reader.onFileVersionRead([=](int version)
+      if (version > VersionAttribute::getCurrentFileVersion ())
       {
-        if (version > VersionAttribute::getCurrentFileVersion ())
-        {
-          SplashLayout::setStatus("Unsupported File Version. The backup was created with a newer firmware. Please update your C15.");
-          std::this_thread::sleep_for (2s);
-          scope->getTransaction ()->rollBack ();
-          return Reader::FileVersionCheckResult::Unsupported;
-        }
-        return Reader::FileVersionCheckResult::OK;
-      });
+        SplashLayout::setStatus("Unsupported File Version. The backup was created with a newer firmware. Please update your C15.");
+        std::this_thread::sleep_for (2s);
+        scope->getTransaction ()->rollBack ();
+        return Reader::FileVersionCheckResult::Unsupported;
+      }
+      return Reader::FileVersionCheckResult::OK;
+    });
 
-      reader.read<PresetManagerSerializer>(std::ref(*pm.get()));
-      SplashLayout::addStatus("Restore Complete!");
-    }
+    reader.read<PresetManagerSerializer> (std::ref(*pm.get ()));
+    SplashLayout::addStatus("Restore Complete!");
+    boled.resetOverlay ();
   }
-  boled.resetOverlay();
-  Application::get().getHWUI()->getPanelUnit().setupFocusAndMode(
-  { UIFocus::Presets, UIMode::Select });
 }
 
 void ImportBackupEditor::importBackup()
 {
   auto matchedFiles = FileTools::getListOfFilesThatMatchFilter("/mnt/usb-stick/", &ImportBackupEditor::filterApplicableFileNames);
-  Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(
-      new FileDialogLayout(std::move(matchedFiles), &ImportBackupEditor::importBackupFileFromPath, "Backup File"));
+  Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().setOverlay(
+      new FileDialogLayout(std::move(matchedFiles), &ImportBackupEditor::importBackupFileFromPath));
 }

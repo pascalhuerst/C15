@@ -72,7 +72,7 @@ void ParameterSerializer::tryWriteHardwareSourceParameter (Writer &writer) const
 
 void ParameterSerializer::readTagContent (Reader &reader) const
 {
-  if (m_param && !m_param->isLocked())
+  if (m_param)
   {
     reader.onTextElement ("value", [&] (const Glib::ustring & text, const Attributes & attr) mutable
     {

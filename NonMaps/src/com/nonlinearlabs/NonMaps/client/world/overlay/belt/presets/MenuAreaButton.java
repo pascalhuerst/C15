@@ -65,10 +65,9 @@ public abstract class MenuAreaButton extends SVGImage {
 
 	protected abstract State getState();
 
-	@Override
-	public void doLayout(double x, double y, double w, double h) {
-		setSelection(w >= getLargeButtonWidth() ? ImageSelection.Large : ImageSelection.Small);
-		super.doLayout(x, y, w, h);
+	public void doLayout(double x, double y, double w, double h, ImageSelection imageSelection) {
+		setSelection(imageSelection);
+		doLayout(x, y, w, h);
 	}
 
 	public void setSelection(ImageSelection desiredSelection) {
@@ -99,10 +98,6 @@ public abstract class MenuAreaButton extends SVGImage {
 
 	protected double getMinHeight() {
 		return Millimeter.toPixels(5);
-	}
-
-	private double getLargeButtonWidth() {
-		return Millimeter.toPixels(31);
 	}
 
 }

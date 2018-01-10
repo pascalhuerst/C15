@@ -75,7 +75,6 @@ public abstract class SettingsMenu extends SettingsControl {
 
 		ctx.setLineWidth(Millimeter.toPixels(0.5));
 		ctx.beginPath();
-		ctx.setStrokeStyle(new Gray(90).toString());
 		double lineWidth = buttonDim / 2;
 		double margin = lineWidth / 2;
 		double heightPerStroke = r.getHeight() / 4;

@@ -47,20 +47,6 @@ bool InfoLayout::onButton (int i, bool down, ButtonModifiers modifiers)
   {
     switch (i)
     {
-    case BUTTON_A:
-      if (Application::get().getHWUI()->getFocusAndMode().mode == UIMode::Info)
-      {
-        if (Application::get().getHWUI()->getFocusAndMode().focus == UIFocus::Presets)
-        {
-          Application::get().getHWUI()->undoableSetFocusAndMode(FocusAndMode(UIFocus::Banks, UIMode::Info));
-        }
-        else if (Application::get().getHWUI()->getFocusAndMode().focus == UIFocus::Banks)
-        {
-          Application::get().getHWUI()->undoableSetFocusAndMode(FocusAndMode(UIFocus::Presets, UIMode::Info));
-        }
-        return true;
-      }
-      break;
       case BUTTON_PRESET:
         if (Application::get ().getHWUI ()->getFocusAndMode().focus == UIFocus::Presets)
         {

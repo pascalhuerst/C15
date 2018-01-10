@@ -548,7 +548,7 @@ namespace NavTree
   struct BackupExport : EditableLeaf
   {
       BackupExport(InnerNode *parent) :
-          EditableLeaf(parent, "Save all Banks...")
+          EditableLeaf(parent, "Export")
       {
       }
 
@@ -566,7 +566,7 @@ namespace NavTree
   struct BackupImport : EditableLeaf
   {
       BackupImport(InnerNode *parent) :
-          EditableLeaf(parent, "Restore all Banks...")
+          EditableLeaf(parent, "Restore")
       {
       }
 
@@ -587,8 +587,8 @@ namespace NavTree
           InnerNode(parent, "Backup")
       {
         children.emplace_back(new USBStickAvailable(this));
-        children.emplace_back(new BackupExport(this));
         children.emplace_back(new BackupImport(this));
+        children.emplace_back(new BackupExport(this));
       }
   };
 

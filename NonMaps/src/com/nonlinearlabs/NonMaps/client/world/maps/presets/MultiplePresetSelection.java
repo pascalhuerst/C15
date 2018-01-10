@@ -10,10 +10,6 @@ public class MultiplePresetSelection {
 	public MultiplePresetSelection(Preset p) {
 		add(p);
 	}
-	
-	public MultiplePresetSelection() {
-		
-	}
 
 	public ArrayList<String> getSelectedPresets() {
 		return selectedPresets;

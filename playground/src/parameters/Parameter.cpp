@@ -13,110 +13,110 @@
 #include <proxies/hwui/panel-unit/boled/parameter-screens/UnmodulatebaleParameterLayouts.h>
 #include <presets/EditBuffer.h>
 
-static const auto c_invalidSnapshotValue = numeric_limits<tControlPositionValue>::max();
+static const auto c_invalidSnapshotValue = numeric_limits<tControlPositionValue>::max ();
 
-Parameter::Parameter(ParameterGroup *group, uint16_t id, const ScaleConverter *scaling, tControlPositionValue def,
-                     tControlPositionValue coarseDenominator, tControlPositionValue fineDenominator) :
-    UpdateDocumentContributor(group),
-    m_id(id),
-    m_value(this, scaling, def, coarseDenominator, fineDenominator),
-    m_lastSnapshotedValue(c_invalidSnapshotValue)
+Parameter::Parameter (ParameterGroup *group, uint16_t id, const ScaleConverter *scaling, tControlPositionValue def,
+                      tControlPositionValue coarseDenominator, tControlPositionValue fineDenominator) :
+    UpdateDocumentContributor (group),
+    m_id (id),
+    m_value (this, scaling, def, coarseDenominator, fineDenominator),
+    m_lastSnapshotedValue (c_invalidSnapshotValue)
 {
 
 }
 
-Parameter::~Parameter()
+Parameter::~Parameter ()
 {
 }
 
-size_t Parameter::getHash() const
+size_t Parameter::getHash () const
 {
   size_t hash = 0;
-  hash_combine(hash, m_value.getHash());
+  hash_combine (hash, m_value.getHash ());
   return hash;
 }
 
-QuantizedValue &Parameter::getValue()
+QuantizedValue &Parameter::getValue ()
 {
   return m_value;
 }
 
-const QuantizedValue &Parameter::getValue() const
+const QuantizedValue &Parameter::getValue () const
 {
   return m_value;
 }
 
-void Parameter::onValueChanged(Initiator initiator, tControlPositionValue oldValue, tControlPositionValue newValue)
+void Parameter::onValueChanged (Initiator initiator, tControlPositionValue oldValue, tControlPositionValue newValue)
 {
-  if(initiator == Initiator::EXPLICIT_LPC)
+  if (initiator == Initiator::EXPLICIT_LPC)
   {
-    if(m_lastSnapshotedValue == c_invalidSnapshotValue)
+    if (m_lastSnapshotedValue == c_invalidSnapshotValue)
     {
       m_lastSnapshotedValue = oldValue;
     }
   }
   else
   {
-    m_lastSnapshotedValue = getControlPositionValue();
+    m_lastSnapshotedValue = getControlPositionValue ();
   }
 
-  invalidate();
+  invalidate ();
 }
 
-tControlPositionValue Parameter::expropriateSnapshotValue()
+tControlPositionValue Parameter::expropriateSnapshotValue ()
 {
   tControlPositionValue v = m_lastSnapshotedValue;
   m_lastSnapshotedValue = c_invalidSnapshotValue;
-  return v == c_invalidSnapshotValue ? getControlPositionValue() : v;
+  return v == c_invalidSnapshotValue ? getControlPositionValue () : v;
 }
 
-void Parameter::setDefaultFromHwui()
+void Parameter::setDefaultFromHwui ()
 {
-  auto scope = getUndoScope().startContinuousTransaction(this, "Set '%0'", getGroupAndParameterName());
-  setCPFromHwui(scope->getTransaction(), getDefaultValue());
+  auto scope = getUndoScope ().startContinuousTransaction (this, "Set '%0'", getGroupAndParameterName ());
+  setCPFromHwui (scope->getTransaction (), getDefaultValue ());
 }
 
-void Parameter::setDefaultFromHwui(UNDO::Scope::tTransactionPtr transaction)
+void Parameter::setDefaultFromHwui (UNDO::Scope::tTransactionPtr transaction)
 {
-  setCPFromHwui(transaction, getDefaultValue());
+  setCPFromHwui (transaction, getDefaultValue ());
 }
 
-void Parameter::setDefaultFromWebUI(UNDO::Scope::tTransactionPtr transaction)
+void Parameter::setDefaultFromWebUI (UNDO::Scope::tTransactionPtr transaction)
 {
-  setCPFromWebUI(transaction, getDefaultValue());
+  setCPFromWebUI (transaction, getDefaultValue ());
 }
 
-void Parameter::stepCPFromHwui(UNDO::Scope::tTransactionPtr transaction, int incs, ButtonModifiers modifiers)
+void Parameter::stepCPFromHwui (UNDO::Scope::tTransactionPtr transaction, int incs, ButtonModifiers modifiers)
 {
-  setCPFromHwui(transaction, getNextStepValue(incs, modifiers));
+  setCPFromHwui (transaction, getNextStepValue (incs, modifiers));
 }
 
-void Parameter::stepCPFromWebUI(UNDO::Scope::tTransactionPtr transaction, Step step, ButtonModifiers modifiers)
+void Parameter::stepCPFromWebUI (UNDO::Scope::tTransactionPtr transaction, Step step, ButtonModifiers modifiers)
 {
-  setCPFromWebUI(transaction, getNextStepValue(step == Parameter::Step::STEP_INC ? 1 : -1, modifiers));
+  setCPFromWebUI (transaction, getNextStepValue (step == Parameter::Step::STEP_INC ? 1 : -1, modifiers));
 }
 
-void Parameter::setCPFromHwui(UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &cpValue)
+void Parameter::setCPFromHwui (UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &cpValue)
 {
-  setCpValue(transaction, Initiator::EXPLICIT_HWUI, cpValue, true);
+  setCpValue (transaction, Initiator::EXPLICIT_HWUI, cpValue, true);
 }
 
-void Parameter::setCPFromWebUI(UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &cpValue)
+void Parameter::setCPFromWebUI (UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &cpValue)
 {
-  setCpValue(transaction, Initiator::EXPLICIT_WEBUI, cpValue, true);
+  setCpValue (transaction, Initiator::EXPLICIT_WEBUI, cpValue, true);
 }
 
-void Parameter::loadFromPreset(UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &value)
+void Parameter::loadFromPreset (UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &value)
 {
-  setIndirect(transaction, value);
+  setIndirect (transaction, value);
   m_lastSnapshotedValue = value;
 }
 
-void Parameter::setIndirect(UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &value)
+void Parameter::setIndirect (UNDO::Scope::tTransactionPtr transaction, const tControlPositionValue &value)
 {
-  auto swapData = UNDO::createSwapData(value);
+  auto swapData = UNDO::createSwapData (value);
 
-  transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
+  transaction->addSimpleCommand ([ = ] (UNDO::Command::State) mutable
   {
     tDisplayValue newVal = m_value.getRawValue();
     swapData->swapWith (newVal);
@@ -124,29 +124,30 @@ void Parameter::setIndirect(UNDO::Scope::tTransactionPtr transaction, const tCon
   });
 }
 
-void Parameter::loadDefault(UNDO::Scope::tTransactionPtr transaction)
+void Parameter::loadDefault (UNDO::Scope::tTransactionPtr transaction)
 {
-  loadFromPreset(transaction, getDefaultValue());
+  loadFromPreset (transaction, getDefaultValue ());
 }
 
-void Parameter::reset(UNDO::Scope::tTransactionPtr transaction, Initiator initiator)
+void Parameter::reset (UNDO::Scope::tTransactionPtr transaction, Initiator initiator)
 {
-  setCpValue(transaction, initiator, getDefaultValue(), true);
+  setCpValue (transaction, initiator, getDefaultValue(), true);
 }
 
-void Parameter::setCpValue(UNDO::Scope::tTransactionPtr transaction, Initiator initiator, tControlPositionValue value, bool doSendToLpc)
+void Parameter::setCpValue (UNDO::Scope::tTransactionPtr transaction, Initiator initiator, tControlPositionValue value,
+                            bool doSendToLpc)
 {
-  if(m_value.differs(value))
+  if (m_value.differs (value))
   {
-    if(initiator == Initiator::EXPLICIT_LPC)
+    if (initiator == Initiator::EXPLICIT_LPC)
     {
-      m_value.setRawValue(Initiator::EXPLICIT_LPC, value);
+      m_value.setRawValue (Initiator::EXPLICIT_LPC, value);
     }
     else
     {
-      auto swapData = UNDO::createSwapData(value);
+      auto swapData = UNDO::createSwapData (value);
 
-      transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
+      transaction->addSimpleCommand ([ = ] (UNDO::Command::State) mutable
       {
         tDisplayValue newVal = m_value.getRawValue();
         swapData->swapWith (newVal);
@@ -160,21 +161,18 @@ void Parameter::setCpValue(UNDO::Scope::tTransactionPtr transaction, Initiator i
   }
 }
 
-void Parameter::copyFrom(UNDO::Scope::tTransactionPtr transaction, Parameter * other)
+void Parameter::copyFrom (UNDO::Scope::tTransactionPtr transaction, Parameter * other)
 {
-  if(!isLocked())
-  {
-    loadFromPreset(transaction, other->getControlPositionValue());
-  }
+  loadFromPreset (transaction, other->getControlPositionValue ());
 }
 
-void Parameter::undoableSetDefaultValue(UNDO::Scope::tTransactionPtr transaction, Parameter *value)
+void Parameter::undoableSetDefaultValue (UNDO::Scope::tTransactionPtr transaction, Parameter *value)
 {
-  if(value->getControlPositionValue() != m_value.getDefaultValue())
+  if (value->getControlPositionValue () != m_value.getDefaultValue ())
   {
-    auto swapData = UNDO::createSwapData(value->getControlPositionValue());
+    auto swapData = UNDO::createSwapData (value->getControlPositionValue ());
 
-    transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
+    transaction->addSimpleCommand ([ = ] (UNDO::Command::State) mutable
     {
       tDisplayValue newVal = m_value.getDefaultValue();
       swapData->swapWith (newVal);
@@ -184,101 +182,101 @@ void Parameter::undoableSetDefaultValue(UNDO::Scope::tTransactionPtr transaction
   }
 }
 
-void Parameter::sendToLpc() const
+void Parameter::sendToLpc () const
 {
-  if(dynamic_cast<const EditBuffer*>(getParentGroup()->getParent()))
-    Application::get().getLPCProxy()->sendParameter(this);
+  if (dynamic_cast<const EditBuffer*> (getParentGroup ()->getParent ()))
+    Application::get ().getLPCProxy ()->sendParameter (this);
 }
 
-tControlPositionValue Parameter::getNextStepValue(int incs, ButtonModifiers modifiers) const
+tControlPositionValue Parameter::getNextStepValue (int incs, ButtonModifiers modifiers) const
 {
-  return m_value.getNextStepValue(incs, modifiers);
+  return m_value.getNextStepValue (incs, modifiers);
 }
 
-bool Parameter::isBiPolar() const
+bool Parameter::isBiPolar () const
 {
-  return m_value.isBiPolar();
+  return m_value.isBiPolar ();
 }
 
-const ParameterGroup *Parameter::getParentGroup() const
+const ParameterGroup *Parameter::getParentGroup () const
 {
-  return static_cast<const ParameterGroup *>(getParent());
+  return static_cast<const ParameterGroup *> (getParent ());
 }
 
-ParameterGroup *Parameter::getParentGroup()
+ParameterGroup *Parameter::getParentGroup ()
 {
-  return static_cast<ParameterGroup *>(getParent());
+  return static_cast<ParameterGroup *> (getParent ());
 }
 
-gint32 Parameter::getID() const
+gint32 Parameter::getID () const
 {
   return m_id;
 }
 
-tControlPositionValue Parameter::getDefaultValue() const
+tControlPositionValue Parameter::getDefaultValue () const
 {
-  return m_value.getDefaultValue();
+  return m_value.getDefaultValue ();
 }
 
-tTcdValue Parameter::getTcdValue() const
+tTcdValue Parameter::getTcdValue () const
 {
-  return m_value.getTcdValue();
+  return m_value.getTcdValue ();
 }
 
-tDisplayValue Parameter::getDisplayValue() const
+tDisplayValue Parameter::getDisplayValue () const
 {
-  return m_value.getDisplayValue();
+  return m_value.getDisplayValue ();
 }
 
-Glib::ustring Parameter::getDisplayString() const
+Glib::ustring Parameter::getDisplayString () const
 {
-  return m_value.getDisplayString();
+  return m_value.getDisplayString ();
 }
 
-tControlPositionValue Parameter::getControlPositionValue() const
+tControlPositionValue Parameter::getControlPositionValue () const
 {
-  return m_value.getQuantizedClipped();
+  return m_value.getQuantizedClipped ();
 }
 
-sigc::connection Parameter::onParameterChanged(slot<void, const Parameter *> slot, bool doInitCall)
+sigc::connection Parameter::onParameterChanged (slot<void, const Parameter *> slot, bool doInitCall)
 {
   if(doInitCall)
-    return m_signalParamChanged.connectAndInit(slot, this);
+    return m_signalParamChanged.connectAndInit (slot, this);
 
   return m_signalParamChanged.connect(slot);
 }
 
-void Parameter::invalidate()
+void Parameter::invalidate ()
 {
-  m_signalParamChanged.send(this);
-  onChange();
+  m_signalParamChanged.send (this);
+  onChange ();
 }
 
-Glib::ustring Parameter::getLongName() const
+Glib::ustring Parameter::getLongName () const
 {
   return ParameterDB::get().getLongName(getID());
 }
 
-Glib::ustring Parameter::getShortName() const
+Glib::ustring Parameter::getShortName () const
 {
   return ParameterDB::get().getShortName(getID());
 }
 
-Glib::ustring Parameter::getMiniParameterEditorName() const
+Glib::ustring Parameter::getMiniParameterEditorName () const
 {
   return getShortName();
 }
 
-Glib::ustring Parameter::getGroupAndParameterName() const
+Glib::ustring Parameter::getGroupAndParameterName () const
 {
   return UNDO::StringTools::buildString(getParentGroup()->getShortName(), " - ", getLongName());
 }
 
-void Parameter::writeDocument(Writer &writer, tUpdateID knownRevision) const
+void Parameter::writeDocument (Writer &writer, tUpdateID knownRevision) const
 {
-  bool changed = knownRevision < getUpdateIDOfLastChange();
+  bool changed = knownRevision < getUpdateIDOfLastChange ();
 
-  writer.writeTag("parameter", Attribute("id", getID()), Attribute("changed", changed), Attribute("locked", isLocked()), [&]()
+  writer.writeTag ("parameter", Attribute ("id", getID ()), Attribute ("changed", changed), [&]()
   {
     if (changed)
     {
@@ -287,88 +285,78 @@ void Parameter::writeDocument(Writer &writer, tUpdateID knownRevision) const
   });
 }
 
-void Parameter::writeDocProperties(Writer &writer, tUpdateID knownRevision) const
+void Parameter::writeDocProperties (Writer &writer, tUpdateID knownRevision) const
 {
-  writer.writeTextElement("value", to_string(m_value.getRawValue()));
-  writer.writeTextElement("default", to_string(m_value.getDefaultValue()));
+  writer.writeTextElement ("value", to_string (m_value.getRawValue ()));
+  writer.writeTextElement ("default", to_string (m_value.getDefaultValue ()));
 
-  if(shouldWriteDocProperties(knownRevision))
+  if (shouldWriteDocProperties (knownRevision))
   {
-    writer.writeTextElement("scaling", m_value.getScaleConverter()->controlPositionToDisplayJS());
-    writer.writeTextElement("bipolar", to_string(m_value.isBiPolar()));
-    writer.writeTextElement("long-name", getLongName());
-    writer.writeTextElement("short-name", getShortName());
-    writer.writeTextElement("coarse-denominator", to_string(m_value.getCoarseDenominator()));
-    writer.writeTextElement("fine-denominator", to_string(m_value.getFineDenominator()));
+    writer.writeTextElement ("scaling", m_value.getScaleConverter ()->controlPositionToDisplayJS ());
+    writer.writeTextElement ("bipolar", to_string (m_value.isBiPolar ()));
+    writer.writeTextElement ("long-name", getLongName ());
+    writer.writeTextElement ("short-name", getShortName ());
+    writer.writeTextElement ("coarse-denominator", to_string (m_value.getCoarseDenominator ()));
+    writer.writeTextElement ("fine-denominator", to_string (m_value.getFineDenominator ()));
   }
 }
 
-bool Parameter::shouldWriteDocProperties(UpdateDocumentContributor::tUpdateID knownRevision) const
+bool Parameter::shouldWriteDocProperties (UpdateDocumentContributor::tUpdateID knownRevision) const
 {
   return knownRevision == 0;
 }
 
-void Parameter::writeToLPC(MessageComposer &cmp) const
+void Parameter::writeToLPC (MessageComposer &cmp) const
 {
-  gint16 v = getTcdValue();
+  gint16 v = getTcdValue ();
   cmp << v;
 }
 
-void Parameter::undoableLoadValue(UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &value)
+void Parameter::undoableLoadValue (UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &value)
 {
-  auto tcdValue = stoi(value);
-  auto cpValue = m_value.getScaleConverter()->tcdToControlPosition(tcdValue);
-  loadFromPreset(transaction, cpValue);
+  auto tcdValue = stoi (value);
+  auto cpValue = m_value.getScaleConverter ()->tcdToControlPosition (tcdValue);
+  loadFromPreset (transaction, cpValue);
 }
 
-void Parameter::undoableRandomize(UNDO::Scope::tTransactionPtr transaction, Initiator initiator, double amount)
+void Parameter::undoableRandomize (UNDO::Scope::tTransactionPtr transaction, Initiator initiator, double amount)
 {
-  auto rnd = g_random_double_range(0.0, 1.0);
-  auto range = getValue().getScaleConverter()->getControlPositionRange();
-  auto newPos = (getControlPositionValue() * (1.0 - amount)) + ((range.getMin() + rnd * range.getRangeWidth()) * amount);
-  setCpValue(transaction, initiator, newPos, false);
+  auto rnd = g_random_double_range (0.0, 1.0);
+  auto range = getValue ().getScaleConverter ()->getControlPositionRange ();
+  auto newPos = (getControlPositionValue () * (1.0 - amount)) + ((range.getMin () + rnd * range.getRangeWidth ()) * amount);
+  setCpValue (transaction, initiator, newPos, false);
 }
 
-void Parameter::undoableSetType(UNDO::Scope::tTransactionPtr transaction, PresetType oldType, PresetType desiredType)
+void Parameter::undoableSetType (UNDO::Scope::tTransactionPtr transaction, PresetType oldType, PresetType desiredType)
 {
-  m_value.undoableSetType(transaction, oldType, desiredType);
+  m_value.undoableSetType (transaction, oldType, desiredType);
 }
 
-void Parameter::onPresetSentToLpc() const
+void Parameter::onPresetSentToLpc () const
 {
 }
 
-void Parameter::exportReaktorParameter(stringstream &target) const
+void Parameter::exportReaktorParameter (stringstream &target) const
 {
-  target << getTcdValue() << endl;
+  target << getTcdValue () << endl;
 }
 
-DFBLayout *Parameter::createLayout(FocusAndMode focusAndMode) const
+DFBLayout *Parameter::createLayout (FocusAndMode focusAndMode) const
 {
-  switch(focusAndMode.mode)
-  {
-    case UIMode::Info:
-      return new ParameterInfoLayout();
+  if (focusAndMode.mode == UIMode::Info)
+    return new ParameterInfoLayout ();
 
-    case UIMode::Edit:
-      return new UnmodulateableParameterEditLayout2();
-
-    case UIMode::Select:
-    default:
-      return new UnmodulateableParameterSelectLayout2();
-  }
-
-  g_return_val_if_reached(nullptr);
+  return new UnmodulateableParameterSelectLayout2 ();
 }
 
-void Parameter::onUnselected()
+void Parameter::onUnselected ()
 {
-  onChange();
+  onChange ();
 }
 
-void Parameter::onSelected()
+void Parameter::onSelected ()
 {
-  onChange();
+  onChange ();
 }
 
 Parameter::VisualizationStyle Parameter::getVisualizationStyle() const
@@ -384,69 +372,36 @@ Parameter::VisualizationStyle Parameter::getVisualizationStyle() const
   return VisualizationStyle::Bar;
 }
 
-void Parameter::undoableLock(UNDO::Scope::tTransactionPtr transaction)
-{
-  if(!isLocked())
-  {
-    auto swapData = UNDO::createSwapData(true);
-
-    transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
-    {
-      swapData->swapWith (m_isLocked);
-      onChange();
-    });
-  }
-}
-
-void Parameter::undoableUnlock(UNDO::Scope::tTransactionPtr transaction)
-{
-  if(isLocked())
-  {
-    auto swapData = UNDO::createSwapData(false);
-
-    transaction->addSimpleCommand([ = ] (UNDO::Command::State) mutable
-    {
-      swapData->swapWith (m_isLocked);
-      onChange();
-    });
-  }
-}
-
-bool Parameter::isLocked() const
-{
-  return m_isLocked;
-}
-
-void Parameter::check()
+void Parameter::check ()
 {
   auto cp = 0;
 
-  auto scope = getUndoScope().startTransaction("Test parameter '%1'", getLongName());
-  setCpValue(scope->getTransaction(), Initiator::EXPLICIT_OTHER, m_value.getLowerBorder(), false);
+  auto scope = getUndoScope ().startTransaction ("Test parameter '%1'", getLongName ());
+  setCpValue (scope->getTransaction (), Initiator::EXPLICIT_OTHER, m_value.getLowerBorder (), false);
 
   // test inc and dec reaches min and max:
 
-  for(int i = 0; i < m_value.getCoarseDenominator(); i++)
-    stepCPFromHwui(scope->getTransaction(), 1, ButtonModifiers());
+  for (int i = 0; i < m_value.getCoarseDenominator (); i++)
+    stepCPFromHwui (scope->getTransaction (), 1, ButtonModifiers());
 
-  cp = getControlPositionValue();
-  g_assert(cp == m_value.getUpperBorder());
+  cp = getControlPositionValue ();
+  g_assert(cp == m_value.getUpperBorder ());
 
-  for(int i = 0; i < m_value.getCoarseDenominator(); i++)
-    stepCPFromHwui(scope->getTransaction(), -1, ButtonModifiers());
+  for (int i = 0; i < m_value.getCoarseDenominator (); i++)
+    stepCPFromHwui (scope->getTransaction (), -1, ButtonModifiers());
 
-  cp = getControlPositionValue();
-  g_assert(cp == m_value.getLowerBorder());
+  cp = getControlPositionValue ();
+  g_assert(cp == m_value.getLowerBorder ());
 
-  for(int i = 0; i < m_value.getFineDenominator(); i++)
-    stepCPFromHwui(scope->getTransaction(), 1, ButtonModifiers(ButtonModifier::FINE));
+  for (int i = 0; i < m_value.getFineDenominator (); i++)
+    stepCPFromHwui (scope->getTransaction (), 1, ButtonModifiers(ButtonModifier::FINE));
 
-  cp = getControlPositionValue();
-  g_assert(cp == m_value.getUpperBorder());
+  cp = getControlPositionValue ();
+  g_assert(cp == m_value.getUpperBorder ());
 
-  for(int i = 0; i < m_value.getFineDenominator(); i++)
-    stepCPFromHwui(scope->getTransaction(), -1, ButtonModifiers(ButtonModifier::FINE));
+  for (int i = 0; i < m_value.getFineDenominator (); i++)
+    stepCPFromHwui (scope->getTransaction (), -1, ButtonModifiers(ButtonModifier::FINE));
 
-  cp = getControlPositionValue();
-  g_assert(cp == m_value.getLowerBorder());
+  cp = getControlPositionValue ();
+  g_assert(cp == m_value.getLowerBorder ());
 }

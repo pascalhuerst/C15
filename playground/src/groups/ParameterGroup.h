@@ -37,11 +37,6 @@ class ParameterGroup : public UpdateDocumentContributor, public IntrusiveListIte
     void undoableClear (UNDO::Scope::tTransactionPtr transaction);
     void undoableReset (UNDO::Scope::tTransactionPtr transaction, Initiator initiator);
 
-    void undoableLock(UNDO::Scope::tTransactionPtr transaction);
-    void undoableUnlock(UNDO::Scope::tTransactionPtr transaction);
-    void undoableToggleLock(UNDO::Scope::tTransactionPtr transaction);
-    bool areAllParametersLocked() const;
-
     virtual void undoableRandomize (UNDO::Scope::tTransactionPtr transaction, Initiator initiator, double amount);
     void undoableSetDefaultValues (UNDO::Scope::tTransactionPtr transaction, ParameterGroup *values);
     void undoableSetType (UNDO::Scope::tTransactionPtr transaction, PresetType oldType, PresetType desiredType);
@@ -56,7 +51,7 @@ class ParameterGroup : public UpdateDocumentContributor, public IntrusiveListIte
     virtual tUpdateID onChange () override;
 
     // CALLBACKS
-    sigc::connection onGroupChanged (slot<void> slot);
+    void onGroupChanged (slot<void> slot);
 
     void check ();
 

@@ -43,7 +43,7 @@ PresetManagerActions::PresetManagerActions (PresetManager &presetManager) :
     auto bank = presetManager.addBank(transaction, x, y);
 
     bank->undoableInsertPreset(transaction, 0);
-    bank->undoableOverwritePreset(transaction, 0, static_pointer_cast<Preset>(presetManager.getEditBuffer()));
+    bank->undoableStorePreset(transaction, 0, presetManager.getEditBuffer());
     presetManager.undoableSelectBank(transaction, bank->getUuid());
     bank->getPreset(0)->undoableSelect(transaction);
 
@@ -210,22 +210,5 @@ bool PresetManagerActions::handleRequest (const Glib::ustring &path, shared_ptr<
       return true;
     }
   }
-
-  if (path.find("/presets/get-diff") == 0)
-  {
-    if (auto httpRequest = dynamic_pointer_cast<HTTPRequest>(request))
-    {
-      auto preset1 = Application::get().getPresetManager()->findPreset(request->get("p1"));
-      auto preset2 = Application::get().getPresetManager()->findPreset(request->get("p2"));
-
-      if (preset1 && preset2)
-      {
-        httpRequest->respond(Application::get().getPresetManager()->getDiffString(preset1, preset2));
-        httpRequest->setStatusOK();
-        return true;
-      }
-    }
-  }
-
   return false;
 }

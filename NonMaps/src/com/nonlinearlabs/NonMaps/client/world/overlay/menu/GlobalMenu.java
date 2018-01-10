@@ -8,7 +8,6 @@ import com.nonlinearlabs.NonMaps.client.world.Position;
 import com.nonlinearlabs.NonMaps.client.world.RGB;
 import com.nonlinearlabs.NonMaps.client.world.Rect;
 import com.nonlinearlabs.NonMaps.client.world.overlay.BankInfoDialog;
-import com.nonlinearlabs.NonMaps.client.world.overlay.Label;
 import com.nonlinearlabs.NonMaps.client.world.overlay.Overlay;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayControl;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayLayout;
@@ -24,19 +23,17 @@ public class GlobalMenu extends OverlayLayout {
 
 	private State state = State.Collapsed;
 	private MenuHeader header;
-	private Label headerText;
 
 	public GlobalMenu(Overlay overlay) {
 		super(overlay);
 
-		addChild(headerText = new GlobalMenuHeaderLabel(this));
 		addChild(header = new MenuHeader(this));
 		addChild(new ToggleViewMenuEntry(this, overlay.getSetup()));
 		addChild(new MenuEntry(this) {
 
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return (SearchQueryDialog.isShown() ? "\uE0A4 " : "\uE0A3 ") + "Preset Search";
+				return (SearchQueryDialog.isShown() ? "Hide " : "Show ") + "Preset Search";
 			}
 
 			@Override
@@ -49,12 +46,12 @@ public class GlobalMenu extends OverlayLayout {
 		});
 
 		addChild(new ToggleViewMenuEntry(this, overlay.getUndoTree()));
-		
+
 		addChild(new MenuEntry(this) {
 
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return (PresetInfoDialog.isShown() ? "\uE0A4 " : "\uE0A3 ") + "Preset Info";
+				return (PresetInfoDialog.isShown() ? "Hide " : "Show ") + "Preset Info";
 			}
 
 			@Override
@@ -70,7 +67,7 @@ public class GlobalMenu extends OverlayLayout {
 
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return (BankInfoDialog.isShown() ? "\uE0A4 " : "\uE0A3 ") + "Bank Info";
+				return (BankInfoDialog.isShown() ? "Hide " : "Show ") + "Bank Info";
 			}
 
 			@Override
@@ -86,7 +83,7 @@ public class GlobalMenu extends OverlayLayout {
 
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return (ParameterInfoDialog.isShown() ? "\uE0A4 " : "\uE0A3 ") + "Parameter Info";
+				return (ParameterInfoDialog.isShown() ? "Hide " : "Show ") + "Parameter Info";
 			}
 
 			@Override
@@ -101,7 +98,7 @@ public class GlobalMenu extends OverlayLayout {
 		addChild(new MenuEntry(this) {
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return (getNonMaps().getNonLinearWorld().getPresetManager().getPresetsVisible() ? "\uE0A4 " : "\uE0A3 ") + "Presets";
+				return (getNonMaps().getNonLinearWorld().getPresetManager().getPresetsVisible() ? "Hide " : "Show ") + "Presets";
 			}
 
 			@Override
@@ -117,7 +114,7 @@ public class GlobalMenu extends OverlayLayout {
 			
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return (getNonMaps().getNonLinearWorld().getParameterEditor().isEditorVisible() ? "\uE0A4 " : "\uE0A3 ") + "Parameter Editor";
+				return (getNonMaps().getNonLinearWorld().getParameterEditor().isEditorVisible() ? "Hide " : "Show ") + "Parameter Editor";
 			}
 			
 			@Override
@@ -133,7 +130,7 @@ public class GlobalMenu extends OverlayLayout {
 
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return "\uE0A3 Open Help";
+				return "Open Help";
 			}
 
 			@Override
@@ -161,7 +158,6 @@ public class GlobalMenu extends OverlayLayout {
 			double myHeight = buttonDim;
 			super.doLayout(w - myWidth, top, myWidth, myHeight);
 			header.doLayout(0, 0, buttonDim, buttonDim);
-			headerText.doLayout(0, 0, 0, 0);
 
 			for (OverlayControl c : getChildren()) {
 				if (c instanceof MenuEntry) {
@@ -169,14 +165,11 @@ public class GlobalMenu extends OverlayLayout {
 				}
 			}
 		} else {
-			final int IGNORED_CHILDREN = 1;
-			
 			double myWidth = Millimeter.toPixels(45);
-			int childCount = getChildren().size() - IGNORED_CHILDREN;
+			int childCount = getChildren().size();
 			double myHeight = childCount * buttonDim;
 			super.doLayout(w - myWidth, top, myWidth, myHeight);
 			header.doLayout(0, 0, myWidth, buttonDim);
-			headerText.doLayout(0, 0, 70, buttonDim);
 			double y = buttonDim;
 
 			for (OverlayControl c : getChildren()) {

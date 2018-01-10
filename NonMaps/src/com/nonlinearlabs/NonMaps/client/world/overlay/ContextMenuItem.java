@@ -95,7 +95,7 @@ public class ContextMenuItem extends OverlayControl {
 	}
 
 	public double getDesiredWidth() {
-		return text.length() * Millimeter.toPixels(2.25);
+		return text.length() * Millimeter.toPixels(3);
 	}
 
 	public double getDesiredHeight() {

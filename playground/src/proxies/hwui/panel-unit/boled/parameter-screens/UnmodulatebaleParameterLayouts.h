@@ -23,18 +23,3 @@ class UnmodulateableParameterSelectLayout2 : public ParameterSelectLayout2, publ
   protected:
     virtual void init () override;
 };
-
-
-class UnmodulateableParameterEditLayout2 : public ParameterEditLayout2, public UnmodulateableParameterLayout2
-{
-  public:
-    typedef ParameterEditLayout2 super1;
-    typedef UnmodulateableParameterLayout2 super2;
-
-    UnmodulateableParameterEditLayout2 ();
-    virtual void init () override;
-
-  protected:
-    virtual ButtonMenu *createMenu (const Rect &rect) override;
-    virtual bool onButton (int i, bool down, ButtonModifiers modifiers) override;
-};

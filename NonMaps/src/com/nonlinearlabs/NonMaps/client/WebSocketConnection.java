@@ -68,24 +68,29 @@ class WebSocketConnection {
 
 	public native void webSocketOpen(String host)
 	/*-{
+		console.log("webSocketOpen");
 		var address = 'ws://' + host + '/ws/';
 		var connection = new WebSocket(address);
 		var self = this;
 
 		connection.onopen = function() {
+			console.log("webSocketOpen->onopen");
 			self.@com.nonlinearlabs.NonMaps.client.WebSocketConnection::webSocketConnection = connection;
 			self.@com.nonlinearlabs.NonMaps.client.WebSocketConnection::onServerOpen(Ljava/lang/String;)('');
 		};
 
 		connection.onerror = function(error) {
+			console.log("webSocketOpen->onerror");
 			self.@com.nonlinearlabs.NonMaps.client.WebSocketConnection::onServerError(Ljava/lang/String;)('error');
 		};
 
 		connection.onclose = function(e) {
+			console.log("webSocketOpen->onclose");
 			self.@com.nonlinearlabs.NonMaps.client.WebSocketConnection::onServerClosed(Ljava/lang/String;)('closed');
 		};
 
 		connection.onmessage = function(e) {
+			console.log("webSocketOpen->onmessage");
 			self.@com.nonlinearlabs.NonMaps.client.WebSocketConnection::onServerUpdate(Ljava/lang/String;)(e.data);
 		};
 	}-*/;
@@ -163,6 +168,7 @@ class WebSocketConnection {
 
 	protected void ping() {
 		if (ping == null) {
+			Tracer.log("ping");
 			send("/ping/" + pingCount);
 
 			ping = new RepeatingCommand() {
@@ -187,6 +193,7 @@ class WebSocketConnection {
 	}
 
 	private void onPongReceived() {
+		Tracer.log("pong");
 		ping = null;
 		hideConnectionError();
 		Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {

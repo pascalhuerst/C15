@@ -119,4 +119,5 @@ public class RenameDialog extends DialogBox {
 		RenameDialog.this.hide();
 		nonMaps.captureFocus();
 	}
+
 }

@@ -1,5 +1,4 @@
 #include <Application.h>
-#include <proxies/hwui/UsageMode.h>
 #include <proxies/hwui/buttons.h>
 #include <proxies/hwui/controls/ControlOwner.h>
 #include <proxies/hwui/controls/Rect.h>
@@ -51,10 +50,6 @@ bool BankInfoLayout::onButton (int i, bool down, ButtonModifiers modifiers)
     auto layout = new EditBankInfoLayout ();
     Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ().setOverlay (layout);
     return true;
-  }
-  else if (i == BUTTON_PRESET && down)
-  {
-    Application::get().getHWUI()->undoableSetFocusAndMode(FocusAndMode(UIFocus::Presets, UIMode::Select));
   }
 
   return super::onButton (i, down, modifiers);

@@ -2,7 +2,6 @@
 
 #include <proxies/hwui/DFBLayout.h>
 #include <proxies/hwui/HWUIEnums.h>
-#include <proxies/hwui/panel-unit/boled/preset-screens/controls/InvertedLabel.h>
 #include <functional>
 
 class BankAndPresetNumberLabel;
@@ -49,7 +48,6 @@ class PresetManagerLayout : public DFBLayout
 
     ButtonMenu *m_menu = nullptr;
     Button *m_autoLoad = nullptr;
-    InvertedLabel* m_groupLocking = nullptr;
     NumPresetsInBankLabel *m_numPresetsInBank = nullptr;
     BankAndPresetNumberLabel *m_bankAndPresetNumberLabel = nullptr;
     PresetListBase *m_presets = nullptr;

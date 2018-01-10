@@ -5,11 +5,8 @@ import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
-import com.nonlinearlabs.NonMaps.client.NonMaps;
 
 public abstract class Mouseing {
 
@@ -40,6 +37,7 @@ public abstract class Mouseing {
 		}, ContextMenuEvent.getType());
 
 		KeyDownHandler keypress = new KeyDownHandler() {
+
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if (handleKeyPress(event)) {
@@ -48,18 +46,9 @@ public abstract class Mouseing {
 				}
 			}
 		};
-		
-		KeyUpHandler keyUpHandler = new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				NonMaps.get().getNonLinearWorld().handleKeyUp(event);
-				
-			}
-		};
 
 		canvas.sinkEvents(Event.ONCONTEXTMENU | Event.KEYEVENTS);
 		canvas.addKeyDownHandler(keypress);
-		canvas.addKeyUpHandler(keyUpHandler);
 		canvas.setFocus(true);
 	}
 

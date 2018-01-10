@@ -13,7 +13,6 @@ class FileListControl : public ControlWithChildren
     Label* upperFile;
     Label* middleFile;
     Label* bottomFile;
-    Label* bottomFile2;
     FileTools::FileList fileList;
     int selectedItem;
 
@@ -25,5 +24,4 @@ class FileListControl : public ControlWithChildren
     void changeSelection(int change);
     fs::directory_entry getSelection() const;
     int getSelectedIndex() const;
-    bool redraw(FrameBuffer &fb) override;
 };

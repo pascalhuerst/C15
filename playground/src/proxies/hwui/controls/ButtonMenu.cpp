@@ -36,7 +36,7 @@ void ButtonMenu::setHighlight (bool isHighlight)
 
 void ButtonMenu::toggle ()
 {
-  auto i = m_selected;
+  size_t i = m_selected;
 
   i++;
 
@@ -45,21 +45,6 @@ void ButtonMenu::toggle ()
 
   selectButton (i);
   bruteForce ();
-}
-
-void ButtonMenu::antiToggle()
-{
-  int i = m_selected;
-
-  i--;
-
-  if (i < 0)
-  {
-    i = m_items.size() - 1;
-  }
-
-  selectButton(i);
-  bruteForce();
 }
 
 size_t ButtonMenu::addButton (const Glib::ustring &caption, Action action)
@@ -168,14 +153,4 @@ size_t ButtonMenu::getSelectedButton () const
 {
   return m_selected;
 }
-
-void ButtonMenu::setItemTitle(size_t i, const Glib::ustring &caption)
-{
-  if(m_items[i].title != caption)
-  {
-    m_items[i].title = caption;
-    bruteForce();
-  }
-}
-
 

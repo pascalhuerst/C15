@@ -159,11 +159,6 @@ void EditBuffer::setModulationAmount(double amount)
   }
 }
 
-bool EditBuffer::hasLocks()
-{
-  return doesAnyParameterHaveALock();
-}
-
 void EditBuffer::undoableSelectParameter(Parameter *p)
 {
   if(p != m_selectedParameter)
@@ -207,7 +202,10 @@ void EditBuffer::undoableSelectParameter(UNDO::Scope::tTransactionPtr transactio
       {
         if (auto hwui = Application::get ().getHWUI ())
         {
-          hwui->setFocusAndMode (UIFocus::Parameters);
+          if (hwui->getFocusAndMode ().mode == UIMode::Info)
+          hwui->setFocusAndMode (FocusAndMode (UIFocus::Parameters, UIMode::Info));
+          else
+          hwui->setFocusAndMode (FocusAndMode (UIFocus::Parameters, UIMode::Select));
         }
       }
 
@@ -360,10 +358,10 @@ void EditBuffer::undoableUpdateLoadedPresetInfo(UNDO::Scope::tTransactionPtr tra
       auto newPreset = getParent()->findPreset(m_lastLoadedPresetInfo.presetUUID);
 
       if(oldPreset)
-      oldPreset->onLoadStatusChanged();
+        oldPreset->onLoadStatusChanged();
 
       if(newPreset)
-      newPreset->onLoadStatusChanged();
+        newPreset->onLoadStatusChanged();
 
       onChange ();
     });
@@ -415,10 +413,10 @@ void EditBuffer::undoableInitSound(UNDO::Scope::tTransactionPtr transaction)
     auto newPreset = getParent()->findPreset(m_lastLoadedPresetInfo.presetUUID);
 
     if(oldPreset)
-    oldPreset->onLoadStatusChanged();
+      oldPreset->onLoadStatusChanged();
 
     if(newPreset)
-    newPreset->onLoadStatusChanged();
+      newPreset->onLoadStatusChanged();
 
     onChange ();
   });
@@ -551,35 +549,4 @@ Glib::ustring EditBuffer::exportReaktorPreset()
 void EditBuffer::sendToLPC()
 {
   Application::get().getLPCProxy()->sendEditBuffer();
-}
-
-void EditBuffer::undoableUnlockAllGroups(UNDO::Scope::tTransactionPtr transaction)
-{
-  for(auto group : getParameterGroups())
-    group->undoableUnlock(transaction);
-}
-
-void EditBuffer::undoableLockAllGroups(UNDO::Scope::tTransactionPtr transaction)
-{
-  for(auto group : getParameterGroups())
-    group->undoableLock(transaction);
-}
-
-void EditBuffer::undoableToggleGroupLock(UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &groupId)
-{
-  if(auto g = getParameterGroupByID(groupId))
-    g->undoableToggleLock(transaction);
-}
-
-bool EditBuffer::doesAnyParameterHaveALock()
-{
-  for (auto group : getParameterGroups())
-  {
-    for (auto parameter : group->getParameters())
-    {
-      if (parameter->isLocked())
-        return true;
-    }
-  }
-  return false;
 }

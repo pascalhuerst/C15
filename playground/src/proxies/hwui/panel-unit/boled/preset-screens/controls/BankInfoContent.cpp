@@ -16,10 +16,9 @@ namespace DETAIL
   class BankComment : public MultiLineLabel
   {
     public:
-      BankComment(Rect pos) :
+      BankComment () :
           MultiLineLabel ("---")
       {
-        setPosition(pos);
       }
 
       Oleds::tFont getFont ()
@@ -29,32 +28,30 @@ namespace DETAIL
   };
 }
 
-static const int divider = 64;
+static const int divider = 128;
 
-BankInfoContent::BankInfoContent()
+BankInfoContent::BankInfoContent () :
+    super (Rect (0, 0, 0, 64))
 {
-  addInfoField("name", new LeftAlignedLabel("Name", Rect(0, 0, divider, 16)), new DETAIL::BankComment(Rect(divider, 0, 256 - divider, 0)));
-  addInfoField("size", new LeftAlignedLabel("Size", Rect(0, 16, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 16, 256 - divider, 16)));
-  addInfoField("comment", new LeftAlignedLabel("Comment", Rect(0, 32, divider, 16)),
-      new DETAIL::BankComment(Rect(divider, 32, 256 - divider, 0)));
-  addInfoField("state", new LeftAlignedLabel("State", Rect(0, 48, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 48, 256 - divider, 16)));
-  addInfoField("dateofchange", new LeftAlignedLabel("Last Change", Rect(0, 64, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 64, 256 - divider, 16)));
-  addInfoField("importdate", new LeftAlignedLabel("Import Date", Rect(0, 96, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 96, 256 - divider, 16)));
-  addInfoField("importfile", new LeftAlignedLabel("Import File", Rect(0, 112, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 112, 256 - divider, 16)));
-  addInfoField("exportdate", new LeftAlignedLabel("Export Date", Rect(0, 124, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 124, 256 - divider, 16)));
-  addInfoField("exportfile", new LeftAlignedLabel("Export File", Rect(0, 136, divider, 16)),
-      new LeftAlignedLabel("---", Rect(divider, 136, 256 - divider, 16)));
+  addControl (m_nameLabel = new LeftAlignedLabel ("Name", Rect (0, 0, divider, 16)));
+  addControl (m_commentLabel = new LeftAlignedLabel ("Comment", Rect (0, 16, divider, 16)));
+  addControl (m_sizeLabel = new LeftAlignedLabel ("Size", Rect (0, 32, divider, 16)));
+  addControl (m_dateOfLastChangeLabel = new LeftAlignedLabel ("Date of Last Change", Rect (0, 48, divider, 16)));
+  addControl (m_dateOfImportFileLabel = new LeftAlignedLabel ("Date of Import File", Rect (0, 64, divider, 16)));
+  addControl (m_nameOfImportFileLabel = new LeftAlignedLabel ("Name of Import File", Rect (0, 80, divider, 16)));
 
+  m_name = addControl (new DETAIL::BankComment ());
+  m_name->setPosition (Rect (divider, 0, 256 - divider, 0));
+
+  m_comment = addControl (new DETAIL::BankComment ());
+  m_comment->setPosition (Rect (divider, 0, 256 - divider, 0));
+
+  m_size = addControl (new LeftAlignedLabel ("---", Rect (divider, 32, 256 - divider, 16)));
+  m_dateOfLastChange = addControl (new LeftAlignedLabel ("---", Rect (divider, 48, 256 - divider, 16)));
+  m_dateOfImportFile = addControl (new LeftAlignedLabel ("---", Rect (divider, 64, 256 - divider, 16)));
+  m_nameOfImportFile = addControl (new LeftAlignedLabel ("---", Rect (divider, 80, 256 - divider, 16)));
 
   Application::get ().getPresetManager ()->onBankSelection (mem_fun (this, &BankInfoContent::onBankSelectionChanged));
-
-  fillFromBank(Application::get().getPresetManager()->getSelectedBank().get());
 }
 
 BankInfoContent::~BankInfoContent ()
@@ -84,32 +81,26 @@ void BankInfoContent::onBankChanged (shared_ptr<PresetBank> bank)
   }
 }
 
-bool BankInfoContent::fillFromBank(PresetBank *bank)
+bool BankInfoContent::fillFromBank (const PresetBank *bank)
 {
-  infoFields["name"]->setInfo(bank->getName(true), FrameBuffer::Colors::C128);
-  infoFields["size"]->setInfo(to_string(bank->getNumPresets()));
-  infoFields["comment"]->setInfo(bank->getAttribute("Comment", "---"), FrameBuffer::Colors::C128);
-  infoFields["state"]->setInfo(bank->calcStateString());
-  infoFields["dateofchange"]->setInfo(DateTimeInfo::formatTime(bank->getLastChangedTimestamp(), "%F %R"));
-  infoFields["importdate"]->setInfo(DateTimeInfo::getDisplayStringFromIso(bank->getAttribute("Date of Import File", "---")));
-  infoFields["importfile"]->setInfo(bank->getAttribute("Name of Import File", "---"));
-  infoFields["exportdate"]->setInfo(DateTimeInfo::getDisplayStringFromIso(bank->getAttribute("Date of Export File", "---")));
-  infoFields["exportfile"]->setInfo(bank->getAttribute("Name of Export File", "---"));
-  return true;
+  bool ret = m_name->setText (bank->getName (true), FrameBuffer::Colors::C128);
+  ret |= m_comment->setText (bank->getAttribute ("Comment", "---"), FrameBuffer::Colors::C128);
+  ret |= m_size->setText (to_string (bank->getNumPresets ()));
+  ret |= m_dateOfLastChange->setText (DateTimeInfo::formatTime (bank->getLastChangedTimestamp (), "%x %X"));
+  ret |= m_dateOfImportFile->setText (DateTimeInfo::formatTime (bank->getAttribute ("Date of Import File", "---"), "%x %X"));
+  ret |= m_nameOfImportFile->setText (bank->getAttribute ("Name of Import File", "---"));
+  return ret;
 }
 
 bool BankInfoContent::fillDefaults ()
 {
-  infoFields["name"]->setInfo("---", FrameBuffer::Colors::C128);
-  infoFields["comment"]->setInfo("---", FrameBuffer::Colors::C128);
-  infoFields["size"]->setInfo("---");
-  infoFields["state"]->setInfo("Not saved by Export!");
-  infoFields["dateofchange"]->setInfo("---");
-  infoFields["exportdate"]->setInfo("---");
-  infoFields["importdate"]->setInfo("---");
-  infoFields["importfile"]->setInfo("---");
-  infoFields["exportfile"]->setInfo("---");
-  return true;
+  bool ret = m_name->setText ("---", FrameBuffer::Colors::C128);
+  ret |= m_comment->setText ("---", FrameBuffer::Colors::C128);
+  ret |= m_size->setText ("---");
+  ret |= m_dateOfLastChange->setText ("---");
+  ret |= m_dateOfImportFile->setText ("---");
+  ret |= m_nameOfImportFile->setText ("---");
+  return ret;
 }
 
 void BankInfoContent::setPosition (const Rect &rect)
@@ -131,18 +122,30 @@ void BankInfoContent::setDirty ()
 
 void BankInfoContent::fixLayout ()
 {
-
   int y = 0;
+  m_nameLabel->setPosition (Rect (0, y, divider, 16));
+  m_name->setPosition (Rect (divider, y + 2, 256 - divider, m_name->getPosition ().getHeight ()));
+  y = std::max (m_name->getPosition ().getBottom (), m_nameLabel->getPosition ().getBottom ());
 
-  for(auto info :
-  { infoFields["name"], infoFields["comment"], infoFields["size"], infoFields["state"], infoFields["dateofchange"],
-      infoFields["importdate"], infoFields["importfile"], infoFields["exportdate"], infoFields["exportfile"] })
-  {
-    auto height = info->m_content->getHeight();
-    info->m_label->setPosition(Rect(0, y, divider, 16));
-    info->m_content->setPosition(Rect(divider, y, 256 - divider, height));
-    y = std::max(info->m_content->getPosition().getBottom(), info->m_label->getPosition().getBottom());
-  }
+  m_commentLabel->setPosition (Rect (0, y, divider, 16));
+  m_comment->setPosition (Rect (divider, y + 2, 256 - divider, m_comment->getPosition ().getHeight ()));
+  y = std::max (m_commentLabel->getPosition ().getBottom (), m_comment->getPosition ().getBottom ());
+
+  m_sizeLabel->setPosition (Rect (0, y, divider, 16));
+  m_size->setPosition (Rect (divider, y, 256 - divider, 16));
+  y += 16;
+
+  m_dateOfLastChangeLabel->setPosition (Rect (0, y, divider, 16));
+  m_dateOfLastChange->setPosition (Rect (divider, y, 256 - divider, 16));
+  y += 16;
+
+  m_dateOfImportFileLabel->setPosition (Rect (0, y, divider, 16));
+  m_dateOfImportFile->setPosition (Rect (divider, y, 256 - divider, 16));
+  y += 16;
+
+  m_nameOfImportFileLabel->setPosition (Rect (0, y, divider, 16));
+  m_nameOfImportFile->setPosition (Rect (divider, y, 256 - divider, 16));
+  y += 16;
 
   Rect r = getPosition ();
   r.setHeight (y);

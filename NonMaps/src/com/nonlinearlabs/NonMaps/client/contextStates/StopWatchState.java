@@ -18,6 +18,7 @@ public class StopWatchState implements AutoCloseable {
 	public void close() {
 		Date now = new Date();
 		long diff = now.getTime() - start.getTime();
+		Tracer.log("StopWatch " + name + " took: " + diff + "ms");
 	}
 
 }

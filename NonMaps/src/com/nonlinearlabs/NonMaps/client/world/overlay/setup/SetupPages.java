@@ -95,7 +95,7 @@ public class SetupPages extends OverlayLayout {
 		ctx.fill();
 
 		ctx.setLineWidth(Millimeter.toPixels(0.25));
-		ctx.setStrokeStyle(new Gray(99).toString());
+		ctx.setStrokeStyle(new Gray(102).toString());
 		ctx.stroke();
 	}
 

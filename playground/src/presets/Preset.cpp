@@ -195,7 +195,7 @@ void Preset::copyFrom (UNDO::Scope::tTransactionPtr transaction, Preset *other, 
   if (auto preset = other)
   {
     m_settings.copyFrom (transaction, preset->getSettings ());
-    AttributesOwner::copyFrom(transaction, preset);
+    AttributesOwner::copyFrom(transaction, other);
 
     auto swapData = UNDO::createSwapData (preset->m_name);
 

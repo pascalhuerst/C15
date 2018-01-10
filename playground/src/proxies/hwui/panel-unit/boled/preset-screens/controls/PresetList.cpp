@@ -26,10 +26,6 @@ void PresetList::onBankSelectionChanged(shared_ptr<PresetBank> bank)
   {
     m_bankChangedConnection = bank->onBankChanged(mem_fun(this, &PresetList::onBankChanged));
   }
-  else
-  {
-    onBankChanged();
-  }
 }
 
 void PresetList::onBankChanged()
@@ -38,11 +34,6 @@ void PresetList::onBankChanged()
   {
     m_header->setup(bank);
     m_content->setup(bank, bank->getPresetPosition(bank->getSelectedPreset()));
-  }
-  else
-  {
-    m_header->setup(nullptr);
-    m_content->setup(nullptr, -1);
   }
 }
 
@@ -121,6 +112,5 @@ std::pair<int, int> PresetList::getSelectedPosition() const
     return make_pair(bankPos, presetPos);
 
   }
-  return
-  { -1, -1};
+  return {-1, -1};
 }

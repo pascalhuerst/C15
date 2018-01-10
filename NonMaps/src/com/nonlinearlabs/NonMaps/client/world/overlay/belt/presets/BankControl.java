@@ -79,11 +79,6 @@ public class BankControl extends OverlayLayout implements IBank {
 			}
 		}
 	}
-	
-	public void setHeaderTitleFontHeightInMM(int mm)
-	{
-		header.setFontHeightInMM(mm);
-	}
 
 	public PresetList getPresetList() {
 		return presets;

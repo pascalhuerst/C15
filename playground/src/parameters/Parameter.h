@@ -74,10 +74,6 @@ class Parameter : public UpdateDocumentContributor, public IntrusiveListItem<Par
     void undoableLoadValue (UNDO::Scope::tTransactionPtr transaction, const Glib::ustring &value);
     void undoableSetDefaultValue (UNDO::Scope::tTransactionPtr transaction, Parameter *values);
 
-    void undoableLock(UNDO::Scope::tTransactionPtr transaction);
-    void undoableUnlock(UNDO::Scope::tTransactionPtr transaction);
-    bool isLocked() const;
-
     virtual void exportReaktorParameter (stringstream &target) const;
 
     tTcdValue getTcdValue () const;
@@ -131,5 +127,4 @@ class Parameter : public UpdateDocumentContributor, public IntrusiveListItem<Par
     friend class EditBufferSnapshotMaker;
 
     tControlPositionValue m_lastSnapshotedValue;
-    bool m_isLocked = false;
 };

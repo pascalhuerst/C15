@@ -16,7 +16,7 @@ public class ToggleViewMenuEntry extends MenuEntry {
 
 	@Override
 	public String getDrawText(Context2d ctx) {
-		return (window.isShown() ? "\uE0A4 " : "\uE0A3 ") + window.getMenuTitle();
+		return (window.isShown() ? "Hide " : "Show ") + window.getMenuTitle();
 	}
 
 	@Override

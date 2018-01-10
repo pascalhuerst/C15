@@ -34,11 +34,10 @@ PresetInfoContent::PresetInfoContent () :
 {
   addControl(m_nameLabel = new LeftAlignedLabel("Name", Rect(2, 0, divider, 16)));
   addControl (m_commentLabel = new LeftAlignedLabel ("Comment", Rect (2, 16, divider, 16)));
-  addControl(m_storeTimeLabel = new LeftAlignedLabel("Last Change", Rect(2, 32, divider, 16)));
-  addControl(m_deviceNameLabel = new LeftAlignedLabel("Device Name", Rect(2, 48, divider, 16)));
-  addControl(m_softwareVersionLabel = new LeftAlignedLabel("UI Version", Rect(2, 64, divider, 16)));
-
-
+  addControl(m_deviceNameLabel = new LeftAlignedLabel("Device Name", Rect(2, 32, divider, 16)));
+  addControl(m_softwareVersionLabel = new LeftAlignedLabel("Software", Rect(2, 48, divider, 16)));
+  addControl(m_storeTimeLabel = new LeftAlignedLabel("Store Time", Rect(2, 64, divider, 16)));
+  
   m_comment = addControl (new DETAIL::PresetComment ());
   m_comment->setPosition (Rect (divider, 0, 256 - divider, 0));
 
@@ -105,7 +104,7 @@ bool PresetInfoContent::fillFromPreset (const Preset *preset)
 {
   bool ret = m_name->setText (preset->getName (), FrameBuffer::Colors::C128);
   ret |= m_comment->setText (preset->getAttribute ("Comment", "---"), FrameBuffer::Colors::C128);
-  ret |= m_storeTime->setText(localizeIsoTime(preset->getAttribute("StoreTime", "---")));
+  ret |= m_storeTime->setText (localizeIsoTime(preset->getAttribute ("StoreTime", "---")));
   ret |= m_deviceName->setText (preset->getAttribute ("DeviceName", "---"));
   ret |= m_softwareVersion->setText (preset->getAttribute ("SoftwareVersion", "---"));
   return ret;
@@ -149,16 +148,16 @@ void PresetInfoContent::fixLayout ()
   m_comment->setPosition(Rect(divider, y + 2, 256 - divider, m_comment->getPosition().getHeight()));
   y = std::max (m_commentLabel->getPosition ().getBottom (), m_comment->getPosition ().getBottom ());
 
-  m_storeTimeLabel->setPosition(Rect(0, y, divider, 16));
-  m_storeTime->setPosition(Rect(divider, y, 256 - divider, 16));
-  y += 16;
-
   m_deviceNameLabel->setPosition (Rect (0, y, divider, 16));
   m_deviceName->setPosition (Rect (divider, y, 256 - divider, 16));
   y += 16;
 
   m_softwareVersionLabel->setPosition (Rect (0, y, divider, 16));
   m_softwareVersion->setPosition (Rect (divider, y, 256 - divider, 16));
+  y += 16;
+
+  m_storeTimeLabel->setPosition(Rect(0, y, divider, 16));
+  m_storeTime->setPosition(Rect(divider, y, 256 - divider, 16));
   y += 16;
 
   Rect r = getPosition ();

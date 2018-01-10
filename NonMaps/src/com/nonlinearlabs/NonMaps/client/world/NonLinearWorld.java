@@ -3,9 +3,7 @@ package com.nonlinearlabs.NonMaps.client.world;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.Context2d.Composite;
 import com.google.gwt.canvas.dom.client.Context2d.LineCap;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.nonlinearlabs.NonMaps.client.Animator;
 import com.nonlinearlabs.NonMaps.client.Animator.DoubleClientData.Client;
 import com.nonlinearlabs.NonMaps.client.ClipboardManager;
@@ -41,8 +39,6 @@ public class NonLinearWorld extends MapsLayout {
 	private final DeveloperSettings settings;
 	private boolean layoutRequested = false;
 	private boolean firstLayout = true;
-	private boolean isShiftDown = false;
-	private boolean isSpaceDown = false;
 
 	private double maxLevelOfDetail = 0;
 
@@ -82,7 +78,6 @@ public class NonLinearWorld extends MapsLayout {
 	public void init() {
 		viewport.init();
 	}
-
 	public DeveloperSettings getSettings() {
 		return settings;
 	}
@@ -220,10 +215,6 @@ public class NonLinearWorld extends MapsLayout {
 			viewport.drawBackground(ctx);
 			drawChildren(ctx, invalidationMask);
 			viewport.draw(ctx, invalidationMask);
-
-			if (getPresetManager().hasMultipleRectangle())
-				getPresetManager().getMoveSomeBanks().draw(ctx, invalidationMask);
-
 			ctx.restore();
 		}
 	}
@@ -286,20 +277,6 @@ public class NonLinearWorld extends MapsLayout {
 
 	@Override
 	public Control mouseDrag(Position oldPoint, Position newPoint, boolean fine) {
-
-		if (isShiftDown()) {
-			if (getPresetManager().hasMultipleRectangle()) {
-				getPresetManager().updateMultipleRectangle(newPoint);
-			} else {
-				getPresetManager().startMultipleRectangle(newPoint);
-			}
-			return this;
-		} else {
-			if (getPresetManager().hasMultipleRectangle()) {
-				getPresetManager().endMultipleRectangle();
-			}
-		}
-
 		double xDiff = newPoint.getX() - oldPoint.getX();
 		double yDiff = newPoint.getY() - oldPoint.getY();
 
@@ -316,27 +293,19 @@ public class NonLinearWorld extends MapsLayout {
 	@Override
 	public Control mouseUp(Position eventPoint) {
 		scrollAnimation.run();
-
-		NonMaps.get().getNonLinearWorld().setShiftDown(false);
-		NonMaps.get().getNonLinearWorld().setSpaceDown(false);
-
-		if (getPresetManager().hasMultipleRectangle()) {
-			getPresetManager().endMultipleRectangle();
-		}
-
 		return this;
 	}
 
 	@Override
 	public Control pinch(Position eventPoint, double touchDist, TouchPinch pinch) {
-		zoom(-2 * touchDist, eventPoint.getX(), eventPoint.getY());
+		zoom(-touchDist, eventPoint.getX(), eventPoint.getY());
 		return this;
 	}
 
 	@Override
 	public Control wheel(Position eventPoint, double amount, boolean fine) {
 		double pix = toYPixels(-amount);
-		zoom(24 * pix / getCurrentZoom(), eventPoint.getX(), eventPoint.getY());
+		zoom(12 * pix / getCurrentZoom(), eventPoint.getX(), eventPoint.getY());
 		return this;
 	}
 
@@ -452,33 +421,6 @@ public class NonLinearWorld extends MapsLayout {
 	}
 
 	public boolean handleKeyPress(final KeyDownEvent event) {
-		isShiftDown = event.isShiftKeyDown();
-		isSpaceDown = event.getNativeKeyCode() == KeyCodes.KEY_SPACE;
-
-		Control ctrl = recurseChildren(new ControlFinder() {
-
-			@Override
-			public boolean onWayDownFound(Control ctrl) {
-				if (ctrl.onKey(event) != null) {
-					return true;
-				}
-
-				return false;
-			}
-		});
-
-		return (ctrl != null);
-	}
-
-	public boolean handleKeyUp(final KeyUpEvent event) {
-		isShiftDown = event.isShiftKeyDown();
-		isSpaceDown = event.getNativeKeyCode() == KeyCodes.KEY_SPACE;
-		return true;
-	}
-
-	public boolean handleKey(final KeyDownEvent event) {
-		isShiftDown = event.isShiftKeyDown();
-
 		Control ctrl = recurseChildren(new ControlFinder() {
 
 			@Override
@@ -595,21 +537,5 @@ public class NonLinearWorld extends MapsLayout {
 			return o.setContextMenu(pos, new PresetManagerContextMenu(o));
 		}
 		return super.onContextMenu(pos);
-	}
-
-	public boolean isShiftDown() {
-		return isShiftDown;
-	}
-
-	public void setShiftDown(boolean b) {
-		isShiftDown = b;
-	}
-
-	public boolean isSpaceDown() {
-		return isSpaceDown;
-	}
-
-	public void setSpaceDown(boolean isSpaceDown) {
-		this.isSpaceDown = isSpaceDown;
 	}
 }

@@ -2,7 +2,6 @@ package com.nonlinearlabs.NonMaps.client.world.overlay;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -10,15 +9,8 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
@@ -34,7 +26,6 @@ import com.nonlinearlabs.NonMaps.client.world.maps.presets.bank.preset.Preset;
 public class PresetInfoDialog extends GWTDialog {
 
 	private static PresetInfoDialog theDialog;
-	private static float commentBoxHeight = 0;
 	private TextArea comment;
 	private Label deviceName;
 	private Label softwareVersion;
@@ -61,13 +52,6 @@ public class PresetInfoDialog extends GWTDialog {
 		addContent();
 
 		initialSetup();
-		
-		super.pushDialogToFront();	
-		
-		if(commentBoxHeight != 0)
-		{
-			comment.setHeight(commentBoxHeight + "px");
-		}
 	}
 
 	private void initialSetup() {
@@ -79,7 +63,7 @@ public class PresetInfoDialog extends GWTDialog {
 		panel.setWidget(c, 0, new Label(name));
 		panel.setWidget(c, 1, content);
 	}
-		
+
 	private void addContent() {
 		HTMLPanel bankNameAndPosition = new HTMLPanel("div", "");
 		bankNameAndPosition.getElement().addClassName("flex-div bankname-and-position");
@@ -96,12 +80,12 @@ public class PresetInfoDialog extends GWTDialog {
 		addRow(panel, "Name", presetNameBox);
 		addRow(panel, "Position", bankNameAndPosition);
 		addRow(panel, "Comment", comment = new TextArea());
-		addRow(panel, "Last Change", storeTime = new Label(""));
 		addRow(panel, "Device Name", deviceName = new Label(""));
-		addRow(panel, "UI Version", softwareVersion = new Label(""));
+		addRow(panel, "Software Version", softwareVersion = new Label(""));
+		addRow(panel, "Store Time", storeTime = new Label(""));
 
 		position.getElement().addClassName("gwt-TextBox");
-				
+
 		comment.addFocusHandler(new FocusHandler() {
 
 			@Override
@@ -123,54 +107,6 @@ public class PresetInfoDialog extends GWTDialog {
 					if (!oldInfo.equals(comment.getText())) {
 						NonMaps.theMaps.getServerProxy().setPresetAttribute(theEditPreset, "Comment", comment.getText());
 					}
-				}
-			}
-		});
-		
-		comment.addMouseDownHandler(new MouseDownHandler() 
-		{
-			private HandlerRegistration mouseMoveUpRegistration;
-			private int lastWidth;
-			private int lastHeight;
-
-			@Override
-			public void onMouseDown(MouseDownEvent event) 
-			{
-				lastWidth = getOffsetWidth();
-				lastHeight = getOffsetHeight();
-	
-				if (mouseMoveUpRegistration == null) 
-				{
-					mouseMoveUpRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() 
-					{
-						@Override
-						public void onPreviewNativeEvent(NativePreviewEvent event) 
-						{
-							if (event.getTypeInt() == Event.ONMOUSEMOVE || event.getTypeInt() == Event.ONMOUSEUP) 
-							{
-								int width = getOffsetWidth();
-								int height = getOffsetHeight();
-								if (width != lastWidth || height != lastHeight) 
-								{
-									commentBoxHeight = comment.getElement().getClientHeight();
-									
-									lastWidth = width;
-									lastHeight = height;
-								}
-	
-								if (event.getTypeInt() == Event.ONMOUSEUP) 
-								{
-									commentBoxHeight = comment.getElement().getClientHeight();
-									
-									if (mouseMoveUpRegistration != null) 
-									{
-										mouseMoveUpRegistration.removeHandler();
-										mouseMoveUpRegistration = null;
-									}
-								}
-							}
-						}
-					});
 				}
 			}
 		});

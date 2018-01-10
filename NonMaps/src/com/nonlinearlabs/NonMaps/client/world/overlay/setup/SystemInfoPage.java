@@ -14,6 +14,8 @@ public class SystemInfoPage extends SetupPage {
 		addChild(new UISoftwareVersion(this));
 		addChild(new RTSoftwareVersion(this));
 		addChild(new OSVersion(this));
+		addChild(new Divider(this));
+		addChild(new SoftwareUpdateAvailable(this));
 	}
 
 	@Override

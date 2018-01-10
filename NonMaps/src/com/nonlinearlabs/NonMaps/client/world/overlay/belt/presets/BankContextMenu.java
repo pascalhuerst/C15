@@ -96,7 +96,7 @@ public abstract class BankContextMenu extends ContextMenu {
 				});
 			}
 
-			addChild(new ContextMenuItem(this, "Export as file ...") {
+			addChild(new ContextMenuItem(this, "Save Bank as file ...") {
 				@Override
 				public Control click(Position eventPoint) {
 					String bankName = URL.encodePathSegment(bank.getCurrentName());

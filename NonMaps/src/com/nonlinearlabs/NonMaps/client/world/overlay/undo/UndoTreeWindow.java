@@ -3,7 +3,6 @@ package com.nonlinearlabs.NonMaps.client.world.overlay.undo;
 import com.google.gwt.xml.client.Node;
 import com.nonlinearlabs.NonMaps.client.Millimeter;
 import com.nonlinearlabs.NonMaps.client.world.Dimension;
-import com.nonlinearlabs.NonMaps.client.world.Position;
 import com.nonlinearlabs.NonMaps.client.world.overlay.FloatingWindow;
 import com.nonlinearlabs.NonMaps.client.world.overlay.Overlay;
 import com.nonlinearlabs.NonMaps.client.world.overlay.setup.FloatingWindowHeader;
@@ -13,7 +12,6 @@ public class UndoTreeWindow extends FloatingWindow {
 	private UndoTree content;
 	private Dimension fixDimension;
 	private FloatingWindowHeader header;
-	private boolean scheduledScrollingToCurrentUndoStep = true;
 
 	public UndoTreeWindow(Overlay parent) {
 		super(parent);
@@ -40,17 +38,6 @@ public class UndoTreeWindow extends FloatingWindow {
 	}
 
 	@Override
-	public void calcPixRect(Position parentsReference, double currentZoom) {
-		super.calcPixRect(parentsReference, currentZoom);
-
-		if (scheduledScrollingToCurrentUndoStep) {
-			scheduledScrollingToCurrentUndoStep = false;
-			content.sanitizeScrollPosition();
-			content.scrollToCurrentUndoStep(false);
-		}
-	}
-
-	@Override
 	public String getTitle() {
 		return "Undo History";
 	}
@@ -64,7 +51,7 @@ public class UndoTreeWindow extends FloatingWindow {
 		super.toggle();
 
 		if (isShown())
-			scheduledScrollingToCurrentUndoStep = true;
+			content.scrollToCurrentUndoStep();
 	}
 
 	public UndoTree getTree() {

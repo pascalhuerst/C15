@@ -10,47 +10,47 @@
 #include <proxies/lpc/LPCProxy.h>
 #include <boost/algorithm/string.hpp>
 
-EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
-    super("/presets/param-editor/")
+EditBufferActions::EditBufferActions (shared_ptr<EditBuffer> editBuffer) :
+    super ("/presets/param-editor/")
 {
-  addAction("sync-lpc", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("sync-lpc", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     Application::get().getSettings()->sendToLPC();
     Application::get().getLPCProxy()->sendEditBuffer();
   });
 
-  addAction("select-param", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("select-param", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     Glib::ustring id = request->get ("id");
     editBuffer->undoableSelectParameter (id);
   });
 
-  addAction("set-param", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-param", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto id = stoi (request->get ("id"));
     auto value = stod (request->get ("value"));
     editBuffer->setParameter (id, value);
   });
 
-  addAction("set-mod-amount", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-mod-amount", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto amount = stod (request->get ("amount"));
     editBuffer->setModulationAmount (amount);
   });
 
-  addAction("set-mod-src", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-mod-src", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto src = stoi (request->get ("source"));
     editBuffer->setModulationSource (src);
   });
 
-  addAction("reset", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("reset", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto scope = editBuffer->getUndoScope ().startTransaction ("Init Sound");
     editBuffer->undoableInitSound(scope->getTransaction());
   });
 
-  addAction("rename-mc", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("rename-mc", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     Glib::ustring parameterId = request->get ("id");
     Glib::ustring newName = request->get ("new-name");
@@ -63,7 +63,7 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("set-macrocontrol-info", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-macrocontrol-info", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     Glib::ustring parameterId = request->get ("id");
     Glib::ustring info = request->get ("info");
@@ -76,13 +76,13 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("import-reaktor-preset", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("import-reaktor-preset", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     Glib::ustring preset = request->get ("preset");
     editBuffer->undoableImportReaktorPreset (preset);
   });
 
-  addAction("download-editbuffer-as-text", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("download-editbuffer-as-text", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     if (auto httpRequest = dynamic_pointer_cast<HTTPRequest> (request))
     {
@@ -95,7 +95,7 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("open-editbuffer-as-text", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("open-editbuffer-as-text", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     if (auto httpRequest = dynamic_pointer_cast<HTTPRequest> (request))
     {
@@ -105,7 +105,7 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("set-ribbon-touch-behaviour", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-ribbon-touch-behaviour", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto parameterId = stoi (request->get ("id"));
     Glib::ustring mode = request->get ("mode");
@@ -117,7 +117,7 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("set-ribbon-return-mode", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-ribbon-return-mode", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto parameterId = stoi (request->get ("id"));
     Glib::ustring mode = request->get ("mode");
@@ -129,7 +129,7 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("set-pedal-mode", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-pedal-mode", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto parameterId = stoi (request->get ("id"));
     Glib::ustring mode = request->get ("mode");
@@ -141,7 +141,7 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("reset-modulation", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("reset-modulation", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto parameterId = stoi (request->get ("id"));
 
@@ -151,57 +151,36 @@ EditBufferActions::EditBufferActions(shared_ptr<EditBuffer> editBuffer) :
     }
   });
 
-  addAction("randomize-sound", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("randomize-sound", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto scope = editBuffer->getUndoScope ().startTransaction ("Randomize Sound");
     editBuffer->undoableRandomize(scope->getTransaction(), Initiator::EXPLICIT_WEBUI);
   });
 
-  addAction("init-sound", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("init-sound", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
     auto scope = editBuffer->getUndoScope ().startTransaction ("Init Sound");
     editBuffer->undoableInitSound(scope->getTransaction());
   });
 
-  addAction("set-modamount-and-value",
-      [ = ] (shared_ptr<NetworkRequest> request) mutable
-      {
-        auto id = stoi (request->get ("id"));
-
-        if (auto param = dynamic_cast<ModulateableParameter*> (editBuffer->findParameterByID (id)))
-        {
-          auto modAmount = stod (request->get ("mod-amount"));
-          auto value = stod (request->get ("value"));
-
-          auto scope = editBuffer->getUndoScope ().startContinuousTransaction(param->getAmountCookie(), "Set Modulation Amount for '%0'", param->getGroupAndParameterName());
-          auto transaction = scope->getTransaction();
-          param->undoableSetModAmount (transaction, modAmount);
-          param->setCPFromHwui (transaction, value);
-        }
-      });
-
-  addAction("unlock-all-groups", [ = ] (shared_ptr<NetworkRequest> request) mutable
+  addAction ("set-modamount-and-value", [ = ] (shared_ptr<NetworkRequest> request) mutable
   {
-    auto scope = editBuffer->getUndoScope ().startTransaction ("Unlock all Groups");
-    editBuffer->undoableUnlockAllGroups(scope->getTransaction());
-  });
+    auto id = stoi (request->get ("id"));
 
-  addAction("lock-all-groups", [ = ] (shared_ptr<NetworkRequest> request) mutable
-  {
-    auto scope = editBuffer->getUndoScope ().startTransaction ("Unlock all Groups");
-    editBuffer->undoableLockAllGroups(scope->getTransaction());
-  });
+    if (auto param = dynamic_cast<ModulateableParameter*> (editBuffer->findParameterByID (id)))
+    {
+      auto modAmount = stod (request->get ("mod-amount"));
+      auto value = stod (request->get ("value"));
 
-  addAction("toggle-group-lock", [ = ] (shared_ptr<NetworkRequest> request) mutable
-  {
-    auto groupId = request->get ("group");
-    auto scope = editBuffer->getUndoScope ().startTransaction ("Toggle Group Lock");
-    editBuffer->undoableToggleGroupLock(scope->getTransaction(), groupId);
+      auto scope = editBuffer->getUndoScope ().startContinuousTransaction(param->getAmountCookie(), "Set Modulation Amount for '%0'", param->getGroupAndParameterName());
+      auto transaction = scope->getTransaction();
+      param->undoableSetModAmount (transaction, modAmount);
+      param->setCPFromHwui (transaction, value);
+    }
   });
-
 }
 
-EditBufferActions::~EditBufferActions()
+EditBufferActions::~EditBufferActions ()
 {
 }
 

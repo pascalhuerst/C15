@@ -7,7 +7,6 @@
 #include <proxies/hwui/panel-unit/PanelUnit.h>
 #include <proxies/hwui/panel-unit/PanelUnitParameterEditMode.h>
 #include <proxies/hwui/panel-unit/PanelUnitPresetMode.h>
-#include <proxies/hwui/panel-unit/boled/parameter-screens/ModulateableParameterLayouts.h>
 #include <proxies/hwui/TwoStateLED.h>
 #include <xml/FileOutStream.h>
 #include <presets/PresetManager.h>
@@ -62,22 +61,6 @@ PanelUnit::PanelUnit()
       {
         auto scope = Application::get().getUndoScope()->startTransaction("Set Modulation Source");
         modParam->undoableSelectModSource(scope->getTransaction(), mc);
-
-        auto Editbuffer = Application::get().getPresetManager()->getEditBuffer();
-
-        editBuffer->undoableSelectParameter(scope->getTransaction(), modParam);
-
-        auto hwui = Application::get().getHWUI();
-        auto layout = hwui->getPanelUnit().getEditPanel().getBoled().getLayout();
-
-        if (auto modParamLayout = dynamic_cast<ModulateableParameterSelectLayout2*>(layout.get()))
-        {
-
-          modParamLayout->installMcAmountScreen();
-          m_macroControlAssignmentStateMachine.setState(MacroControlAssignmentStates::Initial);
-          return true;
-        }
-
       }
     }
     return true;
