@@ -14,6 +14,8 @@
 #include <proxies/hwui/panel-unit/boled/SplashLayout.h>
 #include <proxies/hwui/panel-unit/boled/undo/UndoLayout.h>
 
+#include <proxies/hwui/descriptive-layouts/LayoutFactory.h>
+
 BOLED::BOLED () :
     OLEDProxy (Rect (0, 0, 256, 64))
 {
@@ -30,6 +32,12 @@ void BOLED::init()
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
 {
+  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode.focus, focusAndMode.mode))
+  {
+    reset (layout);
+    return;
+  }
+
   switch (focusAndMode.focus)
   {
     case UIFocus::Parameters:
