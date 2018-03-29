@@ -19,8 +19,11 @@ const Rect &Control::getPosition () const
 
 void Control::setPosition (const Rect &rect)
 {
-  m_rect = rect;
-  setDirty ();
+  if(m_rect != rect)
+  {
+    m_rect = rect;
+    setDirty ();
+  }
 }
 
 void Control::setDirty ()

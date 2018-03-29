@@ -15,7 +15,9 @@ namespace DescriptiveLayouts
       BasicBuildingBlock(const TemplateElement &e);
       virtual ~BasicBuildingBlock();
 
-      using Styles = std::initializer_list<std::pair<Style, int>>;
+      void setProperty(ComponentValues key, std::any value);
+
+      using Styles = std::list<std::pair<Style, int>>;
       void applyStyles(Styles styles);
 
     protected:

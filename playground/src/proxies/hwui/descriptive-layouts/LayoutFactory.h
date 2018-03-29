@@ -2,7 +2,9 @@
 
 #include <cstring>
 #include <assert.h>
+#include <list>
 #include <proxies/hwui/DFBLayout.h>
+#include <proxies/hwui/FrameBuffer.h>
 #include <proxies/hwui/controls/Rect.h>
 #include "EventSink.h"
 #include "EventSource.h"
@@ -34,7 +36,14 @@ namespace DescriptiveLayouts
 
     enum class Color
     {
-      C43, C77, C103, C128, C179, C204, C255, Transparent
+      Transparent = FrameBuffer::Transparent,
+      C43 = FrameBuffer::C43,
+      C77 = FrameBuffer::C77,
+      C103 = FrameBuffer::C103,
+      C128 = FrameBuffer::C128,
+      C179 = FrameBuffer::C179,
+      C204 = FrameBuffer::C204,
+      C255 = FrameBuffer::C255
     };
 
     enum class Alignment
@@ -53,7 +62,7 @@ namespace DescriptiveLayouts
       const char* id;
       Components c;
       Rect pos;
-      std::initializer_list<std::pair<Style, int>> style;
+      std::list<std::pair<Style, int>> style;
   };
 
   struct EventSinkMapping
@@ -70,16 +79,13 @@ namespace DescriptiveLayouts
       std::function<std::any(std::any)> converter;
   };
 
-  template<class T>
-    using list = std::initializer_list<T>;
-
   struct Template
   {
       const char *id;
       Selector selector;
-      list<TemplateElement> elements;
-      list<EventSourceMapping> sourceMapping;
-      list<EventSinkMapping> sinkMappings;
+      std::list<TemplateElement> elements;
+      std::list<EventSourceMapping> sourceMapping;
+      std::list<EventSinkMapping> sinkMappings;
   };
 
   class BoledLayoutFactory
@@ -94,9 +100,9 @@ namespace DescriptiveLayouts
 
       void registerTemplate(const char* id,
                             Selector selector,
-                            list<TemplateElement> elements,
-                            list<EventSourceMapping> sourceMapping,
-                            list<EventSinkMapping> sinkMappings);
+                            std::initializer_list<TemplateElement> elements,
+                            std::initializer_list<EventSourceMapping> sourceMapping,
+                            std::initializer_list<EventSinkMapping> sinkMappings);
 
       Template& findTemplate(const char* name);
       Template& findTemplate(UIFocus focus, UIMode mode);

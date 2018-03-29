@@ -14,7 +14,7 @@ namespace DescriptiveLayouts
   {
   }
 
-  bool BasicBuildingBlock::redraw (FrameBuffer &fb)
+  bool BasicBuildingBlock::redraw(FrameBuffer &fb)
   {
     bool redrew = super::redraw(fb);
     redrew |= drawBorder(fb);
@@ -23,8 +23,8 @@ namespace DescriptiveLayouts
 
   bool BasicBuildingBlock::drawBorder(FrameBuffer &fb)
   {
-    auto style = (StyleValues::BorderStyle)m_currentStyle.at(Style::BorderStyle);
-    auto color = (FrameBuffer::Colors)m_currentStyle.at(Style::BorderColor);
+    auto style = (StyleValues::BorderStyle) m_currentStyle.at(Style::BorderStyle);
+    auto color = (FrameBuffer::Colors) m_currentStyle.at(Style::BorderColor);
 
     switch(style)
     {
@@ -68,16 +68,11 @@ namespace DescriptiveLayouts
 
   BasicBuildingBlock::StyleMap BasicBuildingBlock::getDefaultStyle() const
   {
-    static StyleMap defaults =
-    {
-      { Style::ForegroundColor, (int) FrameBuffer::C255 },
-      { Style::BackgroundColor, (int) FrameBuffer::C43 },
-      { Style::BorderColor, (int) FrameBuffer::C43 },
-      { Style::TextAlign, (int) StyleValues::Alignment::Center },
-      { Style::FontSize, 9 },
-      { Style::BorderStyle, (int) StyleValues::BorderStyle::None },
-      { Style::BorderWidth, 1 }
-    };
+    static StyleMap defaults = { { Style::ForegroundColor, (int) FrameBuffer::C255 }, { Style::BackgroundColor, (int) FrameBuffer::C43 }, {
+        Style::BorderColor, (int) FrameBuffer::C43 },
+                                 { Style::TextAlign, (int) StyleValues::Alignment::Center }, { Style::FontSize, 9 }, {
+                                     Style::BorderStyle, (int) StyleValues::BorderStyle::None },
+                                 { Style::BorderWidth, 1 } };
 
     return defaults;
   }
@@ -87,14 +82,14 @@ namespace DescriptiveLayouts
     fb.setColor((FrameBuffer::Colors) m_currentStyle.at(Style::ForegroundColor));
   }
 
-  void BasicBuildingBlock::setBackgroundColor (FrameBuffer &fb) const
+  void BasicBuildingBlock::setBackgroundColor(FrameBuffer &fb) const
   {
     fb.setColor((FrameBuffer::Colors) m_currentStyle.at(Style::BackgroundColor));
   }
 
-  Font::Justification BasicBuildingBlock::getJustification () const
+  Font::Justification BasicBuildingBlock::getJustification() const
   {
-    switch((StyleValues::Alignment)m_currentStyle.at(Style::TextAlign))
+    switch((StyleValues::Alignment) m_currentStyle.at(Style::TextAlign))
     {
       case StyleValues::Alignment::Left:
         return Font::Justification::Left;
@@ -108,9 +103,35 @@ namespace DescriptiveLayouts
     throw std::runtime_error("unkown text align style");
   }
 
-  int BasicBuildingBlock::getFontHeight () const
+  int BasicBuildingBlock::getFontHeight() const
   {
     return m_currentStyle.at(Style::FontSize);
+  }
+
+  void BasicBuildingBlock::setProperty(ComponentValues key, std::any value)
+  {
+    switch(key)
+    {
+      case ComponentValues::text:
+        setText(std::any_cast < Glib::ustring > (value));
+        break;
+
+      case ComponentValues::length:
+      {
+        auto pos = getPosition();
+        pos.setWidth(std::any_cast<int>(value));
+        setPosition(pos);
+        break;
+      }
+
+      case ComponentValues::left:
+      {
+        auto pos = getPosition();
+        pos.setLeft(std::any_cast<int>(value));
+        setPosition(pos);
+        break;
+      }
+    }
   }
 
 }

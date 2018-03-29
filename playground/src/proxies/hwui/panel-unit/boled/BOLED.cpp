@@ -32,11 +32,13 @@ void BOLED::init()
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
 {
+  /*
   if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode.focus, focusAndMode.mode))
   {
     reset (layout);
     return;
   }
+  */
 
   switch (focusAndMode.focus)
   {

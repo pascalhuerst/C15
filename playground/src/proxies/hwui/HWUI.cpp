@@ -63,7 +63,6 @@ void HWUI::init()
   m_panelUnit.init();
   m_baseUnit.init();
 
-  setupFocusAndMode();
   Oleds::get().syncRedraw();
 }
 

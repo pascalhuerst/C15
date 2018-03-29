@@ -199,6 +199,17 @@ void Rect::addMargin (int left, int top, int right, int bottom)
   m_height -= top + bottom;
 }
 
+
+bool operator ==(const Rect &lhs, const Rect &rhs)
+{
+  return lhs.getPosition() == rhs.getPosition() && lhs.getWidth() == rhs.getWidth() && lhs.getHeight() == rhs.getHeight();
+}
+
+bool operator !=(const Rect &lhs, const Rect &rhs)
+{
+  return lhs.getPosition() != rhs.getPosition() || lhs.getWidth() != rhs.getWidth() || lhs.getHeight() != rhs.getHeight();
+}
+
 void Rect::registerTests ()
 {
   g_test_add_func ("/rect/basics", []()

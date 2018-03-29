@@ -15,6 +15,8 @@ namespace DescriptiveLayouts
     public:
       static EventSourceBroker& get();
 
+      sigc::connection connect(EventSources source, std::function<void (std::any)> cb);
+
     private:
       EventSourceBroker();
 

@@ -14,10 +14,15 @@ namespace DescriptiveLayouts
   {
   }
 
-  void GenericLayout::onInit ()
+  void GenericLayout::onInit()
   {
     super::onInit();
+    addElements();
+    connectEventSources();
+  }
 
+  void GenericLayout::addElements()
+  {
     for(auto &t : m_templates)
     {
       for(auto &e : t.elements)
@@ -33,5 +38,28 @@ namespace DescriptiveLayouts
     {
       m_children[e.id] = addControl(new BasicBuildingBlock(e));
     }
+  }
+
+  void GenericLayout::connectEventSources()
+  {
+    for(auto &t : m_templates)
+    {
+      for(auto &e : t.sourceMapping)
+      {
+        connectEventSource(e);
+      }
+    }
+  }
+
+  void GenericLayout::connectEventSource(const EventSourceMapping &e)
+  {
+    auto memFun = sigc::mem_fun(this, &GenericLayout::onEventSourceFired);
+    auto withBoundMapping = sigc::bind<0>(memFun, e);
+    EventSourceBroker::get().connect(e.source, withBoundMapping);
+  }
+
+  void GenericLayout::onEventSourceFired(const EventSourceMapping &e, std::any value)
+  {
+    m_children.at(e.targetID)->setProperty(e.valueTarget, value);
   }
 }

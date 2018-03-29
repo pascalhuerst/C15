@@ -33,8 +33,10 @@ namespace DescriptiveLayouts
     return factory;
   }
 
-  void BoledLayoutFactory::registerTemplate(const char* id, Selector selector, list<TemplateElement> elements,
-                                          list<EventSourceMapping> sourceMapping, list<EventSinkMapping> sinkMappings)
+  void BoledLayoutFactory::registerTemplate(const char* id, Selector selector,
+                                            std::initializer_list<TemplateElement> elements,
+                                            std::initializer_list<EventSourceMapping> sourceMapping,
+                                            std::initializer_list<EventSinkMapping> sinkMappings)
   {
     m_templates.push_back( { id, selector, elements, sourceMapping, sinkMappings });
   }
