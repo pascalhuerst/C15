@@ -10,6 +10,7 @@
 #include "EventSource.h"
 #include "Selector.h"
 
+
 namespace DescriptiveLayouts
 {
   enum class Components
@@ -96,6 +97,7 @@ namespace DescriptiveLayouts
       static BoledLayoutFactory& get();
 
       std::shared_ptr<DFBLayout> instantiate(UIFocus focus, UIMode mode);
+      std::shared_ptr<DFBLayout> instantiate(UIFocus focus, UIMode mode, LayoutDetail layoutDetail);
 
     private:
       BoledLayoutFactory();
@@ -107,7 +109,7 @@ namespace DescriptiveLayouts
                             std::initializer_list<EventSinkMapping> sinkMappings);
 
       Template& findTemplate(const char* name);
-      Template& findTemplate(UIFocus focus, UIMode mode);
+      Template& findTemplate(FocusAndMode focusAndMode);
 
       std::list<Template> m_templates;
   };

@@ -42,6 +42,35 @@ namespace DescriptiveLayouts
           { EventSinks::decParam, BUTTON_DEC },
           { EventSinks::incParam, BUTTON_INC }
         });
+
+    registerTemplate("modulateable-parameter",
+                     { UIFocus::Parameters, UIMode::Select,
+                       [](FocusAndMode fam)->bool {
+                           if(ParameterDetail* pd = std::get_if<ParameterDetail>(&(fam.detail))) {
+                             return *pd == ParameterDetail::mcassign;
+                         }
+                         return false;
+                       }
+                     },
+                     {
+                             { "group", Components::BasicBuildingBlock, { 0, 0, 64, 16 }, groupHeaderStyle} ,
+                             { "slider-border", Components::BasicBuildingBlock, { 64, 32, 128, 8 }, sliderBorderStyle },
+                             { "slider-bar", Components::BasicBuildingBlock, { 66, 34, 0, 4 }, sliderBarStyle}
+                     },
+                     {
+                             { EventSources::parameterGroupName, "group", ComponentValues::text, nullptr },
+                             { EventSources::parameterValue, "slider-bar", ComponentValues::length,
+                                     [](std::any in) {
+                                       tControlPositionValue v = std::any_cast<tControlPositionValue>(in);
+                                       return v * 124;
+                                     }
+                             }
+                     },
+                     {
+                             { EventSinks::decParam, BUTTON_DEC },
+                             { EventSinks::incParam, BUTTON_INC }
+                     }
+    );
   }
 
   BoledLayoutFactory& BoledLayoutFactory::get()
@@ -68,12 +97,12 @@ namespace DescriptiveLayouts
     return *it;
   }
 
-  Template& BoledLayoutFactory::findTemplate(UIFocus focus, UIMode mode)
+  Template& BoledLayoutFactory::findTemplate(FocusAndMode focusAndMode)
   {
     auto it = std::find_if(m_templates.rbegin(), m_templates.rend(), [=](const Template &t)
     {
       auto& selCB = t.selector.m_detail;
-      return t.selector.m_focus == focus && t.selector.m_mode == mode && (!selCB || selCB());
+      return t.selector.m_focus == focusAndMode.focus && t.selector.m_mode == focusAndMode.mode && (!selCB || selCB(focusAndMode));
     });
 
     assert(it != m_templates.rend());
@@ -82,9 +111,15 @@ namespace DescriptiveLayouts
 
   std::shared_ptr<DFBLayout> BoledLayoutFactory::instantiate(UIFocus focus, UIMode mode)
   {
-    auto temp = findTemplate(focus, mode);
+    return instantiate(focus, mode, LayoutDetail{});
+  }
+
+  std::shared_ptr<DFBLayout> BoledLayoutFactory::instantiate(UIFocus focus, UIMode mode, LayoutDetail layoutDetail)
+  {
+    auto temp = findTemplate(FocusAndMode(focus, mode, layoutDetail));
     auto &boled = Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled();
     auto ret = new GenericLayout({temp}, boled);
     return std::shared_ptr<DFBLayout>(ret);
   }
+
 }
