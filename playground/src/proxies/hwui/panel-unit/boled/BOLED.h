@@ -17,6 +17,7 @@ class BOLED: public OLEDProxy, public sigc::trackable
     bool onButtonPressed (gint32 buttonID, ButtonModifiers modifiers, bool state);
     void onRotary(signed char i);
     void setupFocusAndMode (FocusAndMode focusAndMode);
+    void setupLayoutDetail (LayoutDetail layoutDetail);
     void showUndoScreen ();
 
   private:

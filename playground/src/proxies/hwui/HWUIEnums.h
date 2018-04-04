@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <variant>
 
 enum class UIFocus
 {
@@ -34,11 +35,30 @@ class ButtonModifiers : public std::bitset<ButtonModifier::NUM_MODIFIERS>
     }
 };
 
+enum class EmptyDetail {
+
+};
+
+enum class ParameterDetail {
+    select, none, mcassign, mcpos, mcamount
+};
+
+enum class PresetDetail {
+    bank, preset, store
+};
+
+typedef std::variant<ParameterDetail, PresetDetail, EmptyDetail> LayoutDetail;
+
 struct FocusAndMode
 {
     FocusAndMode (UIFocus f, UIMode m) :
         focus (f),
-        mode (m)
+        mode (m),
+        detail{}
+    {
+    }
+
+    FocusAndMode(UIFocus f, UIMode m, LayoutDetail d) : focus{f}, mode{m}, detail{d}
     {
     }
 
@@ -59,7 +79,7 @@ struct FocusAndMode
 
     bool operator== (const FocusAndMode &other) const
     {
-      return other.focus == focus && other.mode == mode;
+      return other.focus == focus && other.mode == mode && other.detail == detail;
     }
 
     bool operator!= (const FocusAndMode &other) const
@@ -78,4 +98,7 @@ struct FocusAndMode
 
     UIFocus focus;
     UIMode mode;
+    LayoutDetail detail;
 };
+
+

@@ -9,6 +9,6 @@ namespace DescriptiveLayouts
   {
       UIFocus m_focus;
       UIMode m_mode;
-      std::function<bool()> m_detail;
+      std::function<bool(FocusAndMode)> m_detail;
   };
 }
