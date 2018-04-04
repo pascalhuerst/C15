@@ -3,12 +3,17 @@
 namespace DescriptiveLayouts
 {
 
-  Border::Border(const Rect &rect) :
-      Control(rect)
+  Border::Border(const TemplateElement &e) :
+      Control(e.pos)
   {
+    applyStyles(e.style);
   }
 
   Border::~Border()
+  {
+  }
+
+  void Border::drawBackground (FrameBuffer &fb)
   {
   }
 
@@ -21,9 +26,6 @@ namespace DescriptiveLayouts
     {
       case StyleValues::BorderStyle::None:
         return false;
-
-      case StyleValues::BorderStyle::Dotted:
-        throw std::runtime_error("not yet supported: dotted border");
 
       case StyleValues::BorderStyle::Rounded:
         fb.setColor(color);

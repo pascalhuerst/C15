@@ -11,7 +11,6 @@ namespace DescriptiveLayouts
       Stylable();
       virtual ~Stylable();
 
-      using Styles = std::list<std::pair<Style, int>>;
       void applyStyles(Styles styles);
       int getStyle(Style s) const;
 

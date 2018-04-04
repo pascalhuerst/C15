@@ -1,5 +1,8 @@
 #include "GenericLayout.h"
-#include "BasicBuildingBlock.h"
+
+#include "Bar.h"
+#include "Border.h"
+#include "Text.h"
 
 namespace DescriptiveLayouts
 {
@@ -36,9 +39,19 @@ namespace DescriptiveLayouts
 
   void GenericLayout::addElement(const TemplateElement &e)
   {
-    if(e.c == Components::BasicBuildingBlock)
+    switch(e.c)
     {
-      m_children[e.id] = addControl(new BasicBuildingBlock(e));
+      case Components::Text:
+        m_children[e.id] = addControl(new Text(e));
+        break;
+
+      case Components::Bar:
+        m_children[e.id] = addControl(new Bar(e));
+        break;
+
+      case Components::Border:
+        addControl(new Border(e));
+        break;
     }
   }
 
@@ -55,7 +68,8 @@ namespace DescriptiveLayouts
 
   void GenericLayout::connectEventSource(const EventSourceMapping &e)
   {
-    m_connections.push_back(EventSourceBroker::get().connect(e.source, sigc::bind(sigc::mem_fun(this, &GenericLayout::onEventSourceFired), e)));
+    m_connections.push_back(
+        EventSourceBroker::get().connect(e.source, sigc::bind(sigc::mem_fun(this, &GenericLayout::onEventSourceFired), e)));
   }
 
   void GenericLayout::onEventSourceFired(std::any value, const EventSourceMapping &e)

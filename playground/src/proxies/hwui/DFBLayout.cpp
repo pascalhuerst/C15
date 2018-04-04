@@ -36,7 +36,12 @@ bool DFBLayout::redrawLayout ()
   }
 
   if (doRedraw)
+  {
+    std::list<Rect> dirtyRects;
+    collectDirtyRects(dirtyRects);
+    setDirtyIfOverlapsWithAny(dirtyRects);
     return redraw (getFrameBuffer ());
+  }
 
   return doRedraw;
 }

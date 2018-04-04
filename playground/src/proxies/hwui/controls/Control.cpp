@@ -99,3 +99,26 @@ int Control::getHeight() const
 {
   return m_rect.getHeight();
 }
+
+void Control::collectDirtyRects(std::list<Rect> &rects) const
+{
+  if(isDirty())
+    rects.push_back(getPosition());
+}
+
+void Control::setDirtyIfOverlapsWithAny(const std::list<Rect> &rects)
+{
+  if(!isDirty())
+    if(overlapsWithAny(rects))
+      setDirty();
+}
+
+bool Control::overlapsWithAny(const std::list<Rect> &rects) const
+{
+  for(auto &r : rects)
+    if(r.intersects(getPosition()))
+      return true;
+
+  return false;
+}
+

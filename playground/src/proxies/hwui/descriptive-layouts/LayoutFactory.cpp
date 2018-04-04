@@ -5,38 +5,58 @@
 
 namespace DescriptiveLayouts
 {
+  namespace LayoutStyles
+  {
+    namespace GroupHeader
+    {
+      static std::initializer_list<StyleRule> bg =
+      {
+       { Style::Color, (int) (StyleValues::Color::C179) }
+      };
+
+      static std::initializer_list<StyleRule> text =
+      {
+       { Style::Color, (int) (StyleValues::Color::C43) }
+      };
+    }
+
+    namespace Slider
+    {
+      namespace Active
+      {
+        static std::initializer_list<StyleRule> border =
+        {
+         { Style::Color, (int) (StyleValues::Color::C204) },
+         { Style::BorderStyle, (int) (StyleValues::BorderStyle::Solid) }
+        };
+
+        static std::initializer_list<StyleRule> bg =
+        {
+         { Style::Color, (int) (StyleValues::Color::C43) }
+        };
+
+        static std::initializer_list<StyleRule> fg =
+        {
+         { Style::Color, (int) (StyleValues::Color::C255) }
+        };
+      }
+    }
+  }
+
   BoledLayoutFactory::BoledLayoutFactory()
   {
-    static std::initializer_list<StyleRule> sliderBorderStyle =
-    {
-     { Style::Color, (int) (StyleValues::Color::C204) },
-     { Style::BorderStyle, (int) (StyleValues::BorderStyle::Solid) }
-    };
-
-    static std::initializer_list<StyleRule> groupHeaderStyle =
-    {
-     { Style::Color, (int) (StyleValues::Color::C179) }
-    };
-
-    static std::initializer_list<StyleRule> sliderBarStyle =
-    {
-     { Style::Color, (int) (StyleValues::Color::C204) }
-    };
-
     registerTemplate("unmodulateable-parameter",
         { UIFocus::Parameters, UIMode::Select, nullptr },
         {
-          { "group", Components::BasicBuildingBlock, { 0, 0, 64, 16 }, groupHeaderStyle} ,
-          { "slider-border", Components::BasicBuildingBlock, { 64, 32, 128, 8 }, sliderBorderStyle },
-          { "slider-bar", Components::BasicBuildingBlock, { 66, 34, 0, 4 }, sliderBarStyle}
+          { "group-bg", Components::Bar, { 0, 0, 64, 16 }, LayoutStyles::GroupHeader::bg} ,
+          { "group-text", Components::Text, { 0, 0, 64, 16 }, LayoutStyles::GroupHeader::text},
+          { "slider-border", Components::Border, { 64, 26, 128, 12 }, LayoutStyles::Slider::Active::border},
+          { "slider-bg", Components::Bar, { 65, 27, 126, 10 }, LayoutStyles::Slider::Active::bg},
+          { "slider-fg", Components::Bar, { 66, 28, 124, 8 }, LayoutStyles::Slider::Active::fg},
         },
         {
-          { EventSources::parameterGroupName, "group", ComponentValues::text, nullptr },
-          { EventSources::parameterValue, "slider-bar", ComponentValues::length, [](std::any in)
-            {
-              tControlPositionValue v = std::any_cast<tControlPositionValue>(in);
-              return v * 124;
-            } }
+          { EventSources::parameterGroupName, "group-text", ComponentValues::text, nullptr },
+          { EventSources::parameterValue, "slider-fg", ComponentValues::length, nullptr }
         },
         {
           { EventSinks::decParam, BUTTON_DEC },

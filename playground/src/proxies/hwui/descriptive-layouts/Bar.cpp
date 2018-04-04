@@ -3,9 +3,11 @@
 namespace DescriptiveLayouts
 {
 
-  Bar::Bar(const Rect &rect) :
-      Control(rect)
+  Bar::Bar(const TemplateElement &e) :
+      Control(e.pos)
   {
+    m_length = e.pos.getWidth();
+    applyStyles(e.style);
   }
 
   Bar::~Bar()
@@ -15,28 +17,18 @@ namespace DescriptiveLayouts
   bool Bar::redraw(FrameBuffer &fb)
   {
     auto color = (FrameBuffer::Colors) getStyle(Style::Color);
-/*
-    switch(style)
-    {
-      case StyleValues::BorderStyle::None:
-        return false;
 
-      case StyleValues::BorderStyle::Dotted:
-        throw std::runtime_error("not yet supported: dotted border");
+    Rect r = getPosition();
+    r.setLeft(r.getLeft() + m_left);
+    r.setWidth(m_length);
+    fb.setColor(color);
+    fb.fillRect(r);
 
-      case StyleValues::BorderStyle::Rounded:
-        fb.setColor(color);
-        getPosition().drawRounded(fb);
-        return true;
-
-      case StyleValues::BorderStyle::Solid:
-        fb.setColor(color);
-        fb.drawRect(getPosition());
-        return true;
-    }
-    throw std::runtime_error("unkown border style");
-    */
     return true;
+  }
+
+  void Bar::drawBackground (FrameBuffer &fb)
+  {
   }
 
   void Bar::setDirty()
@@ -56,6 +48,18 @@ namespace DescriptiveLayouts
 
   void Bar::setProperty(ComponentValues key, std::any value)
   {
+    switch(key)
+    {
+      case ComponentValues::left:
+        if(std::exchange(m_left, std::any_cast<int>(value)) != m_left)
+          setDirty();
+        break;
 
+      case ComponentValues::length:
+        if(std::exchange(m_length, std::any_cast<int>(value)) != m_length)
+          setDirty();
+        break;
+    }
   }
+
 }

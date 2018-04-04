@@ -13,6 +13,7 @@ class Rect
 
     bool contains(int x, int y) const;
     Rect getIntersection(const Rect &other) const;
+    bool intersects(const Rect &other) const;
 
     const Point &getPosition() const;
     int getX() const;

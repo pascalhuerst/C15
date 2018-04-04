@@ -14,7 +14,9 @@ namespace DescriptiveLayouts
 {
   enum class Components
   {
-    BasicBuildingBlock
+    Bar,
+    Border,
+    Text
   };
 
   enum class ComponentValues
@@ -53,18 +55,19 @@ namespace DescriptiveLayouts
 
     enum class BorderStyle
     {
-      Dotted, Solid, Rounded, None
+      Solid, Rounded, None
     };
   }
 
   using StyleRule = std::pair<Style, int>;
+  using Styles = std::list<StyleRule>;
 
   struct TemplateElement
   {
       const char* id;
       Components c;
       Rect pos;
-      std::list<StyleRule> style;
+      Styles style;
   };
 
   struct EventSinkMapping

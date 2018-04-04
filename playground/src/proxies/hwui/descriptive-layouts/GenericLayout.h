@@ -5,7 +5,7 @@
 
 namespace DescriptiveLayouts
 {
-  class BasicBuildingBlock;
+  class PropertyOwner;
 
   class GenericLayout : public DFBLayout
   {
@@ -26,7 +26,7 @@ namespace DescriptiveLayouts
       void onEventSourceFired(std::any value, const EventSourceMapping &e);
 
       std::list<Template> m_templates;
-      std::map<std::string, BasicBuildingBlock*> m_children;
+      std::map<std::string, PropertyOwner*> m_children;
       std::list<sigc::connection> m_connections;
   };
 }
