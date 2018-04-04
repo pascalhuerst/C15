@@ -241,7 +241,7 @@ void FrameBuffer::swapBuffers()
 
 bool FrameBuffer::isValidColor(Colors c) const
 {
-  return c == C43 || c == C77 || c == C103 || c == C128 || c == C179 || c == C204 || c == C255;
+  return c == C43 || c == C77 || c == C103 || c == C128 || c == C179 || c == C204 || c == C255 || c == Transparent;
 }
 
 FrameBuffer::Clip FrameBuffer::clip(const Rect &rect)

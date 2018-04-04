@@ -5,27 +5,37 @@
 
 namespace DescriptiveLayouts
 {
+  class EventSourceBase : public sigc::trackable
+  {
+    public:
+      using Callback = std::function<void (std::any)>;
+
+      sigc::connection connect(Callback cb)
+      {
+        cb(getLastValue());
+        return m_outputSignal.connect(cb);
+      }
+
+    protected:
+      virtual std::any getLastValue() const = 0;
+      Signal<void, std::any> m_outputSignal;
+  };
+
   enum class EventSources
   {
-    parameterName, parameterValue, parameterDisplayString, paramterGroupName
+    parameterName, parameterValue, parameterDisplayString, parameterGroupName
   };
 
   class EventSourceBroker
   {
     public:
       static EventSourceBroker& get();
+      using Callback = std::function<void (std::any)>;
 
-      sigc::connection connect(EventSources source, std::function<void (std::any)> cb);
+      sigc::connection connect(EventSources source, Callback cb);
 
     private:
       EventSourceBroker();
-
-      struct EventSource
-      {
-          sigc::connection m_inputConnection;
-          Signal<void, std::any> m_outputSignal;
-      };
-
-      std::unordered_map<EventSources, EventSource> m_map;
+      std::unordered_map<EventSources, std::unique_ptr<EventSourceBase>> m_map;
   };
 }

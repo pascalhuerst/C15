@@ -7,19 +7,36 @@ namespace DescriptiveLayouts
 {
   BoledLayoutFactory::BoledLayoutFactory()
   {
+    static std::initializer_list<StyleRule> sliderBorderStyle =
+    {
+     { Style::Color, (int) (StyleValues::Color::C204) },
+     { Style::BorderStyle, (int) (StyleValues::BorderStyle::Solid) }
+    };
+
+    static std::initializer_list<StyleRule> groupHeaderStyle =
+    {
+     { Style::Color, (int) (StyleValues::Color::C179) }
+    };
+
+    static std::initializer_list<StyleRule> sliderBarStyle =
+    {
+     { Style::Color, (int) (StyleValues::Color::C204) }
+    };
+
     registerTemplate("unmodulateable-parameter",
         { UIFocus::Parameters, UIMode::Select, nullptr },
         {
-          {
-            "group", Components::BasicBuildingBlock, { 0, 0, 64, 16 },
-            {
-              { Style::BackgroundColor, (int) (StyleValues::Color::C179) },
-              { Style::ForegroundColor, (int) (StyleValues::Color::C43) }
-            }
-          }
+          { "group", Components::BasicBuildingBlock, { 0, 0, 64, 16 }, groupHeaderStyle} ,
+          { "slider-border", Components::BasicBuildingBlock, { 64, 32, 128, 8 }, sliderBorderStyle },
+          { "slider-bar", Components::BasicBuildingBlock, { 66, 34, 0, 4 }, sliderBarStyle}
         },
         {
-          { EventSources::paramterGroupName, "group", ComponentValues::text, nullptr }
+          { EventSources::parameterGroupName, "group", ComponentValues::text, nullptr },
+          { EventSources::parameterValue, "slider-bar", ComponentValues::length, [](std::any in)
+            {
+              tControlPositionValue v = std::any_cast<tControlPositionValue>(in);
+              return v * 124;
+            } }
         },
         {
           { EventSinks::decParam, BUTTON_DEC },

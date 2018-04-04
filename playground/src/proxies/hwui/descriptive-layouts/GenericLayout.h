@@ -23,9 +23,10 @@ namespace DescriptiveLayouts
       void addElement(const TemplateElement &e);
       void connectEventSources();
       void connectEventSource(const EventSourceMapping &e);
-      void onEventSourceFired(const EventSourceMapping &e, std::any value);
+      void onEventSourceFired(std::any value, const EventSourceMapping &e);
 
       std::list<Template> m_templates;
       std::map<std::string, BasicBuildingBlock*> m_children;
+      std::list<sigc::connection> m_connections;
   };
 }

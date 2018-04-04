@@ -14,39 +14,6 @@ namespace DescriptiveLayouts
   {
   }
 
-  bool BasicBuildingBlock::redraw(FrameBuffer &fb)
-  {
-    bool redrew = super::redraw(fb);
-    redrew |= drawBorder(fb);
-    return redrew;
-  }
-
-  bool BasicBuildingBlock::drawBorder(FrameBuffer &fb)
-  {
-    auto style = (StyleValues::BorderStyle) m_currentStyle.at(Style::BorderStyle);
-    auto color = (FrameBuffer::Colors) m_currentStyle.at(Style::BorderColor);
-
-    switch(style)
-    {
-      case StyleValues::BorderStyle::None:
-        return false;
-
-      case StyleValues::BorderStyle::Dotted:
-        throw std::runtime_error("not yet supported: dotted border");
-
-      case StyleValues::BorderStyle::Rounded:
-        fb.setColor(color);
-        getPosition().drawRounded(fb);
-        return true;
-
-      case StyleValues::BorderStyle::Solid:
-        fb.setColor(color);
-        fb.drawRect(getPosition());
-        return true;
-    }
-    throw std::runtime_error("unkown border style");
-  }
-
   void BasicBuildingBlock::applyStyles(Styles styles)
   {
     StyleMap newStyle = getDefaultStyle();
@@ -68,23 +35,24 @@ namespace DescriptiveLayouts
 
   BasicBuildingBlock::StyleMap BasicBuildingBlock::getDefaultStyle() const
   {
-    static StyleMap defaults = { { Style::ForegroundColor, (int) FrameBuffer::C255 }, { Style::BackgroundColor, (int) FrameBuffer::C43 }, {
-        Style::BorderColor, (int) FrameBuffer::C43 },
-                                 { Style::TextAlign, (int) StyleValues::Alignment::Center }, { Style::FontSize, 9 }, {
-                                     Style::BorderStyle, (int) StyleValues::BorderStyle::None },
-                                 { Style::BorderWidth, 1 } };
+    static StyleMap defaults =
+    {
+      { Style::Color, (int) FrameBuffer::C255 },
+      { Style::TextAlign, (int) StyleValues::Alignment::Center },
+      { Style::FontSize, 9 }
+    };
 
     return defaults;
   }
 
   void BasicBuildingBlock::setFontColor(FrameBuffer &fb) const
   {
-    fb.setColor((FrameBuffer::Colors) m_currentStyle.at(Style::ForegroundColor));
+    fb.setColor((FrameBuffer::Colors) m_currentStyle.at(Style::Color));
   }
 
   void BasicBuildingBlock::setBackgroundColor(FrameBuffer &fb) const
   {
-    fb.setColor((FrameBuffer::Colors) m_currentStyle.at(Style::BackgroundColor));
+    //fb.setColor((FrameBuffer::Colors) m_currentStyle.at(Style::BackgroundColor));
   }
 
   Font::Justification BasicBuildingBlock::getJustification() const
@@ -119,7 +87,7 @@ namespace DescriptiveLayouts
       case ComponentValues::length:
       {
         auto pos = getPosition();
-        pos.setWidth(std::any_cast<int>(value));
+        pos.setWidth(std::any_cast<tControlPositionValue>(value));
         setPosition(pos);
         break;
       }
@@ -127,7 +95,7 @@ namespace DescriptiveLayouts
       case ComponentValues::left:
       {
         auto pos = getPosition();
-        pos.setLeft(std::any_cast<int>(value));
+        pos.setLeft(std::any_cast<tControlPositionValue>(value));
         setPosition(pos);
         break;
       }

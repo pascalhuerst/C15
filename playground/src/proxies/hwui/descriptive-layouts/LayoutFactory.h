@@ -24,7 +24,7 @@ namespace DescriptiveLayouts
 
   enum class Style
   {
-    ForegroundColor, BackgroundColor, BorderColor, TextAlign, FontSize, BorderStyle, BorderWidth
+    Color, TextAlign, FontSize, BorderStyle
   };
 
   namespace StyleValues
@@ -57,12 +57,14 @@ namespace DescriptiveLayouts
     };
   }
 
+  using StyleRule = std::pair<Style, int>;
+
   struct TemplateElement
   {
       const char* id;
       Components c;
       Rect pos;
-      std::list<std::pair<Style, int>> style;
+      std::list<StyleRule> style;
   };
 
   struct EventSinkMapping

@@ -12,6 +12,8 @@ namespace DescriptiveLayouts
 
   GenericLayout::~GenericLayout()
   {
+    for(auto &e : m_connections)
+      e.disconnect();
   }
 
   void GenericLayout::onInit()
@@ -53,13 +55,11 @@ namespace DescriptiveLayouts
 
   void GenericLayout::connectEventSource(const EventSourceMapping &e)
   {
-    auto memFun = sigc::mem_fun(this, &GenericLayout::onEventSourceFired);
-    auto withBoundMapping = sigc::bind<0>(memFun, e);
-    EventSourceBroker::get().connect(e.source, withBoundMapping);
+    m_connections.push_back(EventSourceBroker::get().connect(e.source, sigc::bind(sigc::mem_fun(this, &GenericLayout::onEventSourceFired), e)));
   }
 
-  void GenericLayout::onEventSourceFired(const EventSourceMapping &e, std::any value)
+  void GenericLayout::onEventSourceFired(std::any value, const EventSourceMapping &e)
   {
-    m_children.at(e.targetID)->setProperty(e.valueTarget, value);
+    m_children.at(e.targetID)->setProperty(e.valueTarget, e.converter ? e.converter(value) : value);
   }
 }

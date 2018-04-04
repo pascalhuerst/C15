@@ -21,7 +21,6 @@ namespace DescriptiveLayouts
       void applyStyles(Styles styles);
 
     protected:
-      bool redraw (FrameBuffer &fb) override;
       void setFontColor (FrameBuffer &fb) const override;
       void setBackgroundColor (FrameBuffer &fb) const override;
       Font::Justification getJustification () const override;
@@ -31,7 +30,6 @@ namespace DescriptiveLayouts
       using StyleMap = std::map<Style, int>;
       StyleMap getDefaultStyle() const;
       void applyStyle(Style key, int value);
-      bool drawBorder(FrameBuffer &fb);
 
       StyleMap m_currentStyle;
   };
