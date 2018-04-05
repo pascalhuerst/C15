@@ -6,8 +6,7 @@
 #include <proxies/hwui/panel-unit/EditPanel.h>
 #include <proxies/hwui/panel-unit/PanelUnit.h>
 
-AboutLayout::AboutLayout () :
-    super (Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ())
+AboutLayout::AboutLayout ()
 {
   m_scrollArea = addControl (new ScrollArea (new AboutText (), Rect (0, 0, 256, 64)));
 }

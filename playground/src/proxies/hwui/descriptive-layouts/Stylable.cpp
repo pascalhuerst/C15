@@ -11,15 +11,14 @@ namespace DescriptiveLayouts
   {
   }
 
-  void Stylable::applyStyles(Styles styles)
+  void Stylable::applyStyle(Style style)
   {
     StyleMap newStyle = getDefaultStyle();
 
-    for(auto &style : styles)
+    for(auto &style : style)
     {
-      Style key = style.first;
-      int value = style.second;
-
+      auto key = style.key;
+      auto value = style.value;
       newStyle[key] = value;
     }
 
@@ -30,7 +29,7 @@ namespace DescriptiveLayouts
     }
   }
 
-  int Stylable::getStyle(Style s) const
+  int Stylable::getStyleValue(StyleKey s) const
   {
     return m_currentStyle.at(s);
   }

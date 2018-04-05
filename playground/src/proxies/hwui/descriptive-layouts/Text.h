@@ -7,17 +7,17 @@
 
 namespace DescriptiveLayouts
 {
-  struct TemplateElement;
+  struct Primitive;
 
   class Text : public Label, public Stylable, public PropertyOwner
   {
       using super = Label;
 
     public:
-      Text(const TemplateElement &e);
+      Text(const Primitive &e);
       virtual ~Text();
 
-      void setProperty(ComponentValues key, std::any value);
+      void setProperty(PrimitiveProperty key, std::any value);
       void setDirty() override;
 
     protected:

@@ -1,12 +1,12 @@
 #include "Border.h"
+#include "Primitive.h"
 
 namespace DescriptiveLayouts
 {
 
-  Border::Border(const TemplateElement &e) :
-      Control(e.pos)
+  Border::Border(const Primitive &e) :
+      Control(e.getPosition())
   {
-    applyStyles(e.style);
   }
 
   Border::~Border()
@@ -19,8 +19,8 @@ namespace DescriptiveLayouts
 
   bool Border::redraw(FrameBuffer &fb)
   {
-    auto style = (StyleValues::BorderStyle) getStyle(Style::BorderStyle);
-    auto color = (FrameBuffer::Colors) getStyle(Style::Color);
+    auto style = (StyleValues::BorderStyle) getStyleValue(StyleKey::BorderStyle);
+    auto color = (FrameBuffer::Colors) getStyleValue(StyleKey::Color);
 
     switch(style)
     {
@@ -50,8 +50,8 @@ namespace DescriptiveLayouts
   {
     static StyleMap defaults =
     {
-     { Style::Color, (int) FrameBuffer::C255 },
-     { Style::BorderStyle, (int) StyleValues::BorderStyle::Solid }
+     { StyleKey::Color, (int) FrameBuffer::C255 },
+     { StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid }
     };
 
     return defaults;

@@ -5,11 +5,12 @@
 
 namespace DescriptiveLayouts
 {
+  class Primitive;
 
   class Border : public Control, public Stylable
   {
     public:
-      Border(const TemplateElement &e);
+      Border(const Primitive &e);
       virtual ~Border();
 
     protected:

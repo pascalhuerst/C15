@@ -8,8 +8,7 @@
 #include "UndoMenu.h"
 #include "PositionInTreeLabel.h"
 
-UndoLayout::UndoLayout () :
-    super (Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ())
+UndoLayout::UndoLayout ()
 {
   m_list = addControl (new UndoList (Rect (0, 0, 192, 64)));
   m_editButton = addControl (new Button ("", BUTTON_D));

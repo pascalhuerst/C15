@@ -145,16 +145,16 @@ void Rect::moveBy(int x, int y)
 
 void Rect::normalize()
 {
-  if(getWidth() < 0)
+  if(m_width < 0)
   {
-    setLeft(getLeft() + getWidth());
-    setWidth(-getWidth());
+    setLeft(getLeft() + m_width);
+    setWidth(-m_width);
   }
 
-  if(getHeight() < 0)
+  if(m_height < 0)
   {
-    setTop(getTop() + getHeight());
-    setHeight(-getHeight());
+    setTop(getTop() + m_height);
+    setHeight(-m_height);
   }
 }
 

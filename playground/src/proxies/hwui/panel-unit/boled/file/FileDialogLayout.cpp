@@ -12,7 +12,6 @@
 #include <proxies/hwui/panel-unit/boled/BOLED.h>
 
 FileDialogLayout::FileDialogLayout(tFilterFunction filter, tCallBackFunction cb, std::string header) :
-    DFBLayout(Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled()),
     commitFunction(cb),
     m_header(header),
     crawler("/mnt/usb-stick/", filter, [ = ]()

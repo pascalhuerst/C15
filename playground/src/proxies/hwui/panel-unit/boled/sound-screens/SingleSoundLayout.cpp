@@ -24,8 +24,7 @@
 #include <proxies/hwui/panel-unit/PanelUnit.h>
 #include <proxies/hwui/UsageMode.h>
 
-SingleSoundLayout::SingleSoundLayout (FocusAndMode focusAndMode) :
-    super (Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ())
+SingleSoundLayout::SingleSoundLayout (FocusAndMode focusAndMode)
 {
   addControl (new Caption ("Single", Rect (0, 0, 64, 13)));
 

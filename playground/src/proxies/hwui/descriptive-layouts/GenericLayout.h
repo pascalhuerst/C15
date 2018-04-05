@@ -1,7 +1,8 @@
 #pragma once
 
 #include <proxies/hwui/DFBLayout.h>
-#include "LayoutFactory.h"
+#include "LayoutPrototype.h"
+
 
 namespace DescriptiveLayouts
 {
@@ -12,21 +13,13 @@ namespace DescriptiveLayouts
       using super = DFBLayout;
 
     public:
-      GenericLayout(std::initializer_list<Template> templates, OLEDProxy &oled);
-      virtual ~GenericLayout();
+      GenericLayout(const LayoutPrototype &prototype);
 
-    protected:
-      void onInit() override;
+      void init () override;
 
     private:
-      void addElements();
-      void addElement(const TemplateElement &e);
-      void connectEventSources();
-      void connectEventSource(const EventSourceMapping &e);
-      void onEventSourceFired(std::any value, const EventSourceMapping &e);
+      void createControls();
 
-      std::list<Template> m_templates;
-      std::map<std::string, PropertyOwner*> m_children;
-      std::list<sigc::connection> m_connections;
+      LayoutPrototype m_prototype;
   };
 }

@@ -32,7 +32,7 @@ void BOLED::init()
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
 {
-  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode.focus, focusAndMode.mode))
+  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode))
   {
     reset (layout);
     return;
@@ -70,7 +70,7 @@ void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
 void BOLED::setupLayoutDetail (LayoutDetail layoutDetail)
 {
   auto fAndM = Application::get().getHWUI()->getFocusAndMode();
-  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(fAndM.focus, fAndM.mode, layoutDetail))
+  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(fAndM))
   {
     reset (layout);
     return;

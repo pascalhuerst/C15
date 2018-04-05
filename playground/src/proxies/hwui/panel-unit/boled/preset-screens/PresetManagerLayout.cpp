@@ -26,7 +26,6 @@
 #include <vector>
 
 PresetManagerLayout::PresetManagerLayout(FocusAndMode focusAndMode) :
-    super(Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled()),
     m_focusAndMode(focusAndMode)
 {
   setup();

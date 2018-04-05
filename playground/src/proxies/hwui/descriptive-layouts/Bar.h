@@ -6,14 +6,17 @@
 
 namespace DescriptiveLayouts
 {
+  class Primitive;
 
   class Bar : public Control, public Stylable, public PropertyOwner
   {
     public:
-      Bar(const TemplateElement &e);
+      Bar(const Primitive &e);
       virtual ~Bar();
 
-      void setProperty(ComponentValues key, std::any value) override;
+      using Range = std::pair<tControlPositionValue, tControlPositionValue>;
+
+      void setProperty(PrimitiveProperty key, std::any value) override;
 
     protected:
       bool redraw(FrameBuffer &fb) override;
@@ -23,8 +26,7 @@ namespace DescriptiveLayouts
     private:
       StyleMap getDefaultStyle() const override;
 
-      int m_left = 0;
-      int m_length= 0;
+      Range m_range;
   };
 
 }

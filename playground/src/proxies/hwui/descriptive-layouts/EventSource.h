@@ -2,6 +2,9 @@
 
 #include <playground.h>
 #include <any>
+#include <parameters/ValueRange.h>
+#include <unordered_map>
+#include "TemplateEnums.h"
 
 namespace DescriptiveLayouts
 {
@@ -19,11 +22,6 @@ namespace DescriptiveLayouts
     protected:
       virtual std::any getLastValue() const = 0;
       Signal<void, std::any> m_outputSignal;
-  };
-
-  enum class EventSources
-  {
-    parameterName, parameterValue, parameterDisplayString, parameterGroupName
   };
 
   class EventSourceBroker

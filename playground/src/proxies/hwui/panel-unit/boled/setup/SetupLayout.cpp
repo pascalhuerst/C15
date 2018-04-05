@@ -712,7 +712,6 @@ class Breadcrumb : public Control
 };
 
 SetupLayout::SetupLayout(FocusAndMode focusAndMode) :
-    super(Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled()),
     m_tree(new NavTree::Setup()),
     m_focusAndMode(focusAndMode)
 {

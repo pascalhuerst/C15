@@ -7,12 +7,12 @@
 #include "proxies/hwui/panel-unit/PanelUnit.h"
 #include <presets/PresetManager.h>
 #include <presets/EditBuffer.h>
+#include "proxies/hwui/OLEDProxy.h"
 
 #include <proxies/hwui/buttons.h>
 #include "ButtonRepeat.h"
 
-DFBLayout::DFBLayout (OLEDProxy &oled) :
-    m_oled (oled)
+DFBLayout::DFBLayout ()
 {
 }
 
@@ -20,19 +20,14 @@ DFBLayout::~DFBLayout ()
 {
 }
 
-OLEDProxy &DFBLayout::getOLEDProxy()
-{
-  return m_oled;
-}
-
-bool DFBLayout::redrawLayout ()
+bool DFBLayout::redrawLayout (OLEDProxy& oled)
 {
   bool doRedraw = m_clear || isDirty ();
 
   if (m_clear)
   {
     m_clear = false;
-    m_oled.clear ();
+    oled.clear ();
   }
 
   if (doRedraw)

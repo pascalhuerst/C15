@@ -12,8 +12,7 @@ const int c_numRows = 4;
 const int c_letterWidth = 256 / 12;
 const int c_letterHeight = 12;
 
-RenameLayout::RenameLayout () :
-    super (Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ())
+RenameLayout::RenameLayout ()
 {
 }
 

@@ -10,8 +10,7 @@
 #include <presets/PresetManager.h>
 #include <presets/EditBuffer.h>
 
-ParameterLayout2::ParameterLayout2 () :
-    super (Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled())
+ParameterLayout2::ParameterLayout2 ()
 {
   addControl (new ModuleCaption (Rect (0, 0, 64, 13)));
   addControl (new ParameterNameLabel (Rect (72, 8, 112, 11)));

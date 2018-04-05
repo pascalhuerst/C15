@@ -1,4 +1,5 @@
 #include "EventSource.h"
+#include "LayoutFactory.h"
 #include <Application.h>
 #include <presets/PresetManager.h>
 #include <presets/EditBuffer.h>
@@ -24,7 +25,7 @@ namespace DescriptiveLayouts
           return m_lastValue;
         }
 
-        T m_lastValue = { };
+        T m_lastValue { };
     };
 
   class ParameterGroupNameEventSource : public EventSource<Glib::ustring>
@@ -43,13 +44,39 @@ namespace DescriptiveLayouts
       }
   };
 
-  class ParameterValueEventSource : public EventSource<tControlPositionValue>
+  class ParameterTypeEventSource : public EventSource<uint8_t>
+   {
+     public:
+      ParameterTypeEventSource()
+       {
+         Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged(
+             sigc::mem_fun(this, &ParameterTypeEventSource::onParameterSelectionChanged));
+       }
+
+     private:
+       void onParameterSelectionChanged(Parameter *oldParam, Parameter *newParam)
+       {
+         if(newParam)
+         {
+           uint8_t mask = 0;
+
+           if(newParam->isBiPolar())
+             mask |= (uint8_t)ParameterType::Bipolar;
+           else
+             mask |= (uint8_t)ParameterType::Unipolar;
+
+           setValue(mask);
+         }
+       }
+   };
+
+  class SliderRangeEventSource : public EventSource<std::pair<tControlPositionValue, tControlPositionValue>>
   {
     public:
-      ParameterValueEventSource()
+      SliderRangeEventSource()
       {
         Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged(
-            sigc::mem_fun(this, &ParameterValueEventSource::onParameterSelectionChanged));
+            sigc::mem_fun(this, &SliderRangeEventSource::onParameterSelectionChanged));
       }
 
     private:
@@ -57,12 +84,24 @@ namespace DescriptiveLayouts
       {
         m_connection.disconnect();
         if(newParam)
-          m_connection = newParam->onParameterChanged(sigc::mem_fun(this, &ParameterValueEventSource::onParameterChanged), true);
+          m_connection = newParam->onParameterChanged(sigc::mem_fun(this, &SliderRangeEventSource::onParameterChanged), true);
       }
 
       void onParameterChanged(const Parameter* p)
       {
-        setValue(p->getControlPositionValue());
+        auto v = p->getControlPositionValue();
+
+        if(p->isBiPolar())
+        {
+          auto value = (v + 1) / 2;
+          auto width = value - 0.5;
+
+          setValue(std::make_pair(0.5, width));
+        }
+        else
+        {
+          setValue(std::make_pair(0, v));
+        }
       }
 
       sigc::connection m_connection;
@@ -77,7 +116,8 @@ namespace DescriptiveLayouts
   EventSourceBroker::EventSourceBroker()
   {
     m_map[EventSources::parameterGroupName] = std::make_unique<ParameterGroupNameEventSource>();
-    m_map[EventSources::parameterValue] = std::make_unique<ParameterValueEventSource>();
+    m_map[EventSources::sliderRange] = std::make_unique<SliderRangeEventSource>();
+    m_map[EventSources::parameterType] = std::make_unique<ParameterTypeEventSource>();
 
     m_map[EventSources::parameterName];
     m_map[EventSources::parameterDisplayString];

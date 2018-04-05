@@ -1,13 +1,13 @@
 #include <proxies/hwui/FrameBuffer.h>
 #include "Text.h"
+#include "Primitive.h"
 
 namespace DescriptiveLayouts
 {
 
-  Text::Text(const TemplateElement &e) :
-      super(e.pos)
+  Text::Text(const Primitive &e) :
+      super(e.getPosition())
   {
-    applyStyles(e.style);
   }
 
   Text::~Text()
@@ -22,9 +22,9 @@ namespace DescriptiveLayouts
   {
     static StyleMap defaults =
     {
-      { Style::Color, (int) FrameBuffer::C255 },
-      { Style::TextAlign, (int) StyleValues::Alignment::Center },
-      { Style::FontSize, 9 }
+      { StyleKey::Color, (int) FrameBuffer::C255 },
+      { StyleKey::TextAlign, (int) StyleValues::Alignment::Center },
+      { StyleKey::FontSize, 9 }
     };
 
     return defaults;
@@ -32,12 +32,12 @@ namespace DescriptiveLayouts
 
   void Text::setFontColor(FrameBuffer &fb) const
   {
-    fb.setColor((FrameBuffer::Colors) getStyle(Style::Color));
+    fb.setColor((FrameBuffer::Colors) getStyleValue(StyleKey::Color));
   }
 
   Font::Justification Text::getJustification() const
   {
-    switch((StyleValues::Alignment) getStyle(Style::TextAlign))
+    switch((StyleValues::Alignment) getStyleValue(StyleKey::TextAlign))
     {
       case StyleValues::Alignment::Left:
         return Font::Justification::Left;
@@ -53,14 +53,14 @@ namespace DescriptiveLayouts
 
   int Text::getFontHeight() const
   {
-    return getStyle(Style::FontSize);
+    return getStyleValue(StyleKey::FontSize);
   }
 
-  void Text::setProperty(ComponentValues key, std::any value)
+  void Text::setProperty(PrimitiveProperty key, std::any value)
   {
     switch(key)
     {
-      case ComponentValues::text:
+      case PrimitiveProperty::text:
         setText(std::any_cast < Glib::ustring > (value));
         break;
     }

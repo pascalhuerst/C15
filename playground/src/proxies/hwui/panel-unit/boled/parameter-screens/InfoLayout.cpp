@@ -8,8 +8,7 @@
 #include <proxies/hwui/HWUI.h>
 #include <Application.h>
 
-InfoLayout::InfoLayout () :
-    super (Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ())
+InfoLayout::InfoLayout ()
 {
 
 }
