@@ -18,19 +18,4 @@ namespace DescriptiveLayouts
   {
     return PrimitivesFactory::create(*this);
   }
-
-  Rect Primitive::getPosition() const
-  {
-    return relativePosition;
-  }
-
-  PrimitiveInstances Primitive::getInstance() const
-  {
-    return primitiveInstance;
-  }
-
-  PrimitiveClasses Primitive::getClass() const
-  {
-    return primitveClass;
-  }
 }

@@ -6,7 +6,7 @@ namespace DescriptiveLayouts
 {
 
   Text::Text(const Primitive &e) :
-      super(e.getPosition()),
+      super(e.relativePosition),
       m_primitive(e)
   {
   }
@@ -15,8 +15,15 @@ namespace DescriptiveLayouts
   {
   }
 
-  void Text::drawBackground (FrameBuffer &fb)
+  void Text::drawBackground(FrameBuffer &fb)
   {
+    auto bg = (FrameBuffer::Colors) getStyleValue(StyleKey::BackgroundColor);
+
+    if(bg != FrameBuffer::Colors::Transparent)
+    {
+      fb.setColor(bg);
+      fb.fillRect(getPosition());
+    }
   }
 
   void Text::setFontColor(FrameBuffer &fb) const
@@ -50,8 +57,11 @@ namespace DescriptiveLayouts
     switch(key)
     {
       case PrimitiveProperty::Text:
-        setText(std::any_cast < Glib::ustring > (value));
+      {
+        DisplayString a = std::any_cast < DisplayString > (value);
+        setText(a.first, a.second);
         break;
+      }
     }
   }
 
@@ -60,14 +70,8 @@ namespace DescriptiveLayouts
     Control::setDirty();
   }
 
-  PrimitiveClasses Text::getPrimitiveClass() const
+  const Primitive &Text::getPrimitive() const
   {
-    return m_primitive.getClass();
+    return m_primitive;
   }
-
-  PrimitiveInstances Text::getPrimitiveInstance() const
-  {
-    return m_primitive.getInstance();
-  }
-
 }

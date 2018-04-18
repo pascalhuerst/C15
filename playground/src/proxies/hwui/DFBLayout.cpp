@@ -46,7 +46,7 @@ FrameBuffer &DFBLayout::getFrameBuffer ()
   return FrameBuffer::get ();
 }
 
-bool DFBLayout::onButton (int i, bool down, ButtonModifiers modifiers)
+bool DFBLayout::onButton (int i, bool down, ::ButtonModifiers modifiers)
 {
   if (i == BUTTON_INC || i == BUTTON_DEC)
   {
@@ -69,7 +69,7 @@ bool DFBLayout::onButton (int i, bool down, ButtonModifiers modifiers)
   return false;
 }
 
-bool DFBLayout::onRotary (int inc, ButtonModifiers modifiers)
+bool DFBLayout::onRotary (int inc, ::ButtonModifiers modifiers)
 {
   return false;
 }

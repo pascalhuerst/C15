@@ -19,7 +19,7 @@ namespace DescriptiveLayouts
 
   enum class StyleKey
   {
-    Color, TextAlign, FontSize, BorderStyle
+    BackgroundColor, Color, TextAlign, FontSize, BorderStyle
   };
 
   enum class ParameterType
@@ -74,17 +74,17 @@ namespace DescriptiveLayouts
 
   enum class PrimitiveInstances
   {
-    Any, None, Border, Background, CenterMark, Slider, Text
+    Any, None, Border, Background, CenterMark, Slider, Text, Cover
   };
 
   enum class ControlClasses
   {
-    Any, Slider, Label
+    Any, Slider, Label, Button
   };
 
   enum class ControlInstances
   {
-    Any, GroupHeader, Slider
+    Any, GroupHeader, Slider, ParameterName, ParameterValue, ButtonA, ButtonB, ButtonC, ButtonD
   };
 
   enum class LayoutInstances

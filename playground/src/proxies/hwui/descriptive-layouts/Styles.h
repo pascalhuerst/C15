@@ -65,14 +65,76 @@ namespace DescriptiveLayouts
     public:
       static StyleSheet &get();
 
+      struct StyleSelector
+      {
+          template<typename ... tArgs>
+            StyleSelector(tArgs ... args)
+            {
+              (void) std::initializer_list<bool> { (setupSelector(args), false)... };
+            }
+
+          void setupSelector(UIFocus v)
+          {
+            f = v;
+          }
+
+          void setupSelector(UIMode v)
+          {
+            m = v;
+          }
+
+          void setupSelector(UIFocusAndModeDetail v)
+          {
+            d = v;
+          }
+
+          void setupSelector(LayoutInstances v)
+          {
+            l = v;
+          }
+
+          void setupSelector(ControlClasses v)
+          {
+            cc = v;
+          }
+
+          void setupSelector(ControlInstances v)
+          {
+            ci = v;
+          }
+
+          void setupSelector(PrimitiveClasses v)
+          {
+            pc = v;
+          }
+
+          void setupSelector(PrimitiveInstances v)
+          {
+            pi = v;
+          }
+
+          UIFocus f = UIFocus::Any;
+          UIMode m = UIMode::Any;
+          UIFocusAndModeDetail d = UIFocusAndModeDetail::Any;
+          LayoutInstances l = LayoutInstances::Any;
+          ControlClasses cc = ControlClasses::Any;
+          ControlInstances ci = ControlInstances::Any;
+          PrimitiveClasses pc = PrimitiveClasses::Any;
+          PrimitiveInstances pi = PrimitiveInstances::Any;
+      };
+
+      void registerStyle(StyleSelector s, StyleMap style)
+      {
+        registerStyleFull(s.f, s.m, s.d, s.l, s.cc, s.ci, s.pc, s.pi, style);
+      }
+
+      void registerStyleFull(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutInstances l, ControlClasses cc, ControlInstances ci,
+                             PrimitiveClasses pc, PrimitiveInstances pi, const StyleMap &s);
+
       void applyStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutInstances l, ControlClasses cc, ControlInstances ci,
                       PrimitiveClasses pc, PrimitiveInstances pi, Styleable *target) const;
-
     private:
       StyleSheet();
-
-      void registerStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutInstances l, ControlClasses cc, ControlInstances ci,
-                         PrimitiveClasses pc, PrimitiveInstances pi, const StyleMap &s);
 
       using Styles = SubTree<UIFocus, UIMode, UIFocusAndModeDetail, LayoutInstances, ControlClasses, ControlInstances, PrimitiveClasses, PrimitiveInstances>;
       Styles m_styles;

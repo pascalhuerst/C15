@@ -7,7 +7,7 @@ namespace DescriptiveLayouts
 {
   enum class EventSinks
   {
-    IncParam, DecParam, IncParamFine, DecParamFine,
+    IncParam, DecParam
   };
 
   struct EventSinkMapping
@@ -16,7 +16,6 @@ namespace DescriptiveLayouts
       EventSinkMapping(int button, EventSinks sink, ButtonEvents event = ButtonEvents::Down, ButtonModifiers modifiers =
           ButtonModifiers::None);
 
-    private:
       int button;
       ButtonEvents event;
       ButtonModifiers modifiers;
@@ -28,14 +27,14 @@ namespace DescriptiveLayouts
     public:
       static EventSinkBroker& get();
 
+      void fire(EventSinks s);
+
     private:
+      using tAction = std::function<void()>;
+
       EventSinkBroker();
+      void registerEvent(EventSinks sink, tAction action);
 
-      struct EventSink
-      {
-          std::function<void()> doAction;
-      };
-
-      std::unordered_map<EventSinks, EventSink> m_map;
+      std::unordered_map<EventSinks, tAction> m_map;
   };
 }

@@ -10,11 +10,16 @@ namespace DescriptiveLayouts
     public:
       GenericControl(const ControlInstance &prototype);
       virtual ~GenericControl();
+
       void style(LayoutInstances layout);
+      void connect();
 
     private:
       void addPrimitives();
+      void onEventFired(std::any v);
+
       ControlInstance m_prototype;
+      sigc::connection m_connection;
   };
 
 }
