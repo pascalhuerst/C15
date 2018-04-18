@@ -7,7 +7,7 @@ namespace DescriptiveLayouts
 {
   enum class EventSinks
   {
-    incParam, decParam, incParamFine, decParamFine,
+    IncParam, DecParam, IncParamFine, DecParamFine,
   };
 
   struct EventSinkMapping

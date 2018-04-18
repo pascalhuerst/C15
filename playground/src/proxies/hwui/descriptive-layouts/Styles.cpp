@@ -16,6 +16,21 @@ namespace DescriptiveLayouts
 
     registerStyle(UIFocus::Any, UIMode::Any, UIFocusAndModeDetail::Any,
                   LayoutInstances::Any, ControlClasses::Any, ControlInstances::Any,
+                  PrimitiveClasses::Bar, PrimitiveInstances::Any,
+    {
+      { StyleKey::Color, (int)StyleValues::Color::C255}
+    });
+
+    registerStyle(UIFocus::Any, UIMode::Any, UIFocusAndModeDetail::Any,
+                  LayoutInstances::Any, ControlClasses::Any, ControlInstances::Any,
+                  PrimitiveClasses::Border, PrimitiveInstances::Any,
+    {
+      { StyleKey::Color, (int)StyleValues::Color::C255 },
+      { StyleKey::BorderStyle, (int)StyleValues::BorderStyle::Solid }
+    });
+
+    registerStyle(UIFocus::Any, UIMode::Any, UIFocusAndModeDetail::Any,
+                  LayoutInstances::Any, ControlClasses::Any, ControlInstances::Any,
                   PrimitiveClasses::Text, PrimitiveInstances::Any,
     {
       { StyleKey::TextAlign, (int) StyleValues::Alignment::Center},

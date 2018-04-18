@@ -28,8 +28,8 @@ namespace DescriptiveLayouts
       maxY = std::max(maxY, c->getPosition().getBottom());
     }
 
-    rect.setWidth(maxX);
-    rect.setHeight(maxY);
+    rect.setWidth(maxX + 1);
+    rect.setHeight(maxY + 1);
     setPosition(rect);
   }
 

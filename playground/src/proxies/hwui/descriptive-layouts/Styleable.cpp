@@ -1,7 +1,7 @@
 #include "Styleable.h"
 #include "Application.h"
 #include <proxies/hwui/HWUI.h>
-
+#include <device-settings/DebugLevel.h>
 
 namespace DescriptiveLayouts
 {
@@ -32,7 +32,15 @@ namespace DescriptiveLayouts
 
   int Styleable::getStyleValue(StyleKey s) const
   {
-    return m_currentStyle.at(s);
+    try
+    {
+      return m_currentStyle.at(s);
+    }
+    catch(...)
+    {
+      DebugLevel::error("Have to define a default for key", (int)s, " for primitive class", (int)getPrimitiveClass());
+      return 0;
+    }
   }
 
 }
