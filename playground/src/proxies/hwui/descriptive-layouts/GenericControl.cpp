@@ -1,9 +1,9 @@
 #include "GenericControl.h"
-#include "Stylable.h"
+#include "Styleable.h"
+
 
 namespace DescriptiveLayouts
 {
-
   GenericControl::GenericControl(const ControlInstance &prototype) :
       ControlWithChildren(Rect(prototype.position, Point(0,0))), m_prototype(prototype)
   {
@@ -37,9 +37,9 @@ namespace DescriptiveLayouts
   {
     for(auto &p : getControls())
     {
-      if(auto a = dynamic_pointer_cast<Stylable>(p))
+      if(auto a = dynamic_pointer_cast<Styleable>(p))
       {
-        a->applyStyle({});
+        a->style(layout, m_prototype.control.controlClass, m_prototype.controlInstance);
       }
     }
   }

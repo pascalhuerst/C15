@@ -9,12 +9,12 @@ namespace DescriptiveLayouts
 
   enum class PrimitiveClasses
   {
-    Bar, Border, Text
+    Any, Bar, Border, Text
   };
 
   enum class PrimitiveProperty
   {
-    none, text, range, visibility
+    None, Text, Range, Visibility
   };
 
   enum class StyleKey
@@ -69,26 +69,26 @@ namespace DescriptiveLayouts
 
   enum class EventSources
   {
-    none, parameterName, sliderRange, parameterType, parameterDisplayString, parameterGroupName
+    Any, None, ParameterName, SliderRange, ParameterType, ParameterDisplayString, ParameterGroupName
   };
 
   enum class PrimitiveInstances
   {
-    none, border, background, centerMark, slider, text
+    Any, None, Border, Background, CenterMark, Slider, Text
   };
 
   enum class ControlClasses
   {
-    slider, label
+    Any, Slider, Label
   };
 
   enum class ControlInstances
   {
-    groupHeader, slider
+    Any, GroupHeader, Slider
   };
 
   enum class LayoutInstances
   {
-      unmodulateableParameterLayout
+    Any, UnmodulateableParameterLayout
   };
 }

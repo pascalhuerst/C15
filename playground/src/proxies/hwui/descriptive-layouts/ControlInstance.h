@@ -11,8 +11,8 @@ namespace DescriptiveLayouts
   {
 
     public:
-      ControlInstance(ControlInstances controlInstance, ControlPrototype control, Point position, EventSources eventSource = EventSources::none,
-                      PrimitiveInstances eventTarget = PrimitiveInstances::none);
+      ControlInstance(ControlInstances controlInstance, ControlPrototype control, Point position, EventSources eventSource = EventSources::None,
+                      PrimitiveInstances eventTarget = PrimitiveInstances::None);
 
       GenericControl* instantiate() const;
 

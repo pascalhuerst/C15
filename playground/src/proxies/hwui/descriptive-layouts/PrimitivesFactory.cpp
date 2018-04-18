@@ -9,7 +9,7 @@ namespace DescriptiveLayouts
 {
   Control* PrimitivesFactory::create(const Primitive& primitive)
   {
-    switch(primitive.type)
+    switch(primitive.primitveClass)
     {
       case PrimitiveClasses::Bar:
         return new Bar(primitive);

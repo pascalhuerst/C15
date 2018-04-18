@@ -1,13 +1,14 @@
 #pragma once
 
 #include <proxies/hwui/controls/Control.h>
-#include "Stylable.h"
+#include "Styleable.h"
+#include "Primitive.h"
 
 namespace DescriptiveLayouts
 {
   class Primitive;
 
-  class Border : public Control, public Stylable
+  class Border : public Control, public Styleable
   {
     public:
       Border(const Primitive &e);
@@ -16,10 +17,12 @@ namespace DescriptiveLayouts
     protected:
       bool redraw(FrameBuffer &fb) override;
       void setDirty() override;
-      void drawBackground (FrameBuffer &fb) override;
+      void drawBackground(FrameBuffer &fb) override;
+      PrimitiveClasses getPrimitiveClass() const override;
+      PrimitiveInstances getPrimitiveInstance() const override;
 
     private:
-      StyleMap getDefaultStyle() const override;
+      Primitive m_primitive;
   };
 
 }

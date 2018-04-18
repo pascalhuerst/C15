@@ -5,7 +5,8 @@ namespace DescriptiveLayouts
 {
 
   Border::Border(const Primitive &e) :
-      Control(e.getPosition())
+      Control(e.getPosition()),
+      m_primitive(e)
   {
   }
 
@@ -13,7 +14,7 @@ namespace DescriptiveLayouts
   {
   }
 
-  void Border::drawBackground (FrameBuffer &fb)
+  void Border::drawBackground(FrameBuffer &fb)
   {
   }
 
@@ -46,14 +47,13 @@ namespace DescriptiveLayouts
     Control::setDirty();
   }
 
-  Border::StyleMap Border::getDefaultStyle() const
+  PrimitiveClasses Border::getPrimitiveClass() const
   {
-    static StyleMap defaults =
-    {
-     { StyleKey::Color, (int) FrameBuffer::C255 },
-     { StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid }
-    };
+    return m_primitive.getClass();
+  }
 
-    return defaults;
+  PrimitiveInstances Border::getPrimitiveInstance() const
+  {
+    return m_primitive.getInstance();
   }
 }

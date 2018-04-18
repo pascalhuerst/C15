@@ -9,7 +9,7 @@ namespace DescriptiveLayouts
   class Selector
   {
       using Lambda = std::function<bool()>;
-      using Criteria = std::variant<UIFocus, UIMode, LayoutDetail, Lambda>;
+      using Criteria = std::variant<UIFocus, UIMode, UIFocusAndModeDetail, Lambda>;
 
       struct Tester
       {
@@ -29,7 +29,7 @@ namespace DescriptiveLayouts
             return m == fam.mode;
           }
 
-          bool operator ()(LayoutDetail d)
+          bool operator ()(UIFocusAndModeDetail d)
           {
             return d == fam.detail;
           }

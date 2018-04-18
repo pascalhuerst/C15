@@ -21,7 +21,7 @@ namespace DescriptiveLayouts
   {
     for(auto &c : m_prototype.controls)
     {
-      auto control  = c.instantiate();
+      auto control = c.instantiate();
       control->style(m_prototype.id);
       addControl(control);
     }

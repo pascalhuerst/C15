@@ -115,12 +115,12 @@ namespace DescriptiveLayouts
 
   EventSourceBroker::EventSourceBroker()
   {
-    m_map[EventSources::parameterGroupName] = std::make_unique<ParameterGroupNameEventSource>();
-    m_map[EventSources::sliderRange] = std::make_unique<SliderRangeEventSource>();
-    m_map[EventSources::parameterType] = std::make_unique<ParameterTypeEventSource>();
+    m_map[EventSources::ParameterGroupName] = std::make_unique<ParameterGroupNameEventSource>();
+    m_map[EventSources::SliderRange] = std::make_unique<SliderRangeEventSource>();
+    m_map[EventSources::ParameterType] = std::make_unique<ParameterTypeEventSource>();
 
-    m_map[EventSources::parameterName];
-    m_map[EventSources::parameterDisplayString];
+    m_map[EventSources::ParameterName];
+    m_map[EventSources::ParameterDisplayString];
   }
 
   sigc::connection EventSourceBroker::connect(EventSources source, std::function<void(std::any)> cb)

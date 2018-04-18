@@ -6,6 +6,7 @@ namespace DescriptiveLayouts
 
   Bar::Bar(const Primitive &e) :
       Control(e.getPosition()),
+      m_primitive(e),
       m_range(0.0, 1.0)
   {
   }
@@ -42,26 +43,28 @@ namespace DescriptiveLayouts
     Control::setDirty();
   }
 
-  Bar::StyleMap Bar::getDefaultStyle() const
-  {
-    static StyleMap defaults = { { StyleKey::Color, (int) FrameBuffer::C255 } };
-
-    return defaults;
-  }
-
   void Bar::setProperty(PrimitiveProperty key, std::any value)
   {
     switch(key)
     {
-      case PrimitiveProperty::range:
+      case PrimitiveProperty::Range:
         if(std::exchange(m_range, std::any_cast < Range > (value)) != m_range)
           setDirty();
         break;
 
-      case PrimitiveProperty::visibility:
+      case PrimitiveProperty::Visibility:
         setVisible(std::any_cast<bool>(value));
         break;
     }
   }
 
+  PrimitiveClasses Bar::getPrimitiveClass() const
+  {
+    return m_primitive.getClass();
+  }
+
+  PrimitiveInstances Bar::getPrimitiveInstance() const
+  {
+    return m_primitive.getInstance();
+  }
 }

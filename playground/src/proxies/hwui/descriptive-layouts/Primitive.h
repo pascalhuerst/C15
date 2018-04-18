@@ -15,15 +15,18 @@ namespace DescriptiveLayouts
     public:
       using Converter = std::function<std::any(std::any)>;
 
-      Primitive(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget = PrimitiveProperty::none,
+      Primitive(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget = PrimitiveProperty::None,
                 Converter converter = nullptr);
 
       Rect getPosition() const;
       Control* instantiate() const;
 
+      PrimitiveInstances getInstance() const;
+      PrimitiveClasses getClass() const;
+
     private:
       PrimitiveInstances primitiveInstance;
-      PrimitiveClasses type;
+      PrimitiveClasses primitveClass;
       Rect relativePosition;
       PrimitiveProperty eventTarget;
       std::function<std::any(std::any)> converter;

@@ -67,16 +67,6 @@ void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
   }
 }
 
-void BOLED::setupLayoutDetail (LayoutDetail layoutDetail)
-{
-  auto fAndM = Application::get().getHWUI()->getFocusAndMode();
-  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(fAndM))
-  {
-    reset (layout);
-    return;
-  }
-}
-
 void BOLED::setupSoundScreen (FocusAndMode focusAndMode)
 {
   reset (new SingleSoundLayout (focusAndMode));

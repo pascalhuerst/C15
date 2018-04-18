@@ -5,13 +5,23 @@
 
 enum class UIFocus
 {
-  Sound, Parameters, Presets, Banks, Setup, Unchanged
+  Any, Sound, Parameters, Presets, Banks, Setup, Unchanged
 };
 
 enum class UIMode
 {
-  Select, Store, Edit, Info, Unchanged
+  Any, Select, Store, Edit, Info, Unchanged
 };
+
+enum class UIFocusAndModeDetail
+{
+  Any,
+  Init,
+  MCSelect,
+  MCAmount,
+  MCPosition,
+};
+
 
 enum ButtonModifier
 {
@@ -35,30 +45,16 @@ class ButtonModifiers : public std::bitset<ButtonModifier::NUM_MODIFIERS>
     }
 };
 
-enum class EmptyDetail {
-
-};
-
-enum class ParameterDetail {
-    select, none, mcassign, mcpos, mcamount
-};
-
-enum class PresetDetail {
-    bank, preset, store
-};
-
-typedef std::variant<ParameterDetail, PresetDetail, EmptyDetail> LayoutDetail;
-
 struct FocusAndMode
 {
     FocusAndMode (UIFocus f, UIMode m) :
         focus (f),
         mode (m),
-        detail{}
+        detail (UIFocusAndModeDetail::Init)
     {
     }
 
-    FocusAndMode(UIFocus f, UIMode m, LayoutDetail d) : focus{f}, mode{m}, detail{d}
+    FocusAndMode(UIFocus f, UIMode m, UIFocusAndModeDetail d) : focus{f}, mode{m}, detail{d}
     {
     }
 
@@ -98,7 +94,7 @@ struct FocusAndMode
 
     UIFocus focus;
     UIMode mode;
-    LayoutDetail detail;
+    UIFocusAndModeDetail detail;
 };
 
 
