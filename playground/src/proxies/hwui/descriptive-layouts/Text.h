@@ -18,10 +18,11 @@ namespace DescriptiveLayouts
       Text(const Primitive &e);
       virtual ~Text();
 
+      using DisplayString = std::pair<Glib::ustring, int>;
+
       void setProperty(PrimitiveProperty key, std::any value);
       void setDirty() override;
-      PrimitiveClasses getPrimitiveClass() const override;
-      PrimitiveInstances getPrimitiveInstance() const override;
+      const Primitive &getPrimitive() const override;
 
     protected:
       void setFontColor (FrameBuffer &fb) const override;

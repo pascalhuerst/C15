@@ -8,27 +8,73 @@
 #include "Selector.h"
 #include "TemplateEnums.h"
 #include "EventSink.h"
+#include "Styles.h"
 
 namespace DescriptiveLayouts
 {
 
   BoledLayoutFactory::BoledLayoutFactory()
   {
-    ControlPrototype slider128x12(ControlClasses::Slider,
-        Primitive(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(0, 0, 128, 12)),
-        Primitive(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(1, 1, 126, 10)),
-        Primitive(PrimitiveInstances::Slider, PrimitiveClasses::Bar, Rect(2, 2, 124, 8), PrimitiveProperty::Range, nullptr),
-        Primitive(PrimitiveInstances::CenterMark, PrimitiveClasses::Bar, Rect(63, 2, 2, 8))
-        );
+    auto &styles = StyleSheet::get();
 
-    ControlPrototype label64x16(ControlClasses::Label,
-        Primitive(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(0, 0, 64, 16), PrimitiveProperty::Visibility, nullptr),
+    styles.registerStyle( { PrimitiveClasses::Bar, PrimitiveInstances::Background },
+        { { StyleKey::Color, (int) StyleValues::Color::C43 } });
+
+    styles.registerStyle( { ControlClasses::Button, PrimitiveInstances::Background },
+        { { StyleKey::Color, (int) StyleValues::Color::C179 } });
+
+    styles.registerStyle( { ControlClasses::Button, PrimitiveInstances::Border }, { { StyleKey::Color, (int) StyleValues::Color::C204 }, {
+        StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid } });
+
+    styles.registerStyle( { ControlClasses::Button, PrimitiveClasses::Bar, PrimitiveInstances::Cover },
+        { { StyleKey::Color, (int) StyleValues::Color::C43 } });
+
+    styles.registerStyle( { PrimitiveClasses::Bar }, { { StyleKey::Color, (int) StyleValues::Color::C255 } });
+
+    styles.registerStyle( { PrimitiveClasses::Border }, { { StyleKey::Color, (int) StyleValues::Color::C255 }, {
+        StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid } });
+
+    styles.registerStyle( { PrimitiveClasses::Text }, { { StyleKey::TextAlign, (int) StyleValues::Alignment::Center }, { StyleKey::FontSize,
+                                                                                                                         9 },
+                                                        { StyleKey::Color, (int) FrameBuffer::C255 } });
+
+    styles.registerStyle( { ControlInstances::GroupHeader, PrimitiveInstances::Background }, { });
+
+    styles.registerStyle( { ControlInstances::GroupHeader, PrimitiveInstances::Text },
+        { { StyleKey::Color, (int) StyleValues::Color::C43 }, { StyleKey::BackgroundColor, (int) StyleValues::Color::C255 } });
+
+    ControlPrototype slider128x10(ControlClasses::Slider,
+        Primitive(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(0, 0, 128, 10)),
+        Primitive(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(1, 1, 126, 8)),
+        Primitive(PrimitiveInstances::Slider, PrimitiveClasses::Bar, Rect(2, 2, 124, 6), PrimitiveProperty::Range, nullptr),
+        Primitive(PrimitiveInstances::CenterMark, PrimitiveClasses::Bar, Rect(63, 2, 2, 6)));
+
+    ControlPrototype headerLabel(ControlClasses::Label,
         Primitive(PrimitiveInstances::Text, PrimitiveClasses::Text, Rect(0, 0, 64, 16), PrimitiveProperty::Text, nullptr));
 
+    ControlPrototype label128x14(ControlClasses::Label,
+        Primitive(PrimitiveInstances::Text, PrimitiveClasses::Text, Rect(0, 0, 128, 14), PrimitiveProperty::Text, nullptr));
+
+    ControlPrototype emptyButton(ControlClasses::Button,
+        Primitive(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(3, 2, 56, 9)),
+        Primitive(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(2, 1, 58, 11)),
+        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(2, 1, 1, 1)),
+        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(59, 1, 1, 1)),
+        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(2, 11, 1, 1)),
+        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(59, 11, 1, 1)));
+
     registerLayout(LayoutInstances::UnmodulateableParameterLayout, Selector(UIFocus::Parameters), Selector(UIMode::Select),
-        ControlInstance(ControlInstances::GroupHeader, label64x16, Point(0, 0), EventSources::ParameterGroupName, PrimitiveInstances::Text),
-        ControlInstance(ControlInstances::Slider, slider128x12, Point(64, 20), EventSources::SliderRange, PrimitiveInstances::Slider),
-        EventSinkMapping(BUTTON_INC, EventSinks::IncParam), EventSinkMapping(BUTTON_DEC, EventSinks::DecParam));
+        ControlInstance(ControlInstances::GroupHeader, headerLabel, Point(0, 0), EventSources::ParameterGroupName,
+            PrimitiveInstances::Text),
+        ControlInstance(ControlInstances::ParameterName, label128x14, Point(64, 13), EventSources::ParameterName, PrimitiveInstances::Text),
+        ControlInstance(ControlInstances::Slider, slider128x10, Point(64, 26), EventSources::SliderRange, PrimitiveInstances::Slider),
+        ControlInstance(ControlInstances::ParameterName, label128x14, Point(64, 39), EventSources::ParameterDisplayString,
+            PrimitiveInstances::Text), ControlInstance(ControlInstances::ButtonA, emptyButton, Point(0, 52)),
+        ControlInstance(ControlInstances::ButtonB, emptyButton, Point(64, 52)),
+        ControlInstance(ControlInstances::ButtonC, emptyButton, Point(128, 52)),
+        ControlInstance(ControlInstances::ButtonD, emptyButton, Point(192, 52)), EventSinkMapping(BUTTON_INC, EventSinks::IncParam),
+        EventSinkMapping(BUTTON_DEC, EventSinks::DecParam), EventSinkMapping(ROTARY_PLUS, EventSinks::IncParam),
+        EventSinkMapping(ROTARY_MINUS, EventSinks::DecParam));
   }
 
   BoledLayoutFactory& BoledLayoutFactory::get()

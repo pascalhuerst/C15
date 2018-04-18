@@ -24,8 +24,7 @@ namespace DescriptiveLayouts
       void setDirty() override;
       void drawBackground (FrameBuffer &fb) override;
 
-      PrimitiveClasses getPrimitiveClass() const;
-      PrimitiveInstances getPrimitiveInstance() const;
+      const Primitive &getPrimitive() const;
 
     private:
       Primitive m_primitive;

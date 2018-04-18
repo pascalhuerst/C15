@@ -5,7 +5,7 @@ namespace DescriptiveLayouts
 {
 
   Border::Border(const Primitive &e) :
-      Control(e.getPosition()),
+      Control(e.relativePosition),
       m_primitive(e)
   {
   }
@@ -47,13 +47,8 @@ namespace DescriptiveLayouts
     Control::setDirty();
   }
 
-  PrimitiveClasses Border::getPrimitiveClass() const
+  const Primitive &Border::getPrimitive() const
   {
-    return m_primitive.getClass();
-  }
-
-  PrimitiveInstances Border::getPrimitiveInstance() const
-  {
-    return m_primitive.getInstance();
+    return m_primitive;
   }
 }

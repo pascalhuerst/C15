@@ -1,17 +1,20 @@
 #include "GenericControl.h"
 #include "Styleable.h"
-
+#include "EventSource.h"
+#include "PropertyOwner.h"
 
 namespace DescriptiveLayouts
 {
   GenericControl::GenericControl(const ControlInstance &prototype) :
-      ControlWithChildren(Rect(prototype.position, Point(0,0))), m_prototype(prototype)
+      ControlWithChildren(Rect(prototype.position, Point(0, 0))),
+      m_prototype(prototype)
   {
     addPrimitives();
   }
 
   GenericControl::~GenericControl()
   {
+    m_connection.disconnect();
   }
 
   void GenericControl::addPrimitives()
@@ -40,6 +43,32 @@ namespace DescriptiveLayouts
       if(auto a = dynamic_pointer_cast<Styleable>(p))
       {
         a->style(layout, m_prototype.control.controlClass, m_prototype.controlInstance);
+      }
+    }
+  }
+
+  void GenericControl::connect()
+  {
+    m_connection = EventSourceBroker::get().connect(m_prototype.eventSource, sigc::mem_fun(this, &GenericControl::onEventFired));
+  }
+
+  void GenericControl::onEventFired(std::any v)
+  {
+    for(auto c : getControls())
+    {
+      if(auto a = dynamic_pointer_cast<Styleable>(c))
+      {
+        const auto &primitive = a->getPrimitive();
+
+        if(primitive.primitiveInstance == m_prototype.eventTarget)
+        {
+          if(auto p = dynamic_pointer_cast<PropertyOwner>(c))
+          {
+            p->setProperty(primitive.eventTarget, v);
+          }
+
+          break;
+        }
       }
     }
   }

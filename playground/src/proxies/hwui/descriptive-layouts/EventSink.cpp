@@ -1,4 +1,9 @@
 #include "EventSink.h"
+#include "Application.h"
+#include "presets/PresetManager.h"
+#include "presets/EditBuffer.h"
+#include "parameters/Parameter.h"
+#include "proxies/hwui/HWUI.h"
 
 namespace DescriptiveLayouts
 {
@@ -10,6 +15,29 @@ namespace DescriptiveLayouts
 
   EventSinkBroker::EventSinkBroker()
   {
-    //TODO fill me pls m_map
+    auto eb = Application::get().getPresetManager()->getEditBuffer();
+    auto hwui = Application::get().getHWUI();
+
+    registerEvent(EventSinks::IncParam, [eb, hwui]()
+    {
+      if(auto p = eb->getSelected())
+        p->getValue().inc(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
+    });
+
+    registerEvent(EventSinks::DecParam, [eb, hwui]()
+    {
+      if(auto p = eb->getSelected())
+        p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
+    });
+  }
+
+  void EventSinkBroker::registerEvent(EventSinks sink, tAction action)
+  {
+    m_map[sink] = action;
+  }
+
+  void EventSinkBroker::fire(EventSinks s)
+  {
+    m_map.at(s)();
   }
 }

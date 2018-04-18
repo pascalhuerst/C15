@@ -25,7 +25,7 @@ namespace DescriptiveLayouts
     std::string getValueToKey(std::string styleLine, std::string key)
     {
       styleLine.find(key, 0);
-
+      return "";
     }
     std::tuple<UIFocus, UIMode, UIFocusAndModeDetail, LayoutInstances, ControlClasses, ControlInstances,
             PrimitiveClasses, PrimitiveInstances, StyleMap>
@@ -34,7 +34,9 @@ namespace DescriptiveLayouts
       auto lines = StringTools::splitStringOnAnyDelimiter(styleParagraph, '\n');
       auto selectors = lines[0];
       auto selector_v = StringTools::splitStringOnAnyDelimiter(selectors, ',');
-      
+
+      return {};
+
     }
 
 
@@ -58,11 +60,11 @@ namespace DescriptiveLayouts
       for (auto style: styles)
       {
         auto s = createStyle(style);
-        StyleSheet::get().registerStyle(std::get<0>(s), std::get<1>(s),
-                                        std::get<2>(s), std::get<3>(s),
-                                        std::get<4>(s), std::get<5>(s),
-                                        std::get<6>(s), std::get<7>(s),
-                                        std::get<8>(s));
+        //StyleSheet::get().registerStyle(std::get<0>(s), std::get<1>(s),
+        //                                std::get<2>(s), std::get<3>(s),
+        //                                std::get<4>(s), std::get<5>(s),
+        //                                std::get<6>(s), std::get<7>(s),
+        //                                std::get<8>(s));
       }
     }
 

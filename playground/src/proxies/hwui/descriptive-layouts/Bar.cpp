@@ -5,7 +5,7 @@ namespace DescriptiveLayouts
 {
 
   Bar::Bar(const Primitive &e) :
-      Control(e.getPosition()),
+      Control(e.relativePosition),
       m_primitive(e),
       m_range(0.0, 1.0)
   {
@@ -58,13 +58,8 @@ namespace DescriptiveLayouts
     }
   }
 
-  PrimitiveClasses Bar::getPrimitiveClass() const
+  const Primitive &Bar::getPrimitive() const
   {
-    return m_primitive.getClass();
-  }
-
-  PrimitiveInstances Bar::getPrimitiveInstance() const
-  {
-    return m_primitive.getInstance();
+    return m_primitive;
   }
 }
