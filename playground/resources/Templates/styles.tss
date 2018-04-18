@@ -1,0 +1,11 @@
+Style: UIFocus: Parameter, PrimitiveClass: Border
+    Color: C43
+    TextAlign: Center
+
+Style: UIFocus::Parameter, PrimitiveClass::Bar
+    Color: C69
+    TextAlign: Right
+
+Style: UIFocus::Parameter, PrimitiveClass::Text
+    Color: C76
+    TextAlign: Left

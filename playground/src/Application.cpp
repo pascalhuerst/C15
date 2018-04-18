@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <clipboard/Clipboard.h>
 #include <io/network/WebSocketSession.h>
+#include <proxies/hwui/descriptive-layouts/StyleParser.h>
 
 Application *Application::theApp = nullptr;
 
@@ -56,6 +57,8 @@ Application::Application(int numArgs, char **argv) :
 #ifdef _PROFILING
   Profiler::get().enable(true);
 #endif
+
+  DescriptiveLayouts::StyleParser P;
 
   m_settings->init();
   m_hwui->init();

@@ -70,10 +70,10 @@ namespace DescriptiveLayouts
 
     private:
       StyleSheet();
-
+  public:
       void registerStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutInstances l, ControlClasses cc, ControlInstances ci,
                          PrimitiveClasses pc, PrimitiveInstances pi, const StyleMap &s);
-
+  private:
       using Styles = SubTree<UIFocus, UIMode, UIFocusAndModeDetail, LayoutInstances, ControlClasses, ControlInstances, PrimitiveClasses, PrimitiveInstances>;
       Styles m_styles;
   };
