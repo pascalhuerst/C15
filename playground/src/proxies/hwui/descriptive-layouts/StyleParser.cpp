@@ -10,25 +10,42 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-    /*
-     * UIFocus f,
-     * UIMode m,
-     * UIFocusAndModeDetail d,
-     * LayoutInstances l,
-     * ControlClasses cc,
-     * ControlInstances ci,
-     * PrimitiveClasses pc,
-     * PrimitiveInstances pi,
-     * const StyleMap &s <- map (string, int)
-     */
+    StyleSheet::StyleSelector parseSelector(json selector)
+    {
+      StyleSheet::StyleSelector theSelector;
+      for (json::iterator critera = selector.begin(); critera != selector.end(); ++critera)
+      {
+
+      }
+      return theSelector;
+    }
+
+    StyleMap parseStylePairs(json styles)
+    {
+      StyleMap theStyles;
+      for (json::iterator style = styles.begin(); style != styles.end(); ++style)
+      {
+
+      }
+      return theStyles;
+    }
+
+    void registerStyle(json::iterator style)
+    {
+      auto selector = parseSelector(*style.value().find("selector"));
+      auto styles = parseStylePairs(*style.value().find("styles"));
+      StyleSheet::get().registerStyle(selector, styles);
+    }
 
     StyleParser::StyleParser()
     {
       std::ifstream i("/home/justus/development/C15/C15/playground/resources/Templates/styles.tss");
       json j;
       i >> j;
-      for (json::iterator it = j.begin(); it != j.end(); ++it) {
-        std::cout << it.key() << " : " << it.value() << "\n";
+      for (json::iterator styles = j.begin(); styles != j.end(); ++styles) {
+        for(auto style = styles.operator*().begin(); style != styles.operator*().end(); ++style){
+          registerStyle(style);
+        }
       }
     }
 
