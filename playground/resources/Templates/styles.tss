@@ -1,7 +1,6 @@
 [
     {
         "style": {
-
             "selector": {
                 "UIFocus": "Parameter",
                 "PrimitiveClass": "Border"
