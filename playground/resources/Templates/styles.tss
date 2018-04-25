@@ -1,38 +1,32 @@
 [
     {
-        "style": {
-            "selector": {
-                "UIFocus": "Parameter",
-                "PrimitiveClass": "Border"
-            },
-            "styles": {
-                "Color": "C43",
-                "TextAlign": "Center"
-            }
+        "selector": {
+            "UIFocus": "Parameter",
+            "PrimitiveClass": "Border"
+        },
+        "styles": {
+            "Color": "C43",
+            "TextAlign": "Center"
         }
     },
     {
-        "style": {
-            "selector": {
-                "UIFocus": "Parameter",
-                "PrimitiveClass": "Border"
-            },
-            "styles": {
-                "Color": "C43",
-                "TextAlign": "Left"
-            }
+        "selector": {
+            "UIFocus": "Parameter",
+            "PrimitiveClass": "Border"
+        },
+        "styles": {
+            "Color": "C43",
+            "TextAlign": "Left"
         }
     },
     {
-        "style": {
-            "selector": {
-                "UIFocus": "Parameter",
-                "PrimitiveClass": "Border"
-            },
-            "styles": {
-                "Color": "C43",
-                "TextAlign": "Right"
-            }
+        "selector": {
+            "UIFocus": "Parameter",
+            "PrimitiveClass": "Border"
+        },
+        "styles": {
+            "Color": "C43",
+            "TextAlign": "Right"
         }
     }
 ]

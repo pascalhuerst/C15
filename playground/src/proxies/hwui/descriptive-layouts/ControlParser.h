@@ -2,9 +2,9 @@
 
 namespace DescriptiveLayouts
 {
-    class StyleParser
+    class ControlParser
     {
     public:
-        StyleParser();
+        ControlParser();
     };
 }

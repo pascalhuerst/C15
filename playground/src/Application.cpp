@@ -20,6 +20,7 @@
 #include <clipboard/Clipboard.h>
 #include <io/network/WebSocketSession.h>
 #include <proxies/hwui/descriptive-layouts/StyleParser.h>
+#include <proxies/hwui/descriptive-layouts/ControlParser.h>
 
 Application *Application::theApp = nullptr;
 
@@ -58,7 +59,8 @@ Application::Application(int numArgs, char **argv) :
   Profiler::get().enable(true);
 #endif
 
-  DescriptiveLayouts::StyleParser P;
+  DescriptiveLayouts::StyleParser SP;
+  DescriptiveLayouts::ControlParser CP;
 
   m_settings->init();
   m_hwui->init();

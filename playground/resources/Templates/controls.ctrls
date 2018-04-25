@@ -1,76 +1,68 @@
 [
     {
         "slider128x10": {
-            "primitives": {
-                "Border": {
-                    "Class": "Border",
-                    "Rect": "0,0,128,10"
-                },
-                "Background": {
-                    "Class": "Bar",
-                    "Rect": "1,1,126,8"
-                },
-                "Slider": {
-                    "Class": "Bar",
-                    "Rect": "2,2,124,6",
-                    "Property": "Range"
-                },
-                "CenterMark": {
-                    "Class": "Bar",
-                    "Rect": "63,2,2,6"
-                }
+            "Border": {
+                "Class": "Border",
+                "Rect": "0,0,128,10"
+            },
+            "Background": {
+                "Class": "Bar",
+                "Rect": "1,1,126,8"
+            },
+            "Slider": {
+                "Class": "Bar",
+                "Rect": "2,2,124,6",
+                "Property": "Range"
+            },
+            "CenterMark": {
+                "Class": "Bar",
+                "Rect": "63,2,2,6"
             }
         }
     },
     {
         "headerLabel": {
-            "primitives": {
-                "Text": {
-                    "Class": "Text",
-                    "Rect": "0,0,64,16",
-                    "Property": "Text"
-                }
+            "Text": {
+                "Class": "Text",
+                "Rect": "0,0,64,16",
+                "Property": "Text"
             }
         }
     },
     {
         "label128x14": {
-            "primitives": {
-                "Text": {
-                    "Class": "Text",
-                    "Rect": "0,0,128,14",
-                    "Property": "Text"
-                }
+            "Text": {
+                "Class": "Text",
+                "Rect": "0,0,128,14",
+                "Property": "Text"
             }
         }
     },
     {
         "emptyButton": {
-            "primitives": {
-                "Background": {
-                    "Class": "Bar",
-                    "Rect": "3,2,56,9"
-                },
-                "Border": {
-                    "Class": "Border",
-                    "Rect": "2,1,58,11"
-                },
-                "Cover": {
-                    "Class": "Bar",
-                    "Rect": "2,1,1,1"
-                },
-                "Cover": {
-                    "Class": "Bar",
-                    "Rect": "59,1,1,1"
-                },
-                "Cover": {
-                    "Class": "Bar",
-                    "Rect": "2,11,1,1"
-                },
-                "Cover": {
-                    "Class": "Bar",
-                    "Rect": "59,11,1,1"
-                }
+            "Background": {
+                "Class": "Bar",
+                "Rect": "3,2,56,9"
+            },
+            "Border": {
+                "Class": "Border",
+                "Rect": "2,1,58,11"
+            },
+            "Cover": {
+                "Class": "Bar",
+                "Rect": "2,1,1,1"
+            },
+            "Cover": {
+                "Class": "Bar",
+                "Rect": "59,1,1,1"
+            },
+            "Cover": {
+                "Class": "Bar",
+                "Rect": "2,11,1,1"
+            },
+            "Cover": {
+                "Class": "Bar",
+                "Rect": "59,11,1,1"
             }
         }
     }

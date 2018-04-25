@@ -5,6 +5,7 @@
 #include "Styles.h"
 #include <tuple>
 #include <tools/json.h>
+#include <device-settings/DebugLevel.h>
 
 using json = nlohmann::json;
 
@@ -30,22 +31,24 @@ namespace DescriptiveLayouts
       return theStyles;
     }
 
-    void registerStyle(json::iterator style)
+    void registerStyle(json style)
     {
-      auto selector = parseSelector(*style.value().find("selector"));
-      auto styles = parseStylePairs(*style.value().find("styles"));
-      StyleSheet::get().registerStyle(selector, styles);
+      try {
+        auto selector = parseSelector(*style.find("selector"));
+        auto styles = parseStylePairs(*style.find("styles"));
+        StyleSheet::get().registerStyle(selector, styles);
+      } catch(...) {
+        DebugLevel::error("JSON NOT OKAY! ok?");
+      }
     }
 
     StyleParser::StyleParser()
     {
       std::ifstream i("/home/justus/development/C15/C15/playground/resources/Templates/styles.tss");
-      json j;
-      i >> j;
-      for (json::iterator styles = j.begin(); styles != j.end(); ++styles) {
-        for(auto style = styles.operator*().begin(); style != styles.operator*().end(); ++style){
-          registerStyle(style);
-        }
+      json j; i >> j;
+
+      for(auto i: j) {
+        registerStyle(i);
       }
     }
 
