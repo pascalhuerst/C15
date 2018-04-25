@@ -1,0 +1,59 @@
+[
+    {
+        "UnmodulateableParameterLayout": {
+            "Selector": {
+                "UIFocus": "parameter",
+                "UIMode": "select"
+            },
+            "Controls": {
+                "GroupHeader": {
+                    "Instance": "headerLabel",
+                    "Position": "0,0",
+                    "EventSource": "ParameterGroupName",
+                    "TargetProperty": "Text"
+                },
+                "ParameterName": {
+                    "Instance": "label128x14",
+                    "Position": "64, 13",
+                    "EventSource": "ParameterName",
+                    "TargetProperty": "Text"
+                },
+                "Slider": {
+                    "Instance": "slider128x10",
+                    "Position": "64, 26",
+                    "EventSource": "SliderRange",
+                    "TargetProperty": "Slider"
+                },
+                "ParameterName": {
+                    "Instance": "label128x14",
+                    "Position": "64, 39",
+                    "EventSource": "ParameterDisplayString",
+                    "TargetProperty": "Text"
+                },
+                "ButtonA": {
+                    "Instance": "emptyButton",
+                    "Position": "0,52"
+                },
+                "ButtonB": {
+                    "Instance": "emptyButton",
+                    "Position": "64,52"
+                },
+                "ButtonC": {
+                    "Instance": "emptyButton",
+                    "Position": "128,52"
+                },
+                "ButtonD": {
+                    "Instance": "emptyButton",
+                    "Position": "192, 52"
+                }
+
+            },
+            "EventSinks": {
+                "BUTTON_INC": "IncParam",
+                "BUTTON_DEC": "DecParam",
+                "ROTARY_PLUS": "IncParam",
+                "ROTARY_MINUS": "DecParam"
+            }
+        }
+    }
+]
