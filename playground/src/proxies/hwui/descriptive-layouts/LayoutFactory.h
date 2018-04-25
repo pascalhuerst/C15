@@ -23,14 +23,23 @@ namespace DescriptiveLayouts
 
       std::shared_ptr<DFBLayout> instantiate(FocusAndMode fam);
 
+      template<typename ... Args>
+      void registerLayout(LayoutInstances id, Args ... args)
+      {
+        m_layouts.emplace_back(id, args...);
+      }
+
+      void registerLayout(LayoutInstances id,
+                          std::list<Selector> sel,
+                          std::list<ControlInstance> ci,
+                          std::list<EventSinkMapping> esm) {
+        m_layouts.emplace_back(id, sel, ci, esm);
+      }
+
     private:
       BoledLayoutFactory();
 
-      template<typename ... Args>
-        void registerLayout(LayoutInstances id, Args ... args)
-        {
-          m_layouts.emplace_back(id, args...);
-        }
+
 
       const LayoutPrototype& find(FocusAndMode fam) const;
 

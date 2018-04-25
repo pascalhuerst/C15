@@ -21,6 +21,7 @@
 #include <io/network/WebSocketSession.h>
 #include <proxies/hwui/descriptive-layouts/StyleParser.h>
 #include <proxies/hwui/descriptive-layouts/ControlParser.h>
+#include <proxies/hwui/descriptive-layouts/LayoutParser.h>
 
 Application *Application::theApp = nullptr;
 
@@ -61,6 +62,7 @@ Application::Application(int numArgs, char **argv) :
 
   DescriptiveLayouts::StyleParser SP;
   DescriptiveLayouts::ControlParser CP;
+  DescriptiveLayouts::LayoutParser LP;
 
   m_settings->init();
   m_hwui->init();
