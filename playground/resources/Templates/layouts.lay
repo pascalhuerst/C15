@@ -7,43 +7,43 @@
             },
             "Controls": {
                 "GroupHeader": {
-                    "Instance": "headerLabel",
+                    "Class": "headerLabel",
                     "Position": "0,0",
                     "EventSource": "ParameterGroupName",
-                    "TargetProperty": "Text"
+                    "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ParameterName": {
-                    "Instance": "label128x14",
+                    "Class": "label128x14",
                     "Position": "64, 13",
                     "EventSource": "ParameterName",
-                    "TargetProperty": "Text"
+                    "PrimitiveInstanceEventTarget": "Text"
                 },
                 "Slider": {
-                    "Instance": "slider128x10",
+                    "Class": "slider128x10",
                     "Position": "64, 26",
                     "EventSource": "SliderRange",
-                    "TargetProperty": "Slider"
+                    "PrimitiveInstanceEventTarget": "Slider"
                 },
                 "ParameterName": {
-                    "Instance": "label128x14",
+                    "Class": "label128x14",
                     "Position": "64, 39",
                     "EventSource": "ParameterDisplayString",
-                    "TargetProperty": "Text"
+                    "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ButtonA": {
-                    "Instance": "emptyButton",
+                    "Class": "emptyButton",
                     "Position": "0,52"
                 },
                 "ButtonB": {
-                    "Instance": "emptyButton",
+                    "Class": "emptyButton",
                     "Position": "64,52"
                 },
                 "ButtonC": {
-                    "Instance": "emptyButton",
+                    "Class": "emptyButton",
                     "Position": "128,52"
                 },
                 "ButtonD": {
-                    "Instance": "emptyButton",
+                    "Class": "emptyButton",
                     "Position": "192, 52"
                 }
 

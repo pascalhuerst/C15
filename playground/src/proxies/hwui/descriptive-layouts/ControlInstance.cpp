@@ -3,7 +3,7 @@
 
 namespace DescriptiveLayouts
 {
-  ControlInstance::ControlInstance(ControlInstances controlInstance, ControlPrototype control, Point position, EventSources eventSource,
+  ControlInstance::ControlInstance(ControlInstances controlInstance, ControlClass control, Point position, EventSources eventSource,
                                    PrimitiveInstances eventTarget) :
       controlInstance(controlInstance),
       control(control),

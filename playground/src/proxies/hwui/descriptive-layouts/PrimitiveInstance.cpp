@@ -1,10 +1,10 @@
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 #include "PrimitivesFactory.h"
 #include "Styles.h"
 
 namespace DescriptiveLayouts
 {
-  Primitive::Primitive(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget,
+  PrimitiveInstance::PrimitiveInstance(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget,
                        Converter converter) :
       primitiveInstance(primitiveInstance),
       primitveClass(type),
@@ -14,7 +14,7 @@ namespace DescriptiveLayouts
   {
   }
 
-  Control* Primitive::instantiate() const
+  Control* PrimitiveInstance::instantiate() const
   {
     return PrimitivesFactory::create(*this);
   }

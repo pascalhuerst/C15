@@ -23,13 +23,13 @@ namespace DescriptiveLayouts
     }
 
 
-    std::list<Primitive> createPrimitives(json primitives)
+    std::list<PrimitiveInstance> createPrimitives(json primitives)
     {
-      std::list<Primitive> lP;
+      std::list<PrimitiveInstance> lP;
       for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive) {
         //giveEnum(primitive.value().find("Class"))
         //giveEnum(primitive.value().find("Property"))
-        lP.push_back(Primitive(giveEnum(primitive.key()),
+        lP.push_back(PrimitiveInstance(giveEnum(primitive.key()),
                                PrimitiveClasses::Bar,
                                parseRect(*primitive.value().find("Rect")),
                                PrimitiveProperty::None));
@@ -45,7 +45,7 @@ namespace DescriptiveLayouts
           std::cout << name << '\n';
           auto primitiveList = critera.value();
 
-          ControlPrototype controlPrototype((ControlClasses)giveEnum(name), createPrimitives(primitiveList));
+          ControlClass controlPrototype((ControlClasses)giveEnum(name), createPrimitives(primitiveList));
           ControlRegistry::get().registerControl(name, controlPrototype);
       }
     }

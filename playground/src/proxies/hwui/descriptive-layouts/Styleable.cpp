@@ -1,5 +1,5 @@
 #include "Styleable.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 #include "Application.h"
 #include <proxies/hwui/HWUI.h>
 #include <device-settings/DebugLevel.h>
@@ -15,11 +15,11 @@ namespace DescriptiveLayouts
   {
   }
 
-  void Styleable::style(LayoutInstances li, ControlClasses cc, ControlInstances ci)
+  void Styleable::style(LayoutClasses li, ControlClasses cc, ControlInstances ci)
   {
     const StyleSheet s = StyleSheet::get();
     auto fam = Application::get().getHWUI()->getFocusAndMode();
-    const Primitive &p = getPrimitive();
+    const PrimitiveInstance &p = getPrimitive();
     s.applyStyle(fam.focus, fam.mode, fam.detail, li, cc, ci, p.primitveClass, p.primitiveInstance, this);
   }
 
@@ -40,7 +40,7 @@ namespace DescriptiveLayouts
     }
     catch(...)
     {
-      const Primitive &p = getPrimitive();
+      const PrimitiveInstance &p = getPrimitive();
       DebugLevel::error("Have to define a default for key", (int)s, " for primitive class", (int)p.primitveClass);
       return 0;
     }

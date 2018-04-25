@@ -12,20 +12,20 @@ namespace DescriptiveLayouts
 
   class ControlInstance;
 
-  struct LayoutPrototype
+  struct LayoutClass
   {
     public:
       using ControlInstanceList = std::list<ControlInstance>;
       using EventSinkList = std::list<EventSinkMapping>;
 
       template<typename ... Args>
-        LayoutPrototype(LayoutInstances id, Args ... args) :
+        LayoutClass(LayoutClasses id, Args ... args) :
             id(id)
         {
           (void) std::initializer_list<int> { (addToList(args), 0)... };
         }
 
-      LayoutPrototype(LayoutInstances id, std::list<Selector> sel,
+      LayoutClass(LayoutClasses id, std::list<Selector> sel,
                       std::list<ControlInstance> ci,
                       std::list<EventSinkMapping> esm) : id(id)
       {
@@ -46,7 +46,7 @@ namespace DescriptiveLayouts
       void addToList(ControlInstance s);
       void addToList(EventSinkMapping s);
 
-      LayoutInstances id;
+      LayoutClasses id;
       std::list<Selector> selectors;
       ControlInstanceList controls;
       EventSinkList sinkMappings;

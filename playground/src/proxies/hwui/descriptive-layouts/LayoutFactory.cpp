@@ -3,7 +3,7 @@
 #include "GenericLayout.h"
 #include <Application.h>
 #include <proxies/hwui/HWUI.h>
-#include "ControlPrototype.h"
+#include "ControlClass.h"
 #include "ControlInstance.h"
 #include "Selector.h"
 #include "TemplateEnums.h"
@@ -43,33 +43,34 @@ namespace DescriptiveLayouts
     styles.registerStyle( { ControlInstances::GroupHeader, PrimitiveInstances::Text },
         { { StyleKey::Color, (int) StyleValues::Color::C43 }, { StyleKey::BackgroundColor, (int) StyleValues::Color::C255 } });
 
-    ControlPrototype slider128x10(ControlClasses::Slider,
-        Primitive(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(0, 0, 128, 10)),
-        Primitive(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(1, 1, 126, 8)),
-        Primitive(PrimitiveInstances::Slider, PrimitiveClasses::Bar, Rect(2, 2, 124, 6), PrimitiveProperty::Range, nullptr),
-        Primitive(PrimitiveInstances::CenterMark, PrimitiveClasses::Bar, Rect(63, 2, 2, 6)));
+    ControlClass slider128x10(ControlClasses::Slider,
+        PrimitiveInstance(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(0, 0, 128, 10)),
+        PrimitiveInstance(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(1, 1, 126, 8)),
+        PrimitiveInstance(PrimitiveInstances::Slider, PrimitiveClasses::Bar, Rect(2, 2, 124, 6), PrimitiveProperty::Range, nullptr),
+        PrimitiveInstance(PrimitiveInstances::CenterMark, PrimitiveClasses::Bar, Rect(63, 2, 2, 6)));
 
-    ControlPrototype headerLabel(ControlClasses::Label,
-        Primitive(PrimitiveInstances::Text, PrimitiveClasses::Text, Rect(0, 0, 64, 16), PrimitiveProperty::Text, nullptr));
+    ControlClass headerLabel(ControlClasses::Label,
+        PrimitiveInstance(PrimitiveInstances::Text, PrimitiveClasses::Text, Rect(0, 0, 64, 16), PrimitiveProperty::Text, nullptr));
 
-    ControlPrototype label128x14(ControlClasses::Label,
-        Primitive(PrimitiveInstances::Text, PrimitiveClasses::Text, Rect(0, 0, 128, 14), PrimitiveProperty::Text, nullptr));
+    ControlClass label128x14(ControlClasses::Label,
+        PrimitiveInstance(PrimitiveInstances::Text, PrimitiveClasses::Text, Rect(0, 0, 128, 14), PrimitiveProperty::Text, nullptr));
 
-    ControlPrototype emptyButton(ControlClasses::Button,
-        Primitive(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(3, 2, 56, 9)),
-        Primitive(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(2, 1, 58, 11)),
-        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(2, 1, 1, 1)),
-        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(59, 1, 1, 1)),
-        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(2, 11, 1, 1)),
-        Primitive(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(59, 11, 1, 1)));
+    ControlClass emptyButton(ControlClasses::Button,
+        PrimitiveInstance(PrimitiveInstances::Background, PrimitiveClasses::Bar, Rect(3, 2, 56, 9)),
+        PrimitiveInstance(PrimitiveInstances::Border, PrimitiveClasses::Border, Rect(2, 1, 58, 11)),
+        PrimitiveInstance(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(2, 1, 1, 1)),
+        PrimitiveInstance(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(59, 1, 1, 1)),
+        PrimitiveInstance(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(2, 11, 1, 1)),
+        PrimitiveInstance(PrimitiveInstances::Cover, PrimitiveClasses::Bar, Rect(59, 11, 1, 1)));
 
-    registerLayout(LayoutInstances::UnmodulateableParameterLayout, Selector(UIFocus::Parameters), Selector(UIMode::Select),
+    registerLayout(LayoutClasses::UnmodulateableParameterLayout, Selector(UIFocus::Parameters), Selector(UIMode::Select),
         ControlInstance(ControlInstances::GroupHeader, headerLabel, Point(0, 0), EventSources::ParameterGroupName,
             PrimitiveInstances::Text),
         ControlInstance(ControlInstances::ParameterName, label128x14, Point(64, 13), EventSources::ParameterName, PrimitiveInstances::Text),
         ControlInstance(ControlInstances::Slider, slider128x10, Point(64, 26), EventSources::SliderRange, PrimitiveInstances::Slider),
         ControlInstance(ControlInstances::ParameterName, label128x14, Point(64, 39), EventSources::ParameterDisplayString,
-            PrimitiveInstances::Text), ControlInstance(ControlInstances::ButtonA, emptyButton, Point(0, 52)),
+            PrimitiveInstances::Text),
+        ControlInstance(ControlInstances::ButtonA, emptyButton, Point(0, 52)),
         ControlInstance(ControlInstances::ButtonB, emptyButton, Point(64, 52)),
         ControlInstance(ControlInstances::ButtonC, emptyButton, Point(128, 52)),
         ControlInstance(ControlInstances::ButtonD, emptyButton, Point(192, 52)), EventSinkMapping(BUTTON_INC, EventSinks::IncParam),
@@ -83,9 +84,9 @@ namespace DescriptiveLayouts
     return factory;
   }
 
-  const DescriptiveLayouts::LayoutPrototype& BoledLayoutFactory::find(FocusAndMode fam) const
+  const DescriptiveLayouts::LayoutClass& BoledLayoutFactory::find(FocusAndMode fam) const
   {
-    auto it = std::find_if(m_layouts.begin(), m_layouts.end(), [=](const LayoutPrototype& e)
+    auto it = std::find_if(m_layouts.begin(), m_layouts.end(), [=](const LayoutClass& e)
     {
       return e.matches(fam);
     });

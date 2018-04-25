@@ -10,12 +10,12 @@ class Control;
 namespace DescriptiveLayouts
 {
 
-  class Primitive
+  class PrimitiveInstance
   {
     public:
       using Converter = std::function<std::any(std::any)>;
 
-      Primitive(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget = PrimitiveProperty::None,
+      PrimitiveInstance(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget = PrimitiveProperty::None,
                 Converter converter = nullptr);
 
       Control* instantiate() const;

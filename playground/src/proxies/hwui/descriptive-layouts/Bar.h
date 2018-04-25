@@ -3,16 +3,16 @@
 #include <proxies/hwui/controls/Control.h>
 #include "PropertyOwner.h"
 #include "Styleable.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {
-  class Primitive;
+  class PrimitiveInstance;
 
   class Bar : public Control, public Styleable, public PropertyOwner
   {
     public:
-      Bar(const Primitive &e);
+      Bar(const PrimitiveInstance &e);
       virtual ~Bar();
 
       using Range = std::pair<tControlPositionValue, tControlPositionValue>;
@@ -24,10 +24,10 @@ namespace DescriptiveLayouts
       void setDirty() override;
       void drawBackground (FrameBuffer &fb) override;
 
-      const Primitive &getPrimitive() const;
+      const PrimitiveInstance &getPrimitive() const;
 
     private:
-      Primitive m_primitive;
+      PrimitiveInstance m_primitive;
       Range m_range;
   };
 

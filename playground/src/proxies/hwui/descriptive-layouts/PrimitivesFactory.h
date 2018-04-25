@@ -5,11 +5,11 @@ class Control;
 namespace DescriptiveLayouts
 {
 
-  struct Primitive;
+  struct PrimitiveInstance;
 
   struct PrimitivesFactory
   {
-      static Control* create(const Primitive& c);
+      static Control* create(const PrimitiveInstance& c);
   };
 
 }

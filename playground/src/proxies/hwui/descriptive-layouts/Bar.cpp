@@ -1,10 +1,10 @@
 #include "Bar.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {
 
-  Bar::Bar(const Primitive &e) :
+  Bar::Bar(const PrimitiveInstance &e) :
       Control(e.relativePosition),
       m_primitive(e),
       m_range(0.0, 1.0)
@@ -58,7 +58,7 @@ namespace DescriptiveLayouts
     }
   }
 
-  const Primitive &Bar::getPrimitive() const
+  const PrimitiveInstance &Bar::getPrimitive() const
   {
     return m_primitive;
   }

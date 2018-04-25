@@ -22,6 +22,8 @@
 #include <proxies/hwui/descriptive-layouts/StyleParser.h>
 #include <proxies/hwui/descriptive-layouts/ControlParser.h>
 #include <proxies/hwui/descriptive-layouts/LayoutParser.h>
+#include <proxies/hwui/descriptive-layouts/TemplateEnums.h>
+#include <assert.h>
 
 Application *Application::theApp = nullptr;
 
@@ -59,6 +61,11 @@ Application::Application(int numArgs, char **argv) :
 #ifdef _PROFILING
   Profiler::get().enable(true);
 #endif
+
+  assert(DescriptiveLayouts::toControlClasses("Any") == DescriptiveLayouts::ControlClasses::Any);
+  assert(DescriptiveLayouts::toControlClasses("Slider") == DescriptiveLayouts::ControlClasses::Slider);
+  assert(DescriptiveLayouts::toControlClasses("Slider") != DescriptiveLayouts::ControlClasses::Label);
+
 
   DescriptiveLayouts::StyleParser SP;
   DescriptiveLayouts::ControlParser CP;

@@ -1,10 +1,10 @@
 #include "Border.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {
 
-  Border::Border(const Primitive &e) :
+  Border::Border(const PrimitiveInstance &e) :
       Control(e.relativePosition),
       m_primitive(e)
   {
@@ -47,7 +47,7 @@ namespace DescriptiveLayouts
     Control::setDirty();
   }
 
-  const Primitive &Border::getPrimitive() const
+  const PrimitiveInstance &Border::getPrimitive() const
   {
     return m_primitive;
   }

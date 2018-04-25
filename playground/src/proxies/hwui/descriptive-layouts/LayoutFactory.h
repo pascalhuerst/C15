@@ -10,7 +10,7 @@
 #include "EventSink.h"
 #include "EventSource.h"
 #include "Selector.h"
-#include "LayoutPrototype.h"
+#include "LayoutClass.h"
 
 namespace DescriptiveLayouts
 {
@@ -24,12 +24,12 @@ namespace DescriptiveLayouts
       std::shared_ptr<DFBLayout> instantiate(FocusAndMode fam);
 
       template<typename ... Args>
-      void registerLayout(LayoutInstances id, Args ... args)
+      void registerLayout(LayoutClasses id, Args ... args)
       {
         m_layouts.emplace_back(id, args...);
       }
 
-      void registerLayout(LayoutInstances id,
+      void registerLayout(LayoutClasses id,
                           std::list<Selector> sel,
                           std::list<ControlInstance> ci,
                           std::list<EventSinkMapping> esm) {
@@ -41,8 +41,8 @@ namespace DescriptiveLayouts
 
 
 
-      const LayoutPrototype& find(FocusAndMode fam) const;
+      const LayoutClass& find(FocusAndMode fam) const;
 
-      std::list<LayoutPrototype> m_layouts;
+      std::list<LayoutClass> m_layouts;
   };
 }

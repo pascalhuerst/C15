@@ -11,7 +11,7 @@ namespace DescriptiveLayouts
       GenericControl(const ControlInstance &prototype);
       virtual ~GenericControl();
 
-      void style(LayoutInstances layout);
+      void style(LayoutClasses layout);
       void connect();
 
     private:

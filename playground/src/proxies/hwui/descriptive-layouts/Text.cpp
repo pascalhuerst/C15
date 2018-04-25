@@ -1,11 +1,11 @@
 #include <proxies/hwui/FrameBuffer.h>
 #include "Text.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {
 
-  Text::Text(const Primitive &e) :
+  Text::Text(const PrimitiveInstance &e) :
       super(e.relativePosition),
       m_primitive(e)
   {
@@ -70,7 +70,7 @@ namespace DescriptiveLayouts
     Control::setDirty();
   }
 
-  const Primitive &Text::getPrimitive() const
+  const PrimitiveInstance &Text::getPrimitive() const
   {
     return m_primitive;
   }

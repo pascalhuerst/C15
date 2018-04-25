@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TemplateEnums.h"
-#include "ControlPrototype.h"
+#include "ControlClass.h"
 
 namespace DescriptiveLayouts
 {
@@ -11,14 +11,14 @@ namespace DescriptiveLayouts
   {
 
     public:
-      ControlInstance(ControlInstances controlInstance, ControlPrototype control, Point position, EventSources eventSource = EventSources::None,
+      ControlInstance(ControlInstances controlInstance, ControlClass control, Point position, EventSources eventSource = EventSources::None,
                       PrimitiveInstances eventTarget = PrimitiveInstances::None);
 
       GenericControl* instantiate() const;
 
     private:
       ControlInstances controlInstance;
-      ControlPrototype control;
+      ControlClass control;
       Point position;
       EventSources eventSource;
       PrimitiveInstances eventTarget;

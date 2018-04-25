@@ -1,7 +1,7 @@
 #pragma once
 
 #include <proxies/hwui/DFBLayout.h>
-#include "LayoutPrototype.h"
+#include "LayoutClass.h"
 
 
 namespace DescriptiveLayouts
@@ -13,7 +13,7 @@ namespace DescriptiveLayouts
       using super = DFBLayout;
 
     public:
-      GenericLayout(const LayoutPrototype &prototype);
+      GenericLayout(const LayoutClass &prototype);
 
       void init () override;
       bool onButton (int i, bool down, ::ButtonModifiers modifiers) override;
@@ -22,6 +22,6 @@ namespace DescriptiveLayouts
     private:
       void createControls();
 
-      LayoutPrototype m_prototype;
+      LayoutClass m_prototype;
   };
 }

@@ -5,7 +5,7 @@
 
 namespace DescriptiveLayouts
 {
-  class Primitive;
+  class PrimitiveInstance;
 
   class Styleable
   {
@@ -15,10 +15,10 @@ namespace DescriptiveLayouts
 
       using StyleMap = std::map<StyleKey, int>;
 
-      void style(LayoutInstances li, ControlClasses cc, ControlInstances ci);
+      void style(LayoutClasses li, ControlClasses cc, ControlInstances ci);
       void applyStyle(const StyleMap &style);
       int getStyleValue(StyleKey s) const;
-      virtual const Primitive &getPrimitive() const = 0;
+      virtual const PrimitiveInstance &getPrimitive() const = 0;
 
     protected:
       virtual void setDirty() = 0;

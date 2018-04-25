@@ -6,7 +6,7 @@
 
 namespace DescriptiveLayouts
 {
-  GenericLayout::GenericLayout(const LayoutPrototype &prototype) :
+  GenericLayout::GenericLayout(const LayoutClass &prototype) :
       m_prototype(prototype)
   {
   }

@@ -36,7 +36,7 @@ namespace DescriptiveLayouts
     setPosition(rect);
   }
 
-  void GenericControl::style(LayoutInstances layout)
+  void GenericControl::style(LayoutClasses layout)
   {
     for(auto &p : getControls())
     {

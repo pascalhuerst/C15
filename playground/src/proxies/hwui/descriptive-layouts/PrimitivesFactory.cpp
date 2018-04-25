@@ -1,13 +1,13 @@
 #include "PrimitivesFactory.h"
 #include "TemplateEnums.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 #include "Bar.h"
 #include "Border.h"
 #include "Text.h"
 
 namespace DescriptiveLayouts
 {
-  Control* PrimitivesFactory::create(const Primitive& primitive)
+  Control* PrimitivesFactory::create(const PrimitiveInstance& primitive)
   {
     switch(primitive.primitveClass)
     {
@@ -18,7 +18,7 @@ namespace DescriptiveLayouts
       case PrimitiveClasses::Text:
         return new Text(primitive);
       default:
-        throw new std::runtime_error("Primitive Type not found.");
+        throw new std::runtime_error("PrimitiveInstance Type not found.");
     }
   }
 }

@@ -11,12 +11,20 @@ namespace DescriptiveLayouts {
       return s == "BUTTON_INC" ? 0 : 1;
     }
 
+    Point toPoint(std::string s) {
+      return s == "0,0" ? Point(0,0) : Point(99,99);
+    }
+
     EventSinks toEventSinks(std::string s) {
       return s == "IncParam" ? EventSinks::IncParam : EventSinks::DecParam;
     }
 
-    LayoutInstances toLayoutInstances(std::string name) {
-      return LayoutInstances::UnmodulateableParameterLayout;
+    LayoutClasses toLayoutClasses(std::string name) {
+      return LayoutClasses::UnmodulateableParameterLayout;
+    }
+
+    EventSources toEventSources(std::string s) {
+      return s == "Slider" ? EventSources::SliderRange : EventSources::ParameterName;
     }
 
     std::list<Selector> toSelectors(json j) {
@@ -28,14 +36,12 @@ namespace DescriptiveLayouts {
       return l;
     }
 
-    ControlInstances toControlInstances(json control) {
+    ControlInstances toControlInstances(std::string s) {
       return ControlInstances::Any;
     }
 
-
-    ControlPrototype toControlPrototype(json control) {
-
-      //return ControlPrototype;
+    PrimitiveProperty toPrimitiveProperty(std::string s) {
+      return s == "Text" ? PrimitiveProperty::Text : PrimitiveProperty::Range;
     }
 
     Point toPoint(json control) {
@@ -49,16 +55,29 @@ namespace DescriptiveLayouts {
       return PrimitiveInstances::Background;
     }
 
-    LayoutPrototype::ControlInstanceList toControlInstanceList(json j) {
-      LayoutPrototype::ControlInstanceList l;
+    LayoutClass::ControlInstanceList toControlInstanceList(json j) {
+      LayoutClass::ControlInstanceList l;
+
       for(json::iterator control = j.begin(); control != j.end(); ++control) {
-        ControlInstance(toControlInstances(*control), toControlPrototype(*control), toPoint(*control), toEventSources(*control), toPrimitiveInstances(*control));
+        auto controlInstances = toControlInstances(control.key());
+        auto controlClasses = toControlClasses(*control.value().find("Class"));
+        auto point = toPoint(*control.value().find("Position"));
+
+        try {
+          auto eventSources = toEventSources(*control.value().find("EventSource"));
+          auto primitiveInstances = toPrimitiveInstances(*control.value().find("PrimitiveInstanceEventTarget"));
+
+          l.emplace_back(controlInstances,controlClasses,point,eventSources,primitiveInstances);
+        } catch(...) {
+          l.emplace_back(controlInstances,controlClasses,point);
+        }
+
       }
       return l;
     }
 
-    LayoutPrototype::EventSinkList toEventSinkList(json j) {
-      LayoutPrototype::EventSinkList l;
+    LayoutClass::EventSinkList toEventSinkList(json j) {
+      LayoutClass::EventSinkList l;
       for(json::iterator eventSink = j.begin(); eventSink != j.end(); ++eventSink) {
         l.push_back(EventSinkMapping(toButton(eventSink.key()), toEventSinks(eventSink.value())));
       }
@@ -75,11 +94,10 @@ namespace DescriptiveLayouts {
         auto eventSinkContent = *layoutContent.find("EventSinks");
 
 
-        LayoutInstances id = toLayoutInstances(name);
-        std::list<Selector> selectors = toSelectors(selectorContent);
-        LayoutPrototype::ControlInstanceList controls = toControlInstanceList(controlContent);
-        LayoutPrototype::EventSinkList sinkMappings = toEventSinkList(eventSinkContent);
-        LayoutPrototype p(id, selectors, controls, sinkMappings);
+        auto id = toLayoutClasses(name);
+        auto selectors = toSelectors(selectorContent);
+        auto controls = toControlInstanceList(controlContent);
+        auto sinkMappings = toEventSinkList(eventSinkContent);
         BoledLayoutFactory::get().registerLayout(id, selectors, controls, sinkMappings);
       }
     }

@@ -1,17 +1,17 @@
 #pragma once
 
 #include "TemplateEnums.h"
-#include "Primitive.h"
+#include "PrimitiveInstance.h"
 #include <list>
 
 namespace DescriptiveLayouts
 {
 
-  class ControlPrototype
+  class ControlClass
   {
     public:
       template<typename ...Args>
-        ControlPrototype(ControlClasses controlClass, Args ... args) :
+        ControlClass(ControlClasses controlClass, Args ... args) :
             controlClass(controlClass),
             primitves { args... }
         {
@@ -19,7 +19,7 @@ namespace DescriptiveLayouts
 
     private:
       ControlClasses controlClass;
-      std::list<Primitive> primitves;
+      std::list<PrimitiveInstance> primitves;
 
       friend class GenericControl;
   };
