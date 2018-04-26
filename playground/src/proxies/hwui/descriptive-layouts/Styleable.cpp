@@ -41,7 +41,7 @@ namespace DescriptiveLayouts
     catch(...)
     {
       const PrimitiveInstance &p = getPrimitive();
-      DebugLevel::error("Have to define a default for key", (int)s, " for primitive class", (int)p.primitveClass);
+      DebugLevel::error("Have to define a default for key", toString(s), " for primitive class", toString(p.primitveClass));
       return 0;
     }
   }
