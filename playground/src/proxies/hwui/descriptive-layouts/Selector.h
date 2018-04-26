@@ -21,17 +21,17 @@ namespace DescriptiveLayouts
           }
           bool operator()(UIFocus f)
           {
-            return f == fam.focus;
+            return f == fam.focus || f == UIFocus::Any || fam.focus == UIFocus::Any;
           }
 
           bool operator()(UIMode m)
           {
-            return m == fam.mode;
+            return m == fam.mode || m == UIMode::Any || fam.mode == UIMode::Any;
           }
 
           bool operator ()(UIFocusAndModeDetail d)
           {
-            return d == fam.detail;
+            return d == fam.detail || d == UIFocusAndModeDetail::Any || fam.detail == UIFocusAndModeDetail::Any;
           }
 
           bool operator()(Lambda l)
