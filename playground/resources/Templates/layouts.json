@@ -2,7 +2,7 @@
     "layouts": {
         "UnmodulateableParameterLayout": {
             "Selector": {
-                "UIFocus": "Parameter",
+                "UIFocus": "Parameters",
                 "UIMode": "Select"
             },
             "Controls": {
@@ -13,15 +13,6 @@
                       "Y": 0
                     },
                     "EventSource": "ParameterGroupName",
-                    "PrimitiveInstanceEventTarget": "Text"
-                },
-                "ParameterName": {
-                    "Class": "Label128x14",
-                    "Position": {
-                      "X": 64,
-                      "Y": 13
-                    },
-                    "EventSource": "ParameterName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "Slider": {
