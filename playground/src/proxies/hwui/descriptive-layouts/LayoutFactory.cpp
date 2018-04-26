@@ -50,12 +50,4 @@ namespace DescriptiveLayouts
     return std::shared_ptr<DFBLayout>(find(fam).instantiate());
   }
 
-  EventSinkMapping::EventSinkMapping(int button, EventSinks sink, ButtonEvents event, ButtonModifiers modifiers) :
-      button(button),
-      sink(sink),
-      event(event),
-      modifiers(modifiers)
-  {
-  }
-
 }

@@ -28,7 +28,7 @@ namespace DescriptiveLayouts
     }
   }
 
-  bool GenericLayout::onButton(int i, bool down, ::ButtonModifiers modifiers)
+  bool GenericLayout::onButton(Buttons i, bool down, ::ButtonModifiers modifiers)
   {
     if(down)
     {
@@ -48,13 +48,13 @@ namespace DescriptiveLayouts
   {
     while(inc > 0)
     {
-      onButton(ROTARY_PLUS, true, modifiers);
+      onButton(Buttons::ROTARY_PLUS, true, modifiers);
       inc--;
     }
 
     while(inc < 0)
     {
-      onButton(ROTARY_MINUS, true, modifiers);
+      onButton(Buttons::ROTARY_MINUS, true, modifiers);
       inc++;
     }
     return true;

@@ -9,7 +9,7 @@ PleaseWaitLayout::PleaseWaitLayout()
   addControl(new Label("This will not take longer than a few Seconds...", Rect(0, 25, 250, 10)));
 }
 
-bool PleaseWaitLayout::onButton(int i, bool down, ButtonModifiers modifiers)
+bool PleaseWaitLayout::onButton(Buttons i, bool down, ButtonModifiers modifiers)
 {
   return false;
 }

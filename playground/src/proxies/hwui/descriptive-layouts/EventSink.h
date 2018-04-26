@@ -3,6 +3,7 @@
 #include <playground.h>
 #include "TemplateEnums.h"
 #include <tools/EnumTools.h>
+#include <proxies/hwui/buttons.h>
 
 namespace DescriptiveLayouts
 {
@@ -11,10 +12,10 @@ namespace DescriptiveLayouts
   struct EventSinkMapping
   {
     public:
-      EventSinkMapping(int button, EventSinks sink, ButtonEvents event = ButtonEvents::Down, ButtonModifiers modifiers =
+      EventSinkMapping(Buttons button, EventSinks sink, ButtonEvents event = ButtonEvents::Down, ButtonModifiers modifiers =
           ButtonModifiers::None);
 
-      int button;
+      Buttons button;
       ButtonEvents event;
       ButtonModifiers modifiers;
       EventSinks sink;

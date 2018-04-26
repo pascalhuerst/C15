@@ -9,7 +9,6 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-
   std::list<Selector> toSelectors(json selector)
   {
     std::list<Selector> selectors;
@@ -67,16 +66,13 @@ namespace DescriptiveLayouts
     return l;
   }
 
-  int  toButton(std::string a) {
-    return a == "BUTTON_INC" ? BUTTON_INC : BUTTON_DEC;
-  }
 
   LayoutClass::EventSinkList toEventSinkList(json j)
   {
     LayoutClass::EventSinkList l;
     for(json::iterator eventSink = j.begin(); eventSink != j.end(); ++eventSink)
     {
-      l.push_back(EventSinkMapping(toButton(eventSink.key()), toEventSinks(eventSink.value())));
+      l.push_back(EventSinkMapping(toButtons(eventSink.key()), toEventSinks(eventSink.value())));
     }
     return l;
   }

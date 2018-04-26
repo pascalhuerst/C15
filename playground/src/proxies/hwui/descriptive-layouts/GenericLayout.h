@@ -16,7 +16,7 @@ namespace DescriptiveLayouts
       GenericLayout(const LayoutClass &prototype);
 
       void init () override;
-      bool onButton (int i, bool down, ::ButtonModifiers modifiers) override;
+      bool onButton (Buttons i, bool down, ::ButtonModifiers modifiers) override;
       bool onRotary (int inc, ::ButtonModifiers modifiers) override;
 
     private:

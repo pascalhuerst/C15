@@ -7,6 +7,14 @@
 
 namespace DescriptiveLayouts
 {
+  EventSinkMapping::EventSinkMapping(Buttons button, EventSinks sink, ButtonEvents event, ButtonModifiers modifiers) :
+      button(button),
+      sink(sink),
+      event(event),
+      modifiers(modifiers)
+  {
+  }
+
   EventSinkBroker& EventSinkBroker::get()
   {
     static EventSinkBroker s;
@@ -21,13 +29,13 @@ namespace DescriptiveLayouts
     registerEvent(EventSinks::IncParam, [eb, hwui]()
     {
       if(auto p = eb->getSelected())
-        p->getValue().inc(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
+      p->getValue().inc(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
 
     registerEvent(EventSinks::DecParam, [eb, hwui]()
     {
       if(auto p = eb->getSelected())
-        p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
+      p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
   }
 

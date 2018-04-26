@@ -46,15 +46,15 @@ FrameBuffer &DFBLayout::getFrameBuffer ()
   return FrameBuffer::get ();
 }
 
-bool DFBLayout::onButton (int i, bool down, ::ButtonModifiers modifiers)
+bool DFBLayout::onButton (Buttons i, bool down, ::ButtonModifiers modifiers)
 {
-  if (i == BUTTON_INC || i == BUTTON_DEC)
+  if (i == Buttons::BUTTON_INC || i == Buttons::BUTTON_DEC)
   {
     if (down)
     {
       installButtonRepeat ([ = ]()
       {
-        int direction = (i == BUTTON_INC) ? 1 : - 1;
+        int direction = (i == Buttons::BUTTON_INC) ? 1 : - 1;
         onRotary (direction, modifiers);
       });
     }

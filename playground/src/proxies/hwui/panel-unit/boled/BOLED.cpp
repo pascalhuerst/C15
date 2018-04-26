@@ -129,7 +129,7 @@ void BOLED::setupBankScreen (FocusAndMode focusAndMode)
   }
 }
 
-bool BOLED::onButtonPressed (gint32 buttonID, ButtonModifiers modifiers, bool state)
+bool BOLED::onButtonPressed (Buttons buttonID, ButtonModifiers modifiers, bool state)
 {
   if (shared_ptr<DFBLayout> l = dynamic_pointer_cast<DFBLayout> (getLayout ()))
     if (l->onButton (buttonID, state, modifiers))

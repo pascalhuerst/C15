@@ -37,7 +37,7 @@ FileDialogLayout::~FileDialogLayout()
   crawler.killMe();
 }
 
-bool FileDialogLayout::onButton(int i, bool down, ButtonModifiers modifiers)
+bool FileDialogLayout::onButton(Buttons i, bool down, ButtonModifiers modifiers)
 {
   auto hwui = Application::get().getHWUI();
   auto focusAndMode = Application::get().getHWUI()->getFocusAndMode();
@@ -46,7 +46,7 @@ bool FileDialogLayout::onButton(int i, bool down, ButtonModifiers modifiers)
   {
     switch(i)
     {
-      case BUTTON_ENTER:
+      case Buttons::BUTTON_ENTER:
         try
         {
           commitFunction(getSelectedFile());
@@ -56,10 +56,12 @@ bool FileDialogLayout::onButton(int i, bool down, ButtonModifiers modifiers)
           DebugLevel::error(__FILE__, __LINE__);
         }
         return true;
-      case BUTTON_PRESET:
+
+      case Buttons::BUTTON_PRESET:
         hwui->undoableSetFocusAndMode( { UIFocus::Banks, UIMode::Select });
         return true;
-      case BUTTON_INFO:
+
+      case Buttons::BUTTON_INFO:
         if(fileCount > 0)
           overlayInfo();
         return true;
