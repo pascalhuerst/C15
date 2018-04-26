@@ -2,25 +2,35 @@
 	"styles": {
     "defaultBorder" : {
     	"selector": {
-    		"PrimitiveClass": "Border"
+    		"PrimitiveClasses": "Border"
     	},
     	"styles": {
     		"BorderStyle": "Solid"
     		}
     },
-    "defaultText" : {
+    "defaultBar" : {
     	"selector": {
-    		"PrimitiveClass": "Text"
+    		"PrimitiveClasses": "Bar"
     	},
     	"styles": {
-    		"FontSize": 9,
-    		"BackgroundColor": "C43"
+    		"Color": "C103"
     		}
+    },
+    "defaultText" : {
+    	"selector": {
+    		"PrimitiveClasses": "Text"
+    	},
+    	"styles": {
+    		"FontSize": "9",
+    		"BackgroundColor": "C43",
+    		"Color": "C255",
+    		"TextAlign": "Center"
+    	}
     },
 		"darkBroder": {
 			"selector": {
 				"UIFocus": "Parameters",
-				"PrimitiveClass": "Border"
+				"PrimitiveClasses": "Border"
 			},
 			"styles": {
 				"Color": "C43",
@@ -30,7 +40,7 @@
 		"parameterBorder": {
 			"selector": {
 				"UIFocus": "Parameters",
-				"PrimitiveClass": "Border"
+				"PrimitiveClasses": "Border"
 			},
 			"styles": {
 				"Color": "C43",
@@ -40,7 +50,7 @@
 		"FooBar": {
 			"selector": {
 				"UIFocus": "Parameters",
-				"PrimitiveClass": "Border"
+				"PrimitiveClasses": "Border"
 			},
 			"styles": {
 				"Color": "C43",
