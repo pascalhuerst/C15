@@ -46,7 +46,6 @@ namespace DescriptiveLayouts
 
   std::shared_ptr<DFBLayout> BoledLayoutFactory::instantiate(FocusAndMode fam)
   {
-    LayoutFolderMonitor::get();
     return std::shared_ptr<DFBLayout>(find(fam).instantiate());
   }
 
