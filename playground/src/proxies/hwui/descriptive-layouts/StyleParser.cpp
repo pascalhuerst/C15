@@ -14,10 +14,32 @@ namespace DescriptiveLayouts
   StyleSheet::StyleSelector parseSelector(json selector)
   {
     StyleSheet::StyleSelector theSelector;
-    for(json::iterator critera = selector.begin(); critera != selector.end(); ++critera)
-    {
 
-    }
+    try {
+      theSelector.f = toUIFocus(selector.at("UIFocus"));
+    } catch(...) {}
+    try {
+      theSelector.m = toUIMode(selector.at("UIMode"));
+    } catch(...) {}
+    try {
+      theSelector.d = toUIFocusAndModeDetail(selector.at("UIFocusAndModeDetail"));
+    } catch(...) {}
+    try {
+      theSelector.l = toLayoutClasses(selector.at("LayoutClasses"));
+    } catch(...) {}
+    try {
+      theSelector.cc = toControlClasses(selector.at("ControlClasses"));
+    } catch(...) {}
+    try {
+      theSelector.ci = toControlInstances(selector.at("ControlInstances"));
+    } catch(...) {}
+    try {
+      theSelector.pc = toPrimitiveClasses(selector.at("PrimitiveClasses"));
+    } catch(...) {}
+    try {
+      theSelector.pi = toPrimitiveInstances(selector.at("PrimitiveInstances"));
+    } catch(...) {}
+
     return theSelector;
   }
 
@@ -26,7 +48,25 @@ namespace DescriptiveLayouts
     StyleMap theStyles;
     for(json::iterator style = styles.begin(); style != styles.end(); ++style)
     {
+      auto styleKey = toStyleKey(style.key());
 
+      switch(styleKey) {
+        case StyleKey::BorderStyle:
+          theStyles.emplace(styleKey, (int)StyleValues::toBorderStyle(style.value()));
+          break;
+        case StyleKey::BackgroundColor:
+          theStyles.emplace(styleKey, (int)StyleValues::toColor(style.value()));
+          break;
+        case StyleKey::Color:
+          theStyles.emplace(styleKey, (int)StyleValues::toColor(style.value()));
+          break;
+        case StyleKey::FontSize:
+          theStyles.emplace(styleKey, (int)StyleValues::toFont(style.value()));
+          break;
+        case StyleKey::TextAlign:
+          theStyles.emplace(styleKey, (int)StyleValues::toAlignment(style.value()));
+          break;
+      }
     }
     return theStyles;
   }
@@ -35,13 +75,13 @@ namespace DescriptiveLayouts
   {
     try
     {
-      auto selector = parseSelector(*style.find("selector"));
-      auto styles = parseStylePairs(*style.find("styles"));
+      auto selector = parseSelector(style.at("selector"));
+      auto styles = parseStylePairs(style.at("styles"));
       StyleSheet::get().registerStyle(selector, styles);
     }
-    catch(...)
+    catch(std::exception e)
     {
-      DebugLevel::error("JSON NOT OKAY! ok?");
+      DebugLevel::error(to_string("JSON Parse Error: ") + e.what());
     }
   }
 
