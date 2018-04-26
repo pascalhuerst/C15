@@ -54,9 +54,9 @@ namespace DescriptiveLayouts
     {
       createControls(j);
     }
-    catch(...)
+    catch(std::exception e)
     {
-      DebugLevel::error("JSON NOT OKAY! ok?");
+      DebugLevel::error(to_string("JSON Parsing Error: ") + e.what());
     }
   }
 

@@ -19,6 +19,7 @@
 BOLED::BOLED () :
     OLEDProxy (Rect (0, 0, 256, 64))
 {
+  
 }
 
 BOLED::~BOLED ()

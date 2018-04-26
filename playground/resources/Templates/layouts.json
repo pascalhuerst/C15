@@ -8,43 +8,67 @@
             "Controls": {
                 "GroupHeader": {
                     "Class": "HeaderLabel",
-                    "Position": "0,0",
+                    "Position": {
+                      "X": 0,
+                      "Y": 0
+                    },
                     "EventSource": "ParameterGroupName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ParameterName": {
                     "Class": "Label128x14",
-                    "Position": "64, 13",
+                    "Position": {
+                      "X": 64,
+                      "Y": 13
+                    },
                     "EventSource": "ParameterName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "Slider": {
                     "Class": "Slider128x10",
-                    "Position": "64, 26",
+                    "Position": {
+                      "X": 64,
+                      "Y": 26
+                    },
                     "EventSource": "SliderRange",
                     "PrimitiveInstanceEventTarget": "Slider"
                 },
                 "ParameterName": {
                     "Class": "Label128x14",
-                    "Position": "64, 39",
+                    "Position": {
+                      "X": 64,
+                      "Y": 39
+                    },
                     "EventSource": "ParameterDisplayString",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ButtonA": {
                     "Class": "EmptyButton",
-                    "Position": "0,52"
+                    "Position": {
+                      "X": 0,
+                      "Y": 52
+                    }
                 },
                 "ButtonB": {
-                    "Class": "EmptyButton",
-                    "Position": "64,52"
+                  "Class": "EmptyButton",
+                  "Position": {
+                    "X": 64,
+                    "Y": 52
+                  }
                 },
                 "ButtonC": {
                     "Class": "EmptyButton",
-                    "Position": "128,52"
+                    "Position": {
+                      "X": 128,
+                      "Y": 52
+                    }
                 },
                 "ButtonD": {
                     "Class": "EmptyButton",
-                    "Position": "192, 52"
+                    "Position": {
+                      "X": 192,
+                      "Y": 52
+                    }
                 }
             },
             "EventSinks": {

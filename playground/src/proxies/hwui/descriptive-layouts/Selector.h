@@ -46,6 +46,15 @@ namespace DescriptiveLayouts
       {
       }
 
+      Selector(UIFocus f) :
+        criteria(f) {}
+
+      Selector(UIMode m) :
+        criteria(m) {}
+
+      Selector(UIFocusAndModeDetail d) :
+        criteria(d) {}
+
       bool test(FocusAndMode fam) const
       {
         return std::visit(Tester(fam), criteria);

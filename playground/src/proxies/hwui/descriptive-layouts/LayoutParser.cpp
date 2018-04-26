@@ -9,30 +9,36 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-  int toButton(std::string s)
-  {
-    return s == "BUTTON_INC" ? 0 : 1;
-  }
 
-  Point toPoint(std::string s)
+  std::list<Selector> toSelectors(json selector)
   {
-    return s == "0,0" ? Point(0, 0) : Point(99, 99);
-  }
+    std::list<Selector> selectors;
 
-  std::list<Selector> toSelectors(json j)
-  {
-    std::list<Selector> l;
-    for(json::iterator selector = j.begin(); selector != j.end(); ++selector)
-    {
-      //ENUM KEY = selector.key();
-      //ENUM VALUE = selector.value();
+    try {
+      selectors.push_back(toUIFocus(selector.at("UIFocus")));
+    } catch(...) {
+      selectors.push_back(UIFocus::Any);
     }
-    return l;
+    try {
+      selectors.push_back(toUIMode(selector.at("UIMode")));
+    } catch(...) {
+      selectors.push_back(UIMode::Any);
+    }
+    try {
+      selectors.push_back(toUIFocusAndModeDetail(selector.at("UIFocusAndModeDetail")));
+    } catch(...) {
+      selectors.push_back(UIFocusAndModeDetail::Any);
+    }
+
+    return selectors;
   }
 
   Point toPoint(json control)
   {
-    return Point(0, 1);
+    auto x = control.at("X");
+    auto y = control.at("Y");
+
+    return Point(x, y);
   }
 
   LayoutClass::ControlInstanceList toControlInstanceList(json j)
@@ -47,7 +53,6 @@ namespace DescriptiveLayouts
 
       try
       {
-
         auto eventSources = toEventSources(control.value().at("EventSource"));
         auto primitiveInstances = toPrimitiveInstances(control.value().at("PrimitiveInstanceEventTarget"));
 
@@ -60,6 +65,10 @@ namespace DescriptiveLayouts
 
     }
     return l;
+  }
+
+  int  toButton(std::string a) {
+    return a == "BUTTON_INC" ? BUTTON_INC : BUTTON_DEC;
   }
 
   LayoutClass::EventSinkList toEventSinkList(json j)
