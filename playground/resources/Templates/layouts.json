@@ -2,8 +2,8 @@
     "layouts": {
         "UnmodulateableParameterLayout": {
             "Selector": {
-                "UIFocus": "parameter",
-                "UIMode": "select"
+                "UIFocus": "Parameter",
+                "UIMode": "Select"
             },
             "Controls": {
                 "GroupHeader": {

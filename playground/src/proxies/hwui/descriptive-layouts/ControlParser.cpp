@@ -13,10 +13,14 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-  Rect parseRect(std::string rect)
+  Rect parseRect(json rect)
   {
-    auto r = StringTools::splitStringOnAnyDelimiter(rect, ',');
-    return Rect(std::stoi(r[0]), std::stoi(r[1]), std::stoi(r[2]), std::stoi(r[3]));
+    auto x = rect.at("X");
+    auto y = rect.at("Y");
+    auto w = rect.at("W");
+    auto h = rect.at("H");
+
+    return Rect(x,y,w,h);
   }
 
   std::list<PrimitiveInstance> createPrimitives(json primitives)
