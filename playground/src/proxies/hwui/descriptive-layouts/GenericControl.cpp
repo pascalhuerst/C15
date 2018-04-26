@@ -1,4 +1,6 @@
 #include "GenericControl.h"
+
+#include "../../../tools/EnumTools.h"
 #include "Styleable.h"
 #include "EventSource.h"
 #include "PropertyOwner.h"

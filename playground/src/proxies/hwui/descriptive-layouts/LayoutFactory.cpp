@@ -23,20 +23,23 @@ namespace DescriptiveLayouts
     styles.registerStyle( { ControlClasses::Button, PrimitiveInstances::Background },
         { { StyleKey::Color, (int) StyleValues::Color::C179 } });
 
-    styles.registerStyle( { ControlClasses::Button, PrimitiveInstances::Border }, { { StyleKey::Color, (int) StyleValues::Color::C204 }, {
-        StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid } });
+    styles.registerStyle( { ControlClasses::Button, PrimitiveInstances::Border },
+        { { StyleKey::Color, (int) StyleValues::Color::C204 },
+          { StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid } });
 
     styles.registerStyle( { ControlClasses::Button, PrimitiveClasses::Bar, PrimitiveInstances::Cover },
         { { StyleKey::Color, (int) StyleValues::Color::C43 } });
 
     styles.registerStyle( { PrimitiveClasses::Bar }, { { StyleKey::Color, (int) StyleValues::Color::C255 } });
 
-    styles.registerStyle( { PrimitiveClasses::Border }, { { StyleKey::Color, (int) StyleValues::Color::C255 }, {
-        StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid } });
+    styles.registerStyle( { PrimitiveClasses::Border },
+        { { StyleKey::Color, (int) StyleValues::Color::C255 },
+          { StyleKey::BorderStyle, (int) StyleValues::BorderStyle::Solid } });
 
-    styles.registerStyle( { PrimitiveClasses::Text }, { { StyleKey::TextAlign, (int) StyleValues::Alignment::Center }, { StyleKey::FontSize,
-                                                                                                                         9 },
-                                                        { StyleKey::Color, (int) FrameBuffer::C255 } });
+    styles.registerStyle( { PrimitiveClasses::Text },
+        { { StyleKey::TextAlign, (int) StyleValues::Alignment::Center },
+          { StyleKey::FontSize, 9 },
+          { StyleKey::Color, (int) FrameBuffer::C255 } });
 
     styles.registerStyle( { ControlInstances::GroupHeader, PrimitiveInstances::Background }, { });
 
@@ -73,7 +76,8 @@ namespace DescriptiveLayouts
         ControlInstance(ControlInstances::ButtonA, emptyButton, Point(0, 52)),
         ControlInstance(ControlInstances::ButtonB, emptyButton, Point(64, 52)),
         ControlInstance(ControlInstances::ButtonC, emptyButton, Point(128, 52)),
-        ControlInstance(ControlInstances::ButtonD, emptyButton, Point(192, 52)), EventSinkMapping(BUTTON_INC, EventSinks::IncParam),
+        ControlInstance(ControlInstances::ButtonD, emptyButton, Point(192, 52)),
+        EventSinkMapping(BUTTON_INC, EventSinks::IncParam),
         EventSinkMapping(BUTTON_DEC, EventSinks::DecParam), EventSinkMapping(ROTARY_PLUS, EventSinks::IncParam),
         EventSinkMapping(ROTARY_MINUS, EventSinks::DecParam));
   }
@@ -82,6 +86,11 @@ namespace DescriptiveLayouts
   {
     static BoledLayoutFactory factory;
     return factory;
+  }
+
+  void BoledLayoutFactory::clear()
+  {
+    m_layouts.clear();
   }
 
   const DescriptiveLayouts::LayoutClass& BoledLayoutFactory::find(FocusAndMode fam) const

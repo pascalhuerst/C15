@@ -2,13 +2,11 @@
 
 #include <playground.h>
 #include "TemplateEnums.h"
+#include <tools/EnumTools.h>
 
 namespace DescriptiveLayouts
 {
-  enum class EventSinks
-  {
-    IncParam, DecParam
-  };
+  ENUM(EventSinks, uint8_t, IncParam, DecParam);
 
   struct EventSinkMapping
   {

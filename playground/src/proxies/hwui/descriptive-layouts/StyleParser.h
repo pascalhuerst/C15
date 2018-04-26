@@ -2,9 +2,5 @@
 
 namespace DescriptiveLayouts
 {
-    class StyleParser
-    {
-    public:
-        StyleParser();
-    };
+  void importStyles(const std::string &fileName);
 }

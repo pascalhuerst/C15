@@ -133,6 +133,8 @@ namespace DescriptiveLayouts
 
       void applyStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
                       PrimitiveClasses pc, PrimitiveInstances pi, Styleable *target) const;
+
+      void clear();
     private:
       StyleSheet();
   public:

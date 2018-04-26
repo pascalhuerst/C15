@@ -30,4 +30,9 @@ namespace DescriptiveLayouts
     return sheet;
   }
 
+  void StyleSheet::clear()
+  {
+    m_styles.clear();
+  }
+
 }

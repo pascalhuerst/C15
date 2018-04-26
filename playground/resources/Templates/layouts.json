@@ -1,5 +1,5 @@
-[
-    {
+{
+    "layouts": {
         "UnmodulateableParameterLayout": {
             "Selector": {
                 "UIFocus": "parameter",
@@ -31,22 +31,21 @@
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ButtonA": {
-                    "Class": "emptyButton",
+                    "Class": "EmptyButton",
                     "Position": "0,52"
                 },
                 "ButtonB": {
-                    "Class": "emptyButton",
+                    "Class": "EmptyButton",
                     "Position": "64,52"
                 },
                 "ButtonC": {
-                    "Class": "emptyButton",
+                    "Class": "EmptyButton",
                     "Position": "128,52"
                 },
                 "ButtonD": {
-                    "Class": "emptyButton",
+                    "Class": "EmptyButton",
                     "Position": "192, 52"
                 }
-
             },
             "EventSinks": {
                 "BUTTON_INC": "IncParam",
@@ -56,4 +55,4 @@
             }
         }
     }
-]
+}

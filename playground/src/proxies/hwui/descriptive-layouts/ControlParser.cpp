@@ -13,60 +13,66 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-    PrimitiveInstances giveEnum(std::string value) {
-      return PrimitiveInstances::Background;
-    }
+  PrimitiveInstances giveEnum(std::string value)
+  {
+    return PrimitiveInstances::Background;
+  }
 
-    Rect parseRect(std::string rect) {
-      auto r = StringTools::splitStringOnAnyDelimiter(rect, ',');
-      return Rect(std::stoi(r[0]), std::stoi(r[1]), std::stoi(r[2]), std::stoi(r[3]));
-    }
+  Rect parseRect(std::string rect)
+  {
+    auto r = StringTools::splitStringOnAnyDelimiter(rect, ',');
+    return Rect(std::stoi(r[0]), std::stoi(r[1]), std::stoi(r[2]), std::stoi(r[3]));
+  }
 
-
-    std::list<PrimitiveInstance> createPrimitives(json primitives)
+  std::list<PrimitiveInstance> createPrimitives(json primitives)
+  {
+    std::list<PrimitiveInstance> lP;
+    for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive)
     {
-      std::list<PrimitiveInstance> lP;
-      for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive) {
-        //giveEnum(primitive.value().find("Class"))
-        //giveEnum(primitive.value().find("Property"))
-        lP.push_back(PrimitiveInstance(giveEnum(primitive.key()),
-                               PrimitiveClasses::Bar,
-                               parseRect(*primitive.value().find("Rect")),
-                               PrimitiveProperty::None));
-      }
-      return lP;
+      lP.push_back(
+          PrimitiveInstance(giveEnum(primitive.key()), PrimitiveClasses::Bar, parseRect(*primitive.value().find("Rect")),
+              PrimitiveProperty::None));
     }
+    return lP;
+  }
 
-    void createControls(json controlText)
+  void createControls(json controlText)
+  {
+    for(json::iterator critera = controlText.begin(); critera != controlText.end(); ++critera)
     {
-      for (json::iterator critera = controlText.begin(); critera != controlText.end(); ++critera)
-      {
-          auto name = critera.key();
-          std::cout << name << '\n';
-          auto primitiveList = critera.value();
+      auto name = critera.key();
+      auto primitiveList = critera.value();
 
-          ControlClass controlPrototype((ControlClasses)giveEnum(name), createPrimitives(primitiveList));
-          ControlRegistry::get().registerControl(name, controlPrototype);
-      }
+      ControlClass controlPrototype((ControlClasses) giveEnum(name), createPrimitives(primitiveList));
+      ControlRegistry::get().registerControl(name, controlPrototype);
     }
+  }
 
-    void registerControls(json j)
+  void registerControls(json j)
+  {
+    try
     {
-      try {
-        createControls(j);
-      } catch(...) {
-        DebugLevel::error("JSON NOT OKAY! ok?");
-      }
+      createControls(j);
     }
-
-    ControlParser::ControlParser()
+    catch(...)
     {
-      std::ifstream i("/home/justus/development/C15/C15/playground/resources/Templates/controls.ctrls");
-      json j; i >> j;
-
-      for(auto i: j) {
-        registerControls(i);
-      }
+      DebugLevel::error("JSON NOT OKAY! ok?");
     }
+  }
+
+  void importControls(const std::string &fileName)
+  {
+    try
+    {
+      std::ifstream i(fileName);
+      json j;
+      i >> j;
+      registerControls(j.at("controls"));
+    }
+    catch(...)
+    {
+
+    }
+  }
 
 }

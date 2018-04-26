@@ -21,6 +21,8 @@ namespace DescriptiveLayouts
     public:
       static BoledLayoutFactory& get();
 
+      void clear();
+
       std::shared_ptr<DFBLayout> instantiate(FocusAndMode fam);
 
       template<typename ... Args>

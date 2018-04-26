@@ -1,10 +1,7 @@
 #pragma once
 
-namespace DescriptiveLayouts {
-    class LayoutParser {
-    public:
-        LayoutParser();
-    };
-};
-
+namespace DescriptiveLayouts
+{
+  void importLayout(const std::string &fileName);
+}
 

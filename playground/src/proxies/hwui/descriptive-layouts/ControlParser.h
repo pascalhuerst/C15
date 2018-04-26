@@ -2,9 +2,5 @@
 
 namespace DescriptiveLayouts
 {
-    class ControlParser
-    {
-    public:
-        ControlParser();
-    };
+    void importControls(const std::string &fileName);
 }

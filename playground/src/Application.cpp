@@ -19,11 +19,8 @@
 #include <unistd.h>
 #include <clipboard/Clipboard.h>
 #include <io/network/WebSocketSession.h>
-#include <proxies/hwui/descriptive-layouts/StyleParser.h>
-#include <proxies/hwui/descriptive-layouts/ControlParser.h>
-#include <proxies/hwui/descriptive-layouts/LayoutParser.h>
-#include <proxies/hwui/descriptive-layouts/TemplateEnums.h>
 #include <assert.h>
+#include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
 
 Application *Application::theApp = nullptr;
 
@@ -62,15 +59,6 @@ Application::Application(int numArgs, char **argv) :
   Profiler::get().enable(true);
 #endif
 
-  assert(DescriptiveLayouts::toControlClasses("Any") == DescriptiveLayouts::ControlClasses::Any);
-  assert(DescriptiveLayouts::toControlClasses("Slider") == DescriptiveLayouts::ControlClasses::Slider);
-  assert(DescriptiveLayouts::toControlClasses("Slider") != DescriptiveLayouts::ControlClasses::Label);
-
-
-  DescriptiveLayouts::StyleParser SP;
-  DescriptiveLayouts::ControlParser CP;
-  DescriptiveLayouts::LayoutParser LP;
-
   m_settings->init();
   m_hwui->init();
   m_http->init();
@@ -85,6 +73,8 @@ Application::Application(int numArgs, char **argv) :
   ::signal(SIGQUIT, quitApp);
   ::signal(SIGTERM, quitApp);
   ::signal(SIGINT, quitApp);
+
+  LayoutFolderMonitor::get();
 }
 
 Application::~Application()

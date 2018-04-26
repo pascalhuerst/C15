@@ -11,45 +11,55 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-    StyleSheet::StyleSelector parseSelector(json selector)
+  StyleSheet::StyleSelector parseSelector(json selector)
+  {
+    StyleSheet::StyleSelector theSelector;
+    for(json::iterator critera = selector.begin(); critera != selector.end(); ++critera)
     {
-      StyleSheet::StyleSelector theSelector;
-      for (json::iterator critera = selector.begin(); critera != selector.end(); ++critera)
-      {
 
-      }
-      return theSelector;
     }
+    return theSelector;
+  }
 
-    StyleMap parseStylePairs(json styles)
+  StyleMap parseStylePairs(json styles)
+  {
+    StyleMap theStyles;
+    for(json::iterator style = styles.begin(); style != styles.end(); ++style)
     {
-      StyleMap theStyles;
-      for (json::iterator style = styles.begin(); style != styles.end(); ++style)
-      {
 
-      }
-      return theStyles;
     }
+    return theStyles;
+  }
 
-    void registerStyle(json style)
+  void registerStyle(json style)
+  {
+    try
     {
-      try {
-        auto selector = parseSelector(*style.find("selector"));
-        auto styles = parseStylePairs(*style.find("styles"));
-        StyleSheet::get().registerStyle(selector, styles);
-      } catch(...) {
-        DebugLevel::error("JSON NOT OKAY! ok?");
-      }
+      auto selector = parseSelector(*style.find("selector"));
+      auto styles = parseStylePairs(*style.find("styles"));
+      StyleSheet::get().registerStyle(selector, styles);
     }
-
-    StyleParser::StyleParser()
+    catch(...)
     {
-      std::ifstream i("/home/justus/development/C15/C15/playground/resources/Templates/styles.tss");
-      json j; i >> j;
-
-      for(auto i: j) {
-        registerStyle(i);
-      }
+      DebugLevel::error("JSON NOT OKAY! ok?");
     }
+  }
+
+  void importStyles(const std::string &fileName)
+  {
+    try
+    {
+      std::ifstream i(fileName);
+      json j;
+      i >> j;
+      auto styles = j.at("styles");
+
+      for(auto s : styles)
+        registerStyle(s);
+    }
+    catch(...)
+    {
+    }
+  }
 
 }

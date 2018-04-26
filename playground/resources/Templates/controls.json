@@ -1,7 +1,7 @@
-[
-    {
-        "slider128x10": {
-            "Border": {
+{
+    "controls": {
+	"slider128x10": {
+	    "Border": {
                 "Class": "Border",
                 "Rect": "0,0,128,10"
             },
@@ -18,28 +18,22 @@
                 "Class": "Bar",
                 "Rect": "63,2,2,6"
             }
-        }
-    },
-    {
+        },
         "headerLabel": {
             "Text": {
                 "Class": "Text",
                 "Rect": "0,0,64,16",
                 "Property": "Text"
             }
-        }
-    },
-    {
+        },
         "label128x14": {
             "Text": {
                 "Class": "Text",
                 "Rect": "0,0,128,14",
                 "Property": "Text"
             }
-        }
-    },
-    {
-        "emptyButton": {
+        },
+        "EmptyButton": {
             "Background": {
                 "Class": "Bar",
                 "Rect": "3,2,56,9"
@@ -64,6 +58,6 @@
                 "Class": "Bar",
                 "Rect": "59,11,1,1"
             }
-        }
+	}
     }
-]
+}
