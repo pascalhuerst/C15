@@ -13,8 +13,8 @@
 #include <proxies/hwui/panel-unit/boled/sound-screens/SingleSoundLayout.h>
 #include <proxies/hwui/panel-unit/boled/SplashLayout.h>
 #include <proxies/hwui/panel-unit/boled/undo/UndoLayout.h>
-
 #include <proxies/hwui/descriptive-layouts/LayoutFactory.h>
+#include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
 
 BOLED::BOLED () :
     OLEDProxy (Rect (0, 0, 256, 64))
@@ -28,6 +28,13 @@ BOLED::~BOLED ()
 void BOLED::init()
 {
   reset(new SplashLayout());
+
+  LayoutFolderMonitor::get().onChange(sigc::mem_fun(this, &BOLED::bruteForce));
+}
+
+void BOLED::bruteForce()
+{
+  setupFocusAndMode(Application::get().getHWUI()->getFocusAndMode());
 }
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)

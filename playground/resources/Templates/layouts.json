@@ -7,25 +7,25 @@
             },
             "Controls": {
                 "GroupHeader": {
-                    "Class": "headerLabel",
+                    "Class": "HeaderLabel",
                     "Position": "0,0",
                     "EventSource": "ParameterGroupName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ParameterName": {
-                    "Class": "label128x14",
+                    "Class": "Label128x14",
                     "Position": "64, 13",
                     "EventSource": "ParameterName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "Slider": {
-                    "Class": "slider128x10",
+                    "Class": "Slider128x10",
                     "Position": "64, 26",
                     "EventSource": "SliderRange",
                     "PrimitiveInstanceEventTarget": "Slider"
                 },
                 "ParameterName": {
-                    "Class": "label128x14",
+                    "Class": "Label128x14",
                     "Position": "64, 39",
                     "EventSource": "ParameterDisplayString",
                     "PrimitiveInstanceEventTarget": "Text"
@@ -54,5 +54,5 @@
                 "ROTARY_MINUS": "DecParam"
             }
         }
-    }
+    } 
 }

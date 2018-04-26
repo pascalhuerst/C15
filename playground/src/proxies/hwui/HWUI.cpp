@@ -23,6 +23,7 @@
 #include <xml/FileOutStream.h>
 #include <groups/HardwareSourcesGroup.h>
 #include <io/network/WebSocketSession.h>
+#include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
 
 HWUI::HWUI() :
     m_blinkCount(0),
@@ -91,6 +92,10 @@ void HWUI::onKeyboardLineRead(Glib::RefPtr<Gio::AsyncResult> &res)
   {
     if(!line.empty())
     {
+      if(line == "r")
+      {
+        LayoutFolderMonitor::get().bruteForce();
+      }
       if(line == "t")
       {
         onButtonPressed(BUTTON_SETUP, true);

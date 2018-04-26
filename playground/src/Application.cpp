@@ -20,7 +20,6 @@
 #include <clipboard/Clipboard.h>
 #include <io/network/WebSocketSession.h>
 #include <assert.h>
-#include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
 
 Application *Application::theApp = nullptr;
 
@@ -73,8 +72,6 @@ Application::Application(int numArgs, char **argv) :
   ::signal(SIGQUIT, quitApp);
   ::signal(SIGTERM, quitApp);
   ::signal(SIGINT, quitApp);
-
-  LayoutFolderMonitor::get();
 }
 
 Application::~Application()

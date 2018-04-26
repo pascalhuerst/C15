@@ -1,7 +1,7 @@
 {
     "controls": {
-	"slider128x10": {
-	    "Border": {
+        "Slider128x10": {
+            "Border": {
                 "Class": "Border",
                 "Rect": "0,0,128,10"
             },
@@ -19,14 +19,14 @@
                 "Rect": "63,2,2,6"
             }
         },
-        "headerLabel": {
+        "HeaderLabel": {
             "Text": {
                 "Class": "Text",
                 "Rect": "0,0,64,16",
                 "Property": "Text"
             }
         },
-        "label128x14": {
+        "Label128x14": {
             "Text": {
                 "Class": "Text",
                 "Rect": "0,0,128,14",
@@ -58,6 +58,6 @@
                 "Class": "Bar",
                 "Rect": "59,11,1,1"
             }
-	}
+        }
     }
 }

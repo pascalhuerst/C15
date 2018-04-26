@@ -1,34 +1,34 @@
 {
-    "styles": {
-	"darkBroder": {
-            "selector": {
-		"UIFocus": "Parameter",
-		"PrimitiveClass": "Border"
-            },
-            "styles": {
-		"Color": "C43",
-		"TextAlign": "Center"
-            }
-	},
-	"parameterBorder" : {
-            "selector": {
-		"UIFocus": "Parameter",
-		"PrimitiveClass": "Border"
-            },
-            "styles": {
-		"Color": "C43",
-		"TextAlign": "Left"
-            }
-	},
-	"FooBar": {
-            "selector": {
-		"UIFocus": "Parameter",
-		"PrimitiveClass": "Border"
-            },
-            "styles": {
-		"Color": "C43",
-		"TextAlign": "Right"
-            }
+	"styles": {
+		"darkBroder": {
+			"selector": {
+				"UIFocus": "Parameter",
+				"PrimitiveClass": "Border"
+			},
+			"styles": {
+				"Color": "C43",
+				"TextAlign": "Center"
+			}
+		},
+		"parameterBorder": {
+			"selector": {
+				"UIFocus": "Parameter",
+				"PrimitiveClass": "Border"
+			},
+			"styles": {
+				"Color": "C43",
+				"TextAlign": "Left"
+			}
+		},
+		"FooBar": {
+			"selector": {
+				"UIFocus": "Parameter",
+				"PrimitiveClass": "Border"
+			},
+			"styles": {
+				"Color": "C43",
+				"TextAlign": "Right"
+			}
+		}
 	}
-    }
 }

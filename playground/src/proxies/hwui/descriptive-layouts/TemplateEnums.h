@@ -28,7 +28,7 @@ namespace DescriptiveLayouts
   ENUM(EventSources, uint8_t, Any, None, ParameterName, SliderRange, ParameterType, ParameterDisplayString, ParameterGroupName);
   ENUM(PrimitiveClasses, uint8_t, Any, Bar, Border, Text);
   ENUM(PrimitiveInstances, uint8_t, Any, None, Border, Background, CenterMark, Slider, Text, Cover);
-  ENUM(ControlClasses, uint8_t, Any, Slider, Label, Button, EmptyButton);
+  ENUM(ControlClasses, uint8_t, Any, EmptyButton, Slider128x10, HeaderLabel, Label128x14);
   ENUM(ControlInstances, uint8_t, Any, GroupHeader, Slider, ParameterName, ParameterValue, ButtonA, ButtonB, ButtonC, ButtonD);
   ENUM(LayoutClasses, uint8_t, Any, UnmodulateableParameterLayout);
 }
