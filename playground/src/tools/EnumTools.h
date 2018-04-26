@@ -4,50 +4,63 @@
 #include <device-settings/DebugLevel.h>
 #include <string>
 #include <map>
-#include <boost/preprocessor/list/enum.hpp>
-#include <boost/preprocessor/variadic/to_list.hpp>
-#include <boost/preprocessor/list/transform.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/stringize.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace EnumTools
 {
-  template<typename T>
-    struct Assignable
+  template<typename enum_type, typename base_type, typename struct_type>
+    std::map<enum_type, std::string> createMap(const std::string &def)
     {
-        Assignable(const T &v)
-        {
-          value = v;
-        }
+      std::map<enum_type, std::string> ret;
 
-        Assignable &operator=(int i)
-        {
-          value = (T)i;
-          return *this;
-        }
+      base_type invalidValue = (base_type) -1;
+      auto numEnums = sizeof(struct_type) / sizeof(base_type);
+      base_type plain[numEnums];
 
-        bool operator<(const Assignable &a) const
-        {
-          return value < a.value;
-        }
+      for(size_t i = 0; i < numEnums; i++)
+        plain[i] = invalidValue;
 
-        T value;
-    };
+      new (plain) struct_type;
+      base_type currentValue = 0;
 
-  inline std::string parseEnumKey(std::string in)
-  {
-    auto pos = in.find_first_of(" =,;\n\r");
-    if(pos == string::npos)
-      return in;
-    return in.substr(0, pos);
-  }
+      for(size_t i = 0; i < numEnums; i++)
+      {
+        if(plain[i] == invalidValue)
+          plain[i] = currentValue;
+        else
+          currentValue = plain[i];
+        currentValue++;
+      }
+
+      std::vector<std::string> strs;
+      boost::split(strs, def, boost::is_any_of(","));
+
+      g_assert(strs.size() == numEnums);
+
+      for(size_t idx = 0; idx < numEnums; idx++)
+      {
+        std::string key = strs[idx];
+        key = boost::trim_copy(key);
+        auto pos = key.find_first_of(" =,;\n\r");
+        if(pos != string::npos)
+          key = key.substr(0, pos);
+
+        ret[(enum_type) plain[idx]] = key;
+      }
+
+      return ret;
+    }
+
+  template<typename enum_type>
+    std::map<std::string, enum_type> reverse(const std::map<enum_type, std::string> &m)
+    {
+      std::map<std::string, enum_type> ret;
+      for(auto &a : m)
+        ret[a.second] = a.first;
+
+      return ret;
+    }
 }
-
-#define TRANSFORM_VARIADIC(op, data, var...) BOOST_PP_LIST_ENUM(BOOST_PP_LIST_TRANSFORM(op, data, BOOST_PP_VARIADIC_TO_LIST(var)))
-#define CREATE_E2S_MAP_ENTRY(d, enumName, enumValue) std::make_pair((EnumTools::Assignable<enumName>)enumName::enumValue, EnumTools::parseEnumKey(#enumValue))
-#define GENERATE_E2S_MAP_ENTRIES(enumName, enumValues...) TRANSFORM_VARIADIC(CREATE_E2S_MAP_ENTRY, enumName, enumValues)
-#define CREATE_S2E_MAP_ENTRY(d, enumName, enumValue) std::make_pair(EnumTools::parseEnumKey(#enumValue), (EnumTools::Assignable<enumName>)enumName::enumValue)
-#define GENERATE_S2E_MAP_ENTRIES(enumName, enumValues...) TRANSFORM_VARIADIC(CREATE_S2E_MAP_ENTRY, enumName, enumValues)
 
 #define ENUM(enumName, type, enums...) \
   enum class enumName : type \
@@ -55,20 +68,22 @@ namespace EnumTools
     enums \
   };\
   \
-  inline std::string toString(enumName e) \
-  { \
-    static std::map<EnumTools::Assignable<enumName>, std::string> values ({ GENERATE_E2S_MAP_ENTRIES(enumName, enums) });\
-    auto it = values.find((EnumTools::Assignable<enumName>)e); \
-    if(it != values.end()) return it->second;\
-    DebugLevel::error("Could not find value", (int)e, "in enum map for", typeid(enumName).name()); \
-    return ""; \
-  }\
-  \
   inline enumName to##enumName(const std::string &e) \
   { \
-    static std::map<std::string, EnumTools::Assignable<enumName>> values ({ GENERATE_S2E_MAP_ENTRIES(enumName, enums) });\
-    auto it = values.find(e); \
-    if(it != values.end()) return it->second.value;\
-    DebugLevel::error("Could not find value", e, "in enum map for", typeid(enumName).name()); \
+    struct __attribute__((packed))  Values { type enums;}; \
+    static auto map = EnumTools::reverse(EnumTools::createMap<enumName, type, Values>(#enums)); \
+    auto it = map.find(e); \
+    if(it != map.end()) return it->second;\
+    DebugLevel::error("Could not find value", e, "in enum map for", #enumName); \
     return (enumName)0; \
+  } \
+  inline std::string toString(const enumName &e) \
+  { \
+    struct __attribute__((packed))  Values { type enums;}; \
+    static auto map = EnumTools::createMap<enumName, type, Values>(#enums); \
+    auto it = map.find(e); \
+    if(it != map.end()) return it->second;\
+    DebugLevel::error("Could not find value", (int)e, "in enum map for", #enumName); \
+    return ""; \
   }
+
