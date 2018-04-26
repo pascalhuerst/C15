@@ -21,7 +21,7 @@
     		"PrimitiveClasses": "Text"
     	},
     	"styles": {
-    		"FontSize": "9",
+    		"FontSize": 9,
     		"BackgroundColor": "C43",
     		"Color": "C255",
     		"TextAlign": "Center"

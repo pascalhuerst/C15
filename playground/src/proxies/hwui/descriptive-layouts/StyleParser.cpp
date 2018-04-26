@@ -101,7 +101,7 @@ namespace DescriptiveLayouts
           theStyles.emplace(styleKey, (int) StyleValues::toColor(style.value()));
           break;
         case StyleKey::FontSize:
-          theStyles.emplace(styleKey, (int) stoi((std::string)style.value()));
+          theStyles.emplace(styleKey, (int) style.value());
           break;
         case StyleKey::TextAlign:
           theStyles.emplace(styleKey, (int) StyleValues::toAlignment(style.value()));
