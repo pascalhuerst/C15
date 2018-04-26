@@ -1,8 +1,25 @@
 {
 	"styles": {
+    "defaultBorder" : {
+    	"selector": {
+    		"PrimitiveClass": "Border"
+    	},
+    	"styles": {
+    		"BorderStyle": "Solid"
+    		}
+    },
+    "defaultText" : {
+    	"selector": {
+    		"PrimitiveClass": "Text"
+    	},
+    	"styles": {
+    		"FontSize": 9,
+    		"BackgroundColor": "C43"
+    		}
+    },
 		"darkBroder": {
 			"selector": {
-				"UIFocus": "Parameter",
+				"UIFocus": "Parameters",
 				"PrimitiveClass": "Border"
 			},
 			"styles": {
@@ -12,7 +29,7 @@
 		},
 		"parameterBorder": {
 			"selector": {
-				"UIFocus": "Parameter",
+				"UIFocus": "Parameters",
 				"PrimitiveClass": "Border"
 			},
 			"styles": {
@@ -22,7 +39,7 @@
 		},
 		"FooBar": {
 			"selector": {
-				"UIFocus": "Parameter",
+				"UIFocus": "Parameters",
 				"PrimitiveClass": "Border"
 			},
 			"styles": {
