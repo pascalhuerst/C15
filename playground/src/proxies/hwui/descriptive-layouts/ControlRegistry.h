@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include "ControlClass.h"
 
@@ -9,11 +10,16 @@ namespace DescriptiveLayouts
   {
     protected:
       ControlRegistry() = default;
+
     public:
       static ControlRegistry& get();
+
+      void registerControl(ControlClass &&cp);
+      const ControlClass& find(ControlClasses id) const;
       void clear();
-      void registerControl(std::string key, ControlClass cp);
-      std::unordered_map<std::string, std::unique_ptr<ControlClass>> m_controlRegistry;
+
+    private:
+      std::unordered_map<ControlClasses, ControlClass> m_controlRegistry;
   };
 }
-;
+

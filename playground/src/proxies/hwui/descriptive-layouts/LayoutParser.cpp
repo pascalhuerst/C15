@@ -47,6 +47,7 @@ namespace DescriptiveLayouts
 
       try
       {
+
         auto eventSources = toEventSources(control.value().at("EventSource"));
         auto primitiveInstances = toPrimitiveInstances(control.value().at("PrimitiveInstanceEventTarget"));
 

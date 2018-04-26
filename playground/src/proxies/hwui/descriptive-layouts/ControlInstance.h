@@ -11,14 +11,14 @@ namespace DescriptiveLayouts
   {
 
     public:
-      ControlInstance(ControlInstances controlInstance, ControlClass control, Point position, EventSources eventSource = EventSources::None,
+      ControlInstance(ControlInstances controlInstance, ControlClasses control, Point position, EventSources eventSource = EventSources::None,
                       PrimitiveInstances eventTarget = PrimitiveInstances::None);
 
       GenericControl* instantiate() const;
 
     private:
       ControlInstances controlInstance;
-      ControlClass control;
+      ControlClasses controlClass;
       Point position;
       EventSources eventSource;
       PrimitiveInstances eventTarget;

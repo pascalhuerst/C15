@@ -13,11 +13,6 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-  PrimitiveInstances giveEnum(std::string value)
-  {
-    return PrimitiveInstances::Background;
-  }
-
   Rect parseRect(std::string rect)
   {
     auto r = StringTools::splitStringOnAnyDelimiter(rect, ',');
@@ -29,9 +24,16 @@ namespace DescriptiveLayouts
     std::list<PrimitiveInstance> lP;
     for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive)
     {
-      lP.push_back(
-          PrimitiveInstance(giveEnum(primitive.key()), PrimitiveClasses::Bar, parseRect(*primitive.value().find("Rect")),
-              PrimitiveProperty::None));
+      auto key = primitive.key();
+      auto value = primitive.value();
+
+      PrimitiveProperty prop = PrimitiveProperty::None;
+      auto itProp = value.find("Property");
+
+      if(itProp != value.end())
+        prop = toPrimitiveProperty(*itProp);
+
+      lP.emplace_back(toPrimitiveInstances(key), toPrimitiveClasses(value.at("Class")), parseRect(value.at("Rect")), prop);
     }
     return lP;
   }
@@ -42,9 +44,7 @@ namespace DescriptiveLayouts
     {
       auto name = critera.key();
       auto primitiveList = critera.value();
-
-      ControlClass controlPrototype((ControlClasses) giveEnum(name), createPrimitives(primitiveList));
-      ControlRegistry::get().registerControl(name, controlPrototype);
+      ControlRegistry::get().registerControl(ControlClass(toControlClasses(name), createPrimitives(primitiveList)));
     }
   }
 
@@ -71,7 +71,6 @@ namespace DescriptiveLayouts
     }
     catch(...)
     {
-
     }
   }
 

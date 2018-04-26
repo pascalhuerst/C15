@@ -1,17 +1,27 @@
 #include "ControlRegistry.h"
 
-void DescriptiveLayouts::ControlRegistry::registerControl(std::string key, DescriptiveLayouts::ControlClass cp)
+namespace DescriptiveLayouts
 {
-  m_controlRegistry[key] = std::make_unique<ControlClass>(cp);
-}
 
-void DescriptiveLayouts::ControlRegistry::clear()
-{
-  m_controlRegistry.clear();
-}
+  void ControlRegistry::registerControl(ControlClass &&cp)
+  {
+    m_controlRegistry.insert(std::make_pair(cp.controlClass, std::move(cp)));
+  }
 
-DescriptiveLayouts::ControlRegistry& DescriptiveLayouts::ControlRegistry::get()
-{
-  static ControlRegistry cr;
-  return cr;
+  void ControlRegistry::clear()
+  {
+    m_controlRegistry.clear();
+  }
+
+  ControlRegistry& ControlRegistry::get()
+  {
+    static ControlRegistry cr;
+    return cr;
+  }
+
+  const ControlClass& ControlRegistry::find(ControlClasses id) const
+  {
+    return m_controlRegistry.at(id);
+  }
+
 }

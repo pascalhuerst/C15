@@ -15,30 +15,69 @@ namespace DescriptiveLayouts
   {
     StyleSheet::StyleSelector theSelector;
 
-    try {
+    try
+    {
       theSelector.f = toUIFocus(selector.at("UIFocus"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.m = toUIMode(selector.at("UIMode"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.d = toUIFocusAndModeDetail(selector.at("UIFocusAndModeDetail"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.l = toLayoutClasses(selector.at("LayoutClasses"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.cc = toControlClasses(selector.at("ControlClasses"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.ci = toControlInstances(selector.at("ControlInstances"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.pc = toPrimitiveClasses(selector.at("PrimitiveClasses"));
-    } catch(...) {}
-    try {
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.pi = toPrimitiveInstances(selector.at("PrimitiveInstances"));
-    } catch(...) {}
+    }
+    catch(...)
+    {
+    }
 
     return theSelector;
   }
@@ -50,21 +89,22 @@ namespace DescriptiveLayouts
     {
       auto styleKey = toStyleKey(style.key());
 
-      switch(styleKey) {
+      switch(styleKey)
+      {
         case StyleKey::BorderStyle:
-          theStyles.emplace(styleKey, (int)StyleValues::toBorderStyle(style.value()));
+          theStyles.emplace(styleKey, (int) StyleValues::toBorderStyle(style.value()));
           break;
         case StyleKey::BackgroundColor:
-          theStyles.emplace(styleKey, (int)StyleValues::toColor(style.value()));
+          theStyles.emplace(styleKey, (int) StyleValues::toColor(style.value()));
           break;
         case StyleKey::Color:
-          theStyles.emplace(styleKey, (int)StyleValues::toColor(style.value()));
+          theStyles.emplace(styleKey, (int) StyleValues::toColor(style.value()));
           break;
         case StyleKey::FontSize:
-          theStyles.emplace(styleKey, (int)StyleValues::toFont(style.value()));
+          theStyles.emplace(styleKey, (int) StyleValues::toFont(style.value()));
           break;
         case StyleKey::TextAlign:
-          theStyles.emplace(styleKey, (int)StyleValues::toAlignment(style.value()));
+          theStyles.emplace(styleKey, (int) StyleValues::toAlignment(style.value()));
           break;
       }
     }

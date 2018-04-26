@@ -10,18 +10,16 @@ namespace DescriptiveLayouts
   class ControlClass
   {
     public:
-      template<typename ...Args>
-        ControlClass(ControlClasses controlClass, Args ... args) :
+        ControlClass(ControlClasses controlClass, std::list<PrimitiveInstance> primitives) :
             controlClass(controlClass),
-            primitves { args... }
+            primitves(primitives)
         {
         }
 
-    private:
+        ControlClass(ControlClass &&o) = default;
+
       ControlClasses controlClass;
       std::list<PrimitiveInstance> primitves;
-
-      friend class GenericControl;
   };
 
 }

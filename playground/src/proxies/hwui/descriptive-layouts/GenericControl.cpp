@@ -1,9 +1,10 @@
 #include "GenericControl.h"
 
-#include "../../../tools/EnumTools.h"
+#include <tools/EnumTools.h>
 #include "Styleable.h"
 #include "EventSource.h"
 #include "PropertyOwner.h"
+#include "ControlRegistry.h"
 
 namespace DescriptiveLayouts
 {
@@ -26,7 +27,9 @@ namespace DescriptiveLayouts
     int maxX = 0;
     int maxY = 0;
 
-    for(auto &p : m_prototype.control.primitves)
+    const auto &controlClass = ControlRegistry::get().find(m_prototype.controlClass);
+
+    for(auto &p : controlClass.primitves)
     {
       auto c = addControl(p.instantiate());
       maxX = std::max(maxX, c->getPosition().getRight());
@@ -44,7 +47,7 @@ namespace DescriptiveLayouts
     {
       if(auto a = dynamic_pointer_cast<Styleable>(p))
       {
-        a->style(layout, m_prototype.control.controlClass, m_prototype.controlInstance);
+        a->style(layout, m_prototype.controlClass, m_prototype.controlInstance);
       }
     }
   }
