@@ -1,40 +1,39 @@
 {
 	"styles": {
-    "defaultBorder" : {
-    	"selector": {
-    		"PrimitiveClasses": "Border"
-    	},
-    	"styles": {
-    		"BorderStyle": "Solid"
-    		}
-    },
-    "defaultBar" : {
-    	"selector": {
-    		"PrimitiveClasses": "Bar"
-    	},
-    	"styles": {
-    		"Color": "C103"
-    		}
-    },
-    "defaultText" : {
-    	"selector": {
-    		"PrimitiveClasses": "Text"
-    	},
-    	"styles": {
-    		"FontSize": 9,
-    		"BackgroundColor": "C43",
-    		"Color": "C255",
-    		"TextAlign": "Center"
-    	}
-    },
-		"darkBroder": {
+		"defaultBorder": {
 			"selector": {
-				"UIFocus": "Parameters",
 				"PrimitiveClasses": "Border"
 			},
 			"styles": {
-				"Color": "C43",
+				"BorderStyle": "Solid"
+			}
+		},
+		"defaultBar": {
+			"selector": {
+				"PrimitiveClasses": "Bar"
+			},
+			"styles": {
+				"Color": "C103"
+			}
+		},
+		"defaultText": {
+			"selector": {
+				"PrimitiveClasses": "Text"
+			},
+			"styles": {
+				"FontSize": 9,
+				"BackgroundColor": "C43",
+				"Color": "C255",
 				"TextAlign": "Center"
+			}
+		},
+		"moduleHeaderBackground": {
+			"selector": {
+				"ControlClasses": "HeaderLabel"
+			},
+			"styles": {
+				"BackgroundColor": "C255",
+				"Color": "C43"
 			}
 		},
 		"parameterBorder": {
@@ -47,14 +46,13 @@
 				"TextAlign": "Left"
 			}
 		},
-		"FooBar": {
+		"slider-foreground": {
 			"selector": {
-				"UIFocus": "Parameters",
-				"PrimitiveClasses": "Border"
+				"PrimitiveInstances": "Slider",
+				"PrimitiveClasses": "Bar"
 			},
 			"styles": {
-				"Color": "C43",
-				"TextAlign": "Right"
+				"Color": "C255"
 			}
 		}
 	}
