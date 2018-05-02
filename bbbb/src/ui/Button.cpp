@@ -3,11 +3,15 @@
 #include <Application.h>
 #include <io/Bridges.h>
 
-Button::Button(int buttonId) :
+Button::Button(int buttonId, const std::string &title) :
     m_buttonId(buttonId)
 {
   set_size_request(1, 1);
-  set_label(std::to_string(buttonId));
+
+  if(title.empty())
+    set_label(std::to_string(buttonId));
+  else
+    set_label(title);
 }
 
 Button::~Button()

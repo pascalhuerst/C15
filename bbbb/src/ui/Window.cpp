@@ -16,7 +16,7 @@ Window::Window()
   Application::get().getWebsocketServer()->onMessageReceived(Domain::Oled, sigc::mem_fun(this, &Window::onFrameBufferMessageReceived));
   Application::get().getWebsocketServer()->onMessageReceived(Domain::PanelLed, sigc::mem_fun(this, &Window::onPanelLEDsMessageReceived));
 
-  m_box.pack_start(m_boled, true, true);
+  m_box.pack_start(m_playPanel, true, true);
   m_box.pack_end(m_editPanel, false, false);
 
   add(m_box);
@@ -30,7 +30,7 @@ Window::~Window()
 
 void Window::onFrameBufferMessageReceived(WebSocketServer::tMessage msg)
 {
-  m_boled.setBuffer(msg);
+  m_playPanel.setFrameBuffer(msg);
 }
 
 void Window::onPanelLEDsMessageReceived(WebSocketServer::tMessage msg)

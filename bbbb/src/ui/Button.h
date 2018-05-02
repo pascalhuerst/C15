@@ -7,7 +7,7 @@
 class Button : public Gtk::Button
 {
   public:
-    Button(int id);
+    Button(int id, const std::string &title = "");
     virtual ~Button();
 
     void setLed(int idx, bool state);
