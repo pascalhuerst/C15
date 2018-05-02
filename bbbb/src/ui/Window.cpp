@@ -10,16 +10,14 @@ constexpr auto framebufferDimY = 96;
 
 Window::Window()
 {
-  std::fill(m_panelLEDs.begin(), m_panelLEDs.end(), 0);
-
   set_default_size(framebufferDimX, framebufferDimY * 2);
   set_size_request(framebufferDimX, framebufferDimY * 2);
 
   Application::get().getWebsocketServer()->onMessageReceived(Domain::Oled, sigc::mem_fun(this, &Window::onFrameBufferMessageReceived));
   Application::get().getWebsocketServer()->onMessageReceived(Domain::PanelLed, sigc::mem_fun(this, &Window::onPanelLEDsMessageReceived));
 
-  m_box.add(m_boled);
-  m_box.add(m_editPanel);
+  m_box.pack_start(m_boled, true, true);
+  m_box.pack_end(m_editPanel, false, false);
 
   add(m_box);
 
