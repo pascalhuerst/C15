@@ -1,5 +1,7 @@
 #include "Button.h"
-#include <gdkmm/rgba.h>
+#include <io/FromButtonsBridge.h>
+#include <Application.h>
+#include <io/Bridges.h>
 
 Button::Button(int buttonId) :
     m_buttonId(buttonId)
@@ -48,11 +50,13 @@ bool Button::on_draw(const ::Cairo::RefPtr<::Cairo::Context>& cr)
 
 void Button::on_pressed()
 {
-
+  auto b = Application::get().getBridges()->getBridge<FromButtonsBridge>();
+  b->sendKey(m_buttonId, true);
 }
 
 void Button::on_released()
 {
-
+  auto b = Application::get().getBridges()->getBridge<FromButtonsBridge>();
+  b->sendKey(m_buttonId, false);
 }
 
