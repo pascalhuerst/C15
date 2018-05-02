@@ -39,39 +39,42 @@ void BOLED::bruteForce()
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
 {
-  if(auto layout = DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode))
-  {
-    reset (layout);
+  try {
+    reset (DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
     return;
+  } catch(...) {
+    DebugLevel::error("Could not find Layout! Going with old Layout-Switch-Case!");
+
+    switch (focusAndMode.focus)
+    {
+      case UIFocus::Parameters:
+        setupParameterScreen (focusAndMode);
+        break;
+
+      case UIFocus::Presets:
+        setupPresetScreen (focusAndMode);
+        break;
+
+      case UIFocus::Banks:
+        setupBankScreen (focusAndMode);
+        break;
+
+      case UIFocus::Sound:
+        setupSoundScreen (focusAndMode);
+        break;
+
+      case UIFocus::Setup:
+        reset (new SetupLayout (focusAndMode));
+        break;
+
+      default:
+        g_assert_not_reached()
+                ;
+        break;
+    }
   }
 
-  switch (focusAndMode.focus)
-  {
-    case UIFocus::Parameters:
-      setupParameterScreen (focusAndMode);
-      break;
 
-    case UIFocus::Presets:
-      setupPresetScreen (focusAndMode);
-      break;
-
-    case UIFocus::Banks:
-      setupBankScreen (focusAndMode);
-      break;
-
-    case UIFocus::Sound:
-      setupSoundScreen (focusAndMode);
-      break;
-
-    case UIFocus::Setup:
-      reset (new SetupLayout (focusAndMode));
-      break;
-
-    default:
-      g_assert_not_reached()
-      ;
-      break;
-  }
 }
 
 void BOLED::setupSoundScreen (FocusAndMode focusAndMode)
