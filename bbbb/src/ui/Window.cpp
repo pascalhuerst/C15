@@ -17,7 +17,6 @@ Window::Window()
   Application::get().getWebsocketServer()->onMessageReceived(Domain::PanelLed, sigc::mem_fun(this, &Window::onPanelLEDsMessageReceived));
 
   m_box.pack_start(m_boled, true, true);
-  m_box.pack_end(m_editPanel, false, false);
 
   add(m_box);
 
