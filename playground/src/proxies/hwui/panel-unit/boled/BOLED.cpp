@@ -13,6 +13,8 @@
 #include <proxies/hwui/panel-unit/boled/sound-screens/SingleSoundLayout.h>
 #include <proxies/hwui/panel-unit/boled/SplashLayout.h>
 #include <proxies/hwui/panel-unit/boled/undo/UndoLayout.h>
+#include <proxies/hwui/descriptive-layouts/LayoutFactory.h>
+#include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
 
 BOLED::BOLED () :
     OLEDProxy (Rect (0, 0, 256, 64))
@@ -26,37 +28,53 @@ BOLED::~BOLED ()
 void BOLED::init()
 {
   reset(new SplashLayout());
+
+  LayoutFolderMonitor::get().onChange(sigc::mem_fun(this, &BOLED::bruteForce));
+}
+
+void BOLED::bruteForce()
+{
+  setupFocusAndMode(Application::get().getHWUI()->getFocusAndMode());
 }
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
 {
-  switch (focusAndMode.focus)
-  {
-    case UIFocus::Parameters:
-      setupParameterScreen (focusAndMode);
-      break;
+  try {
+    reset (DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
+    return;
+  } catch(...) {
+    DebugLevel::error("Could not find Layout! Going with old Layout-Switch-Case!");
 
-    case UIFocus::Presets:
-      setupPresetScreen (focusAndMode);
-      break;
+    switch (focusAndMode.focus)
+    {
+      case UIFocus::Parameters:
+        setupParameterScreen (focusAndMode);
+        break;
 
-    case UIFocus::Banks:
-      setupBankScreen (focusAndMode);
-      break;
+      case UIFocus::Presets:
+        setupPresetScreen (focusAndMode);
+        break;
 
-    case UIFocus::Sound:
-      setupSoundScreen (focusAndMode);
-      break;
+      case UIFocus::Banks:
+        setupBankScreen (focusAndMode);
+        break;
 
-    case UIFocus::Setup:
-      reset (new SetupLayout (focusAndMode));
-      break;
+      case UIFocus::Sound:
+        setupSoundScreen (focusAndMode);
+        break;
 
-    default:
-      g_assert_not_reached()
-      ;
-      break;
+      case UIFocus::Setup:
+        reset (new SetupLayout (focusAndMode));
+        break;
+
+      default:
+        g_assert_not_reached()
+                ;
+        break;
+    }
   }
+
+
 }
 
 void BOLED::setupSoundScreen (FocusAndMode focusAndMode)
@@ -114,7 +132,7 @@ void BOLED::setupBankScreen (FocusAndMode focusAndMode)
   }
 }
 
-bool BOLED::onButtonPressed (gint32 buttonID, ButtonModifiers modifiers, bool state)
+bool BOLED::onButtonPressed (Buttons buttonID, ButtonModifiers modifiers, bool state)
 {
   if (shared_ptr<DFBLayout> l = dynamic_pointer_cast<DFBLayout> (getLayout ()))
     if (l->onButton (buttonID, state, modifiers))

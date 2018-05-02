@@ -1,6 +1,7 @@
 #pragma once
 
 #include "proxies/hwui/OLEDProxy.h"
+#include "proxies/hwui/buttons.h"
 
 class Application;
 class Parameter;
@@ -14,7 +15,7 @@ class BOLED: public OLEDProxy, public sigc::trackable
 
     void init();
 
-    bool onButtonPressed (gint32 buttonID, ButtonModifiers modifiers, bool state);
+    bool onButtonPressed (Buttons buttonID, ButtonModifiers modifiers, bool state);
     void onRotary(signed char i);
     void setupFocusAndMode (FocusAndMode focusAndMode);
     void showUndoScreen ();
@@ -24,4 +25,6 @@ class BOLED: public OLEDProxy, public sigc::trackable
     void setupParameterScreen (FocusAndMode focusAndMode);
     void setupPresetScreen (FocusAndMode focusAndMode);
     void setupBankScreen (FocusAndMode focusAndMode);
+
+    void bruteForce();
 };

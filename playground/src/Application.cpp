@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <clipboard/Clipboard.h>
 #include <io/network/WebSocketSession.h>
+#include <assert.h>
 
 Application *Application::theApp = nullptr;
 
