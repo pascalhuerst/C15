@@ -44,6 +44,7 @@ bool Boled::on_draw(const ::Cairo::RefPtr<::Cairo::Context> & cr)
     auto height = get_allocated_height();
 
     int multiplier = std::min(width / frameBufferDimX, height / frameBufferDimY);
+    auto offsetX = (width - (frameBufferDimX * multiplier)) / 2;
 
     for(int y = 0; y < frameBufferDimY; y++)
     {
@@ -52,7 +53,7 @@ bool Boled::on_draw(const ::Cairo::RefPtr<::Cairo::Context> & cr)
         int idx = y * frameBufferDimX + x;
 
         auto &rgb = colorMap.at(data[idx]);
-        cr->rectangle(x * multiplier, y * multiplier, multiplier, multiplier);
+        cr->rectangle(offsetX + x * multiplier, y * multiplier, multiplier, multiplier);
         cr->set_source_rgb(std::get < 0 > (rgb) / 256.0, std::get < 1 > (rgb) / 256.0, std::get < 2 > (rgb) / 256.0);
         cr->fill();
       }
