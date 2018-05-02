@@ -4,6 +4,8 @@
 
 #include <gtkmm-3.0/gtkmm.h>
 #include <io/network/WebSocketServer.h>
+#include "Boled.h"
+#include "EditPanel.h"
 
 class Window : public Gtk::Window
 {
@@ -17,6 +19,9 @@ class Window : public Gtk::Window
     WebSocketServer::tMessage m_frameBuffer;
 
     std::array<uint8_t, 96> m_panelLEDs;
+    Gtk::VBox m_box;
+    Boled m_boled;
+    EditPanel m_editPanel;
 };
 
 #endif
