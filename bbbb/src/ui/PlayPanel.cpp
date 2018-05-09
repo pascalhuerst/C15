@@ -1,4 +1,7 @@
 #include "PlayPanel.h"
+#include <io/FromEncoderBridge.h>
+#include <Application.h>
+#include <io/Bridges.h>
 
 enum Buttons
 {
@@ -82,6 +85,10 @@ PlayPanel::PlayPanel() :
   m_box.pack_start(m_boled, true, true);
   m_box.pack_start(m_buttons, false, false);
   add(m_box);
+
+  m_rotary.set_range(-100, 100);
+  m_rotary.set_value(0);
+  m_rotary.signal_change_value().connect(sigc::mem_fun(this, &PlayPanel::onRotary));
 }
 
 PlayPanel::~PlayPanel()
@@ -91,5 +98,14 @@ PlayPanel::~PlayPanel()
 void PlayPanel::setFrameBuffer(WebSocketServer::tMessage msg)
 {
   m_boled.setBuffer(msg);
+}
+
+bool PlayPanel::onRotary(Gtk::ScrollType s, double v)
+{
+  TRACE(__PRETTY_FUNCTION__ << " " << (int)s);
+  auto b = Application::get().getBridges()->getBridge<FromEncoderBridge>();
+  b->sendRotary(v);
+  m_rotary.set_value(0);
+  return false;
 }
 

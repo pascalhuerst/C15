@@ -19,7 +19,7 @@ namespace DescriptiveLayouts
       void clear();
 
     private:
-      std::unordered_map<ControlClasses, ControlClass> m_controlRegistry;
+      std::map<ControlClasses, ControlClass> m_controlRegistry;
   };
 }
 

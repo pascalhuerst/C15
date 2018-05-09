@@ -42,12 +42,14 @@ namespace DescriptiveLayouts
       rect.setHeight(maxY + 1);
       setPosition(rect);
     } catch(...) {
-      DebugLevel::error("Could not add Primitives! Control: " + toString(m_prototype.controlInstance));
+      DebugLevel::error("Could not add Primitives! Control: " + m_prototype.controlInstance);
     }
   }
 
   void GenericControl::style(LayoutClasses layout)
   {
+    DebugLevel::info("Styling control", m_prototype.controlInstance, "of class", m_prototype.controlClass);
+
     for(auto &p : getControls())
     {
       if(auto a = dynamic_pointer_cast<Styleable>(p))

@@ -31,13 +31,15 @@ namespace DescriptiveLayouts
       auto key = primitive.key();
       auto value = primitive.value();
 
+      DebugLevel::info("add primitve", key);
+
       PrimitiveProperty prop = PrimitiveProperty::None;
       auto itProp = value.find("Property");
 
       if(itProp != value.end())
         prop = toPrimitiveProperty(*itProp);
 
-      lP.emplace_back(toPrimitiveInstances(key), toPrimitiveClasses(value.at("Class")), parseRect(value.at("Rect")), prop);
+      lP.emplace_back(key, toPrimitiveClasses(value.at("Class")), parseRect(value.at("Rect")), prop);
     }
     return lP;
   }
@@ -48,7 +50,8 @@ namespace DescriptiveLayouts
     {
       auto name = critera.key();
       auto primitiveList = critera.value();
-      ControlRegistry::get().registerControl(ControlClass(toControlClasses(name), createPrimitives(primitiveList)));
+      DebugLevel::info("register control", name);
+      ControlRegistry::get().registerControl(ControlClass(name, createPrimitives(primitiveList)));
     }
   }
 
@@ -68,6 +71,7 @@ namespace DescriptiveLayouts
   {
     try
     {
+      DebugLevel::info("importing controls from file", fileName);
       std::ifstream i(fileName);
       json j;
       i >> j;

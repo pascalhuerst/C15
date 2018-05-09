@@ -15,6 +15,8 @@ class PlayPanel : public Gtk::VBox
     void setFrameBuffer(WebSocketServer::tMessage msg);
 
   private:
+    bool onRotary(Gtk::ScrollType s, double v);
+
     Button m_setup;
     Boled m_boled;
     Button m_preset;

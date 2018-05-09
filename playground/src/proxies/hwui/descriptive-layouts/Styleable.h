@@ -13,8 +13,6 @@ namespace DescriptiveLayouts
       Styleable();
       virtual ~Styleable();
 
-      using StyleMap = std::map<StyleKey, int>;
-
       void style(LayoutClasses li, ControlClasses cc, ControlInstances ci);
       void applyStyle(const StyleMap &style);
       int getStyleValue(StyleKey s) const;

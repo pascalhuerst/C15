@@ -12,23 +12,23 @@ class Bridges
     Bridges();
     virtual ~Bridges();
 
-
-
   private:
     using tBridge = std::unique_ptr<Bridge>;
     std::list<tBridge> m_bridges;
 
-public:
-    template <typename t>
-    t* getBridge() {
-      for(auto& b: m_bridges) {
-        auto raw = b.get();
-        if(dynamic_cast<t*>(raw) != nullptr) {
-          return static_cast<t*>(raw);
+  public:
+    template<typename T>
+      T* getBridge()
+      {
+        for(auto& b : m_bridges)
+        {
+          if(auto t = dynamic_cast<T*>(b.get()))
+          {
+            return t;
+          }
         }
+        return nullptr;
       }
-     return nullptr;
-    }
 
 };
 

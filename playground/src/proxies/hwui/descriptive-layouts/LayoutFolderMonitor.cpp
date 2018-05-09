@@ -7,6 +7,7 @@
 #include "ControlParser.h"
 #include "Styles.h"
 #include "StyleParser.h"
+#include "tools/SpawnCommandLine.h"
 
 LayoutFolderMonitor& LayoutFolderMonitor::get()
 {
@@ -51,12 +52,21 @@ void LayoutFolderMonitor::bruteForce()
       DescriptiveLayouts::importLayout(path);
       DescriptiveLayouts::importStyles(path);
     }
+    else if(g_str_has_suffix(name.c_str(), ".yaml"))
+    {
+      auto tmpPath = "/tmp/__nl_style.json";
+      SpawnCommandLine cmd("yaml2json " + path);
+      g_file_set_contents(tmpPath, cmd.getStdOutput().c_str(), -1, nullptr);
+      DescriptiveLayouts::importControls(tmpPath);
+      DescriptiveLayouts::importLayout(tmpPath);
+      DescriptiveLayouts::importStyles(tmpPath);
+    }
   }
 
   m_onChange.send();
 }
 
-sigc::connection LayoutFolderMonitor::onChange(std::function<void ()> cb)
+sigc::connection LayoutFolderMonitor::onChange(std::function<void()> cb)
 {
   return m_onChange.connect(cb);
 }

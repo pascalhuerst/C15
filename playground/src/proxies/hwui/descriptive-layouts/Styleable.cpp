@@ -20,12 +20,14 @@ namespace DescriptiveLayouts
     const StyleSheet s = StyleSheet::get();
     auto fam = Application::get().getHWUI()->getFocusAndMode();
     const PrimitiveInstance &p = getPrimitive();
+    DebugLevel::info("Styling primitive", p.primitiveInstance, "of class", toString(p.primitveClass));
+
     s.applyStyle(fam.focus, fam.mode, fam.detail, li, cc, ci, p.primitveClass, p.primitiveInstance, this);
   }
 
   void Styleable::applyStyle(const StyleMap &style)
   {
-    if(m_currentStyle != style)
+    if(m_currentStyle.map != style.map)
     {
       m_currentStyle = style;
       setDirty();
@@ -36,7 +38,7 @@ namespace DescriptiveLayouts
   {
     try
     {
-      return m_currentStyle.at(s);
+      return m_currentStyle.map.at(s);
     }
     catch(...)
     {

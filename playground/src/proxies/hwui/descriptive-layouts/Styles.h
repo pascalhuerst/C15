@@ -10,16 +10,25 @@ namespace DescriptiveLayouts
   template<typename ...tStages>
     struct SubTree;
 
-  using StyleMap = std::map<StyleKey, int>;
+  struct StyleMap
+  {
+      Glib::ustring name;
+      std::map<StyleKey, int> map;
+  };
 
   inline void merge(StyleMap &target, const StyleMap &s)
   {
-    for(auto &a : s)
-      target[a.first] = a.second;
+    DebugLevel::info("Style", s.name, "matches!");
+
+    for(auto &a : s.map)
+    {
+      DebugLevel::info("set", toString(a.first), "=", std::to_string(a.second));
+      target.map[a.first] = a.second;
+    }
   }
 
   template<typename tLast>
-    struct SubTree<tLast> : public std::unordered_map<tLast, StyleMap>
+    struct SubTree<tLast> : public std::map<tLast, StyleMap>
     {
         void collectStyle(StyleMap &target, tLast key) const
         {
@@ -40,7 +49,7 @@ namespace DescriptiveLayouts
     };
 
   template<typename tFirst, typename ...tStages>
-    struct SubTree<tFirst, tStages...> : public std::unordered_map<tFirst, SubTree<tStages...>>
+    struct SubTree<tFirst, tStages...> : public std::map<tFirst, SubTree<tStages...>>
     {
         void collectStyle(StyleMap &target, tFirst first, tStages ... others) const
         {

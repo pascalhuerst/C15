@@ -46,14 +46,14 @@ namespace DescriptiveLayouts
 
     for(json::iterator control = j.begin(); control != j.end(); ++control)
     {
-      auto controlInstances = toControlInstances(control.key());
-      auto controlClasses = toControlClasses(control.value().at("Class"));
+      auto controlInstances = control.key();
+      auto controlClasses = control.value().at("Class");
       auto point = toPoint(control.value().at("Position"));
 
       try
       {
         auto eventSources = toEventSources(control.value().at("EventSource"));
-        auto primitiveInstances = toPrimitiveInstances(control.value().at("PrimitiveInstanceEventTarget"));
+        PrimitiveInstances primitiveInstances = control.value().at("PrimitiveInstanceEventTarget");
 
         l.emplace_back(controlInstances, controlClasses, point, eventSources, primitiveInstances);
       }
@@ -82,12 +82,15 @@ namespace DescriptiveLayouts
     for(json::iterator layout = j.begin(); layout != j.end(); ++layout)
     {
       auto name = layout.key();
+
+      DebugLevel::info("importing layout", name);
+
       auto layoutContent = layout.value();
       auto selectorContent = layoutContent.at("Selector");
       auto controlContent = layoutContent.at("Controls");
       auto eventSinkContent = layoutContent.at("EventSinks");
 
-      auto id = toLayoutClasses(name);
+      auto id = name;
       auto selectors = toSelectors(selectorContent);
       auto controls = toControlInstanceList(controlContent);
       auto sinkMappings = toEventSinkList(eventSinkContent);
@@ -99,6 +102,7 @@ namespace DescriptiveLayouts
   {
     try
     {
+      DebugLevel::info("importing layouts from file", fileName);
       std::ifstream i(fileName);
       json j;
       i >> j;

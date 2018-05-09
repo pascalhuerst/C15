@@ -20,6 +20,7 @@ namespace DescriptiveLayouts
                               PrimitiveClasses pc, PrimitiveInstances pi, Styleable *target) const
   {
     StyleMap style;
+    DebugLevel::info("Collecting styles for", toString(f), toString(m), toString(d), l, cc, ci, toString(pc), pi);
     m_styles.collectStyle(style, f, m, d, l, cc, ci, pc, pi);
     target->applyStyle(style);
   }

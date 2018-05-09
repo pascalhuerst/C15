@@ -41,7 +41,7 @@ namespace DescriptiveLayouts
 
     try
     {
-      theSelector.l = toLayoutClasses(selector.at("LayoutClasses"));
+      theSelector.l = selector.at("LayoutClasses");
     }
     catch(...)
     {
@@ -49,7 +49,7 @@ namespace DescriptiveLayouts
 
     try
     {
-      theSelector.cc = toControlClasses(selector.at("ControlClasses"));
+      theSelector.cc = selector.at("ControlClasses");
     }
     catch(...)
     {
@@ -57,7 +57,7 @@ namespace DescriptiveLayouts
 
     try
     {
-      theSelector.ci = toControlInstances(selector.at("ControlInstances"));
+      theSelector.ci = selector.at("ControlInstances");
     }
     catch(...)
     {
@@ -73,7 +73,7 @@ namespace DescriptiveLayouts
 
     try
     {
-      theSelector.pi = toPrimitiveInstances(selector.at("PrimitiveInstances"));
+      theSelector.pi = selector.at("PrimitiveInstances");
     }
     catch(...)
     {
@@ -92,31 +92,32 @@ namespace DescriptiveLayouts
       switch(styleKey)
       {
         case StyleKey::BorderStyle:
-          theStyles.emplace(styleKey, (int) StyleValues::toBorderStyle(style.value()));
+          theStyles.map.emplace(styleKey, (int) StyleValues::toBorderStyle(style.value()));
           break;
         case StyleKey::BackgroundColor:
-          theStyles.emplace(styleKey, (int) StyleValues::toColor(style.value()));
+          theStyles.map.emplace(styleKey, (int) StyleValues::toColor(style.value()));
           break;
         case StyleKey::Color:
-          theStyles.emplace(styleKey, (int) StyleValues::toColor(style.value()));
+          theStyles.map.emplace(styleKey, (int) StyleValues::toColor(style.value()));
           break;
         case StyleKey::FontSize:
-          theStyles.emplace(styleKey, (int) style.value());
+          theStyles.map.emplace(styleKey, (int) style.value());
           break;
         case StyleKey::TextAlign:
-          theStyles.emplace(styleKey, (int) StyleValues::toAlignment(style.value()));
+          theStyles.map.emplace(styleKey, (int) StyleValues::toAlignment(style.value()));
           break;
       }
     }
     return theStyles;
   }
 
-  void registerStyle(json style)
+  void registerStyle(std::string name, json style)
   {
     try
     {
       auto selector = parseSelector(style.at("selector"));
       auto styles = parseStylePairs(style.at("styles"));
+      styles.name = name;
       StyleSheet::get().registerStyle(selector, styles);
     }
     catch(std::exception e)
@@ -129,13 +130,14 @@ namespace DescriptiveLayouts
   {
     try
     {
+      DebugLevel::info("importing styles from file", fileName);
       std::ifstream i(fileName);
       json j;
       i >> j;
       auto styles = j.at("styles");
 
-      for(auto s : styles)
-        registerStyle(s);
+      for(json::iterator style = styles.begin(); style != styles.end(); ++style)
+        registerStyle(style.key(), style.value());
     }
     catch(...)
     {
