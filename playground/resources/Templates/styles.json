@@ -46,6 +46,17 @@
 				"TextAlign": "Left"
 			}
 		},
+        "buttonCover": {
+          "selector": {
+            "UIFocus": "Parameters",
+            "PrimitveInstances": "Cover",
+            "PrimitiveClasses": "Bar"
+          },
+          "styles": {
+            "Color": "C255",
+            "TextAlign": "Left"
+          }
+        },
 		"slider-foreground": {
 			"selector": {
 				"PrimitiveInstances": "Slider",

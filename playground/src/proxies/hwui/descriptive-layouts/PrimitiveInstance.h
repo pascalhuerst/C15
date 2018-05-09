@@ -15,7 +15,7 @@ namespace DescriptiveLayouts
     public:
       using Converter = std::function<std::any(std::any)>;
 
-      PrimitiveInstance(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget = PrimitiveProperty::None,
+      PrimitiveInstance(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveTag t = PrimitiveTag::Any, PrimitiveProperty eventTarget = PrimitiveProperty::None,
                 Converter converter = nullptr);
 
       Control* instantiate() const;
@@ -24,6 +24,7 @@ namespace DescriptiveLayouts
       PrimitiveClasses primitveClass;
       Rect relativePosition;
       PrimitiveProperty eventTarget;
+      PrimitiveTag tag;
       std::function<std::any(std::any)> converter;
   };
 

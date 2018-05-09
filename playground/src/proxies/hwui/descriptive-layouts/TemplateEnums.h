@@ -61,6 +61,10 @@ namespace DescriptiveLayouts
       struct Instance
       {
       };
+
+      struct Tag
+      {
+      };
     }
 
     namespace Controls
@@ -81,6 +85,7 @@ namespace DescriptiveLayouts
     }
   }
 
+  using PrimitiveTag = StringId<traits::Primitives::Tag>;
   using PrimitiveInstances = StringId<traits::Primitives::Instance>;
   using ControlClasses = StringId<traits::Controls::Class>;
   using ControlInstances = StringId<traits::Controls::Instance>;

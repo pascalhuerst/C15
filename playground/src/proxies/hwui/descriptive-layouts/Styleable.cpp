@@ -22,7 +22,7 @@ namespace DescriptiveLayouts
     const PrimitiveInstance &p = getPrimitive();
     DebugLevel::info("Styling primitive", p.primitiveInstance, "of class", toString(p.primitveClass));
 
-    s.applyStyle(fam.focus, fam.mode, fam.detail, li, cc, ci, p.primitveClass, p.primitiveInstance, this);
+    s.applyStyle(fam.focus, fam.mode, fam.detail, li, cc, ci, p.primitveClass, p.tag, p.primitiveInstance, this);
   }
 
   void Styleable::applyStyle(const StyleMap &style)

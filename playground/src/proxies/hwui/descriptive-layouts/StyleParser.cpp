@@ -17,6 +17,14 @@ namespace DescriptiveLayouts
 
     try
     {
+      theSelector.pt = selector.at("Tag");
+    }
+    catch(...)
+    {
+    }
+
+    try
+    {
       theSelector.f = toUIFocus(selector.at("UIFocus"));
     }
     catch(...)
