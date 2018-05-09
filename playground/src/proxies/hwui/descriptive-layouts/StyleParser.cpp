@@ -1,11 +1,9 @@
 #include <Application.h>
 #include <fstream>
-#include <tools/StringTools.h>
 #include "StyleParser.h"
 #include "Styles.h"
 #include <tuple>
 #include <tools/json.h>
-#include <device-settings/DebugLevel.h>
 
 using json = nlohmann::json;
 
@@ -14,6 +12,14 @@ namespace DescriptiveLayouts
   StyleSheet::StyleSelector parseSelector(json selector)
   {
     StyleSheet::StyleSelector theSelector;
+
+    try
+    {
+      theSelector.pt = selector.at("Tag");
+    }
+    catch(...)
+    {
+    }
 
     try
     {
@@ -29,6 +35,7 @@ namespace DescriptiveLayouts
     }
     catch(...)
     {
+
     }
 
     try

@@ -39,7 +39,13 @@ namespace DescriptiveLayouts
       if(itProp != value.end())
         prop = toPrimitiveProperty(*itProp);
 
-      lP.emplace_back(key, toPrimitiveClasses(value.at("Class")), parseRect(value.at("Rect")), prop);
+      PrimitiveTag tag = PrimitiveTag::None;
+      auto itTag = value.find("Tag");
+
+      if(itTag != value.end())
+        tag = *itTag;
+
+      lP.emplace_back(key, toPrimitiveClasses(value.at("Class")), parseRect(value.at("Rect")), tag, prop);
     }
     return lP;
   }

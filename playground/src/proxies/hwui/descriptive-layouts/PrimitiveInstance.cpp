@@ -4,9 +4,10 @@
 
 namespace DescriptiveLayouts
 {
-  PrimitiveInstance::PrimitiveInstance(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveProperty eventTarget,
-                       Converter converter) :
+  PrimitiveInstance::PrimitiveInstance(PrimitiveInstances primitiveInstance, PrimitiveClasses type, Rect relativePosition, PrimitiveTag t, PrimitiveProperty eventTarget,
+                                       Converter converter) :
       primitiveInstance(primitiveInstance),
+      tag(t),
       primitveClass(type),
       relativePosition(relativePosition),
       eventTarget(eventTarget),
