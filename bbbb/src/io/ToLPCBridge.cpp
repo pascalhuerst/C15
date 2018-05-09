@@ -12,4 +12,3 @@ ToLPCBridge::ToLPCBridge() :
 ToLPCBridge::~ToLPCBridge()
 {
 }
-

@@ -6,6 +6,9 @@
 #include <io/network/WebSocketServer.h>
 #include "Boled.h"
 #include "PanelUnit.h"
+#include "PlayPanel.h"
+#include "Ribbon.h"
+#include "LowerRibbon.h"
 
 class Window : public Gtk::Window
 {
@@ -19,8 +22,11 @@ class Window : public Gtk::Window
     WebSocketServer::tMessage m_frameBuffer;
 
     Gtk::VBox m_box;
-    Boled m_boled;
+    Gtk::VBox m_ribbonBox;
+    PlayPanel m_playPanel;
     PanelUnit m_editPanel;
+    Ribbon m_ribbonUp;
+    LowerRibbon m_ribbonDown;
 };
 
 #endif

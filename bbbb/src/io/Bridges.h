@@ -2,6 +2,7 @@
 
 #include "bbbb.h"
 #include "FromButtonsBridge.h"
+#include "ToLPCBridge.h"
 
 class Bridge;
 
@@ -22,7 +23,7 @@ public:
     t* getBridge() {
       for(auto& b: m_bridges) {
         auto raw = b.get();
-        if(dynamic_cast<FromButtonsBridge*>(raw) != nullptr) {
+        if(dynamic_cast<t*>(raw) != nullptr) {
           return static_cast<t*>(raw);
         }
       }
