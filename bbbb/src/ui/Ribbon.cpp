@@ -5,6 +5,7 @@
 #include <io/FromLPCBridge.h>
 
 Ribbon::Ribbon() : m_upperRibbon(true) {
+  set_draw_value(false);
   set_digits(0);
   set_range(0, 16000);
 }
