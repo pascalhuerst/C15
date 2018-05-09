@@ -1,0 +1,67 @@
+styles:
+
+  defaultBar:
+    styles:
+      Color: C103
+    selector:
+      PrimitiveClasses: Bar
+
+  parameterBorder:
+    styles:
+      Color: C43
+      TextAlign: Left
+    selector:
+      UIFocus: Parameters
+      ControlInstances: Slider
+      PrimitiveClasses: Border
+
+  moduleHeaderBackground:
+    styles:
+      Color: C43
+      BackgroundColor: C255
+    selector:
+      ControlClasses: HeaderLabel
+
+  defaultBorder:
+    styles:
+      BorderStyle: Solid
+    selector:
+      PrimitiveClasses: Border
+
+  slider-foreground:
+    styles:
+      Color: C255
+    selector:
+      PrimitiveInstances: Slider
+      PrimitiveClasses: Bar
+
+  defaultText:
+    styles:
+      Color: C255
+      TextAlign: Center
+      BackgroundColor: C43
+      FontSize: 9
+    selector:
+      PrimitiveClasses: Text
+
+  emptyButtonBackground:
+    selector:
+      ControlClasses: EmptyButton
+      PrimitiveInstances: Background
+    styles:
+      Color: C77
+
+  buttonBorder:
+    selector:
+      ControlClasses: EmptyButton
+      PrimitiveInstances: Border
+    styles:
+      Color: C103
+      BorderStyle: Solid 
+
+  buttonBorderCover:
+    selector:
+      PrimitiveInstances: CoverLT
+      PrimitiveClasses: Bar
+    styles:
+      Color: C43

@@ -1,0 +1,52 @@
+layouts:
+  UnmodulateableParameterLayout:
+    Controls:
+      ButtonB:
+        Class: EmptyButton
+        Position:
+          X: 64
+          Y: 52
+      ButtonD:
+        Class: EmptyButton
+        Position:
+          X: 192
+          Y: 52
+      Slider:
+        PrimitiveInstanceEventTarget: Slider
+        Class: Slider128x10
+        EventSource: SliderRange
+        Position:
+          X: 64
+          Y: 26
+      ButtonC:
+        Class: EmptyButton
+        Position:
+          X: 128
+          Y: 52
+      ButtonA:
+        Class: EmptyButton
+        Position:
+          X: 0
+          Y: 52
+      GroupHeader:
+        PrimitiveInstanceEventTarget: Text
+        Class: HeaderLabel
+        EventSource: ParameterGroupName
+        Position:
+          X: 0
+          Y: 0
+      ParameterName:
+        PrimitiveInstanceEventTarget: Text
+        Class: Label128x14
+        EventSource: ParameterDisplayString
+        Position:
+          X: 64
+          Y: 39
+    Selector:
+      UIMode: Select
+      UIFocus: Parameters
+    EventSinks:
+      BUTTON_INC: IncParam
+      ROTARY_MINUS: DecParam
+      BUTTON_DEC: DecParam
+      ROTARY_PLUS: IncParam
