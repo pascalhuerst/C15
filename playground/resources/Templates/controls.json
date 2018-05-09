@@ -63,9 +63,22 @@
                 "Property": "Text"
             }
         },
+	"ParamNameLabel": {
+            "Text": {
+                "Class": "Text",
+                "Rect": {
+                  "X": 0,
+                  "Y": 0,
+                  "W": 128,
+                  "H": 14
+                },
+                "Property": "Text"
+            }
+        },
         "EmptyButton": {
             "Background": {
                 "Class": "Bar",
+		"Tag": "Button",
                 "Rect": {
                   "X": 3,
                   "Y": 2,
@@ -82,8 +95,9 @@
                   "H": 11
                 }
             },
-            "Cover": {
+            "CoverLT": {
                 "Class": "Bar",
+		"Tag": "Cover",
                 "Rect": {
                   "X": 2,
                   "Y": 1,
@@ -91,8 +105,9 @@
                   "H": 1
                 }
             },
-            "Cover": {
+            "CoverRT": {
                 "Class": "Bar",
+		"Tag": "Cover",
                 "Rect": {
                   "X": 59,
                   "Y": 1,
@@ -100,8 +115,9 @@
                   "H": 1
                 }
             },
-            "Cover": {
+            "CoverLB": {
                 "Class": "Bar",
+		"Tag": "Cover",
                 "Rect": {
                   "X": 2,
                   "Y": 11,
@@ -109,8 +125,9 @@
                   "H": 1
                 }
             },
-            "Cover": {
+            "CoverRB": {
                 "Class": "Bar",
+		"Tag": "Cover",
                 "Rect": {
                   "X": 59,
                   "Y": 11,

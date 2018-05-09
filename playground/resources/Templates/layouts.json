@@ -1,5 +1,6 @@
 {
-    "layouts": {
+    "layouts":    {
+	
         "UnmodulateableParameterLayout": {
             "Selector": {
                 "UIFocus": "Parameters",
@@ -9,7 +10,7 @@
                 "GroupHeader": {
                     "Class": "HeaderLabel",
                     "Position": {
-                      "X": 0,
+			"X": 0,
                       "Y": 0
                     },
                     "EventSource": "ParameterGroupName",
@@ -24,13 +25,22 @@
                     "EventSource": "SliderRange",
                     "PrimitiveInstanceEventTarget": "Slider"
                 },
-                "ParameterName": {
+                "ParameterValue": {
                     "Class": "Label128x14",
                     "Position": {
                       "X": 64,
                       "Y": 39
                     },
                     "EventSource": "ParameterDisplayString",
+                    "PrimitiveInstanceEventTarget": "Text"
+                },
+                "ParameterName": {
+                    "Class": "Label128x14",
+                    "Position": {
+                      "X": 64,
+                      "Y": 10
+                    },
+                    "EventSource": "ParameterName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
                 "ButtonA": {
@@ -69,5 +79,21 @@
                 "ROTARY_MINUS": "DecParam"
             }
         }
-    } 
+    },
+    "Test":	{
+	"Selector":	    {
+	    "UIFocus": "Presets"
+	},
+	"Controls": {
+	    "GroupHeader": {
+		"Class": "HeaderLabel",
+		"Position": {
+		    "X": 0,
+		    "Y": 0
+		},
+		"EventSource": "ParameterGroupName",
+		"PrimitiveInstanceEventTarget": "Text"
+	    }
+        }
+    }
 }
