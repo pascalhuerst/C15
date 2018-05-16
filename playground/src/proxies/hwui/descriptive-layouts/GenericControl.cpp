@@ -41,7 +41,7 @@ namespace DescriptiveLayouts
       rect.setWidth(maxX + 1);
       rect.setHeight(maxY + 1);
       setPosition(rect);
-    } catch(...) {
+    } catch(std::exception& e) {
       DebugLevel::error("Could not add Primitives! Control: " + m_prototype.controlInstance);
     }
   }

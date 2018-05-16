@@ -10,7 +10,7 @@ namespace DescriptiveLayouts
       m_primitive(e)
   {
     if(!m_primitive.defaultText.empty()) {
-      setProperty(PrimitiveProperty::Text, m_primitive.defaultText);
+      setText(m_primitive.defaultText, 0);
     }
   }
 

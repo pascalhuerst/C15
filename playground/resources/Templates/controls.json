@@ -72,7 +72,7 @@
               "W": 128,
               "H": 14
             },
-            "Default": "Test-Text",
+            "Default": "Test-Text,2",
             "Property": "Text"
           }
         },

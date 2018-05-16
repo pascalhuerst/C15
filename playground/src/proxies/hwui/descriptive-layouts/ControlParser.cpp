@@ -44,40 +44,33 @@ namespace DescriptiveLayouts
       auto key = primitive.key();
       auto value = primitive.value();
 
-      try {
-        auto primClass = getFromJson<PrimitiveClasses>(value, "Class", [](std::string u){return toPrimitiveClasses(u);});
-        auto prop = getFromJson<PrimitiveProperty>(value, "Property", [](std::string u){return toPrimitiveProperty(u);});
-        auto tag = getFromJson<PrimitiveTag>(value, "Tag");
-        auto defaultText = getFromJson<DefaultText>(value, "Default");
-        auto rect = parseRect(value.at("Rect"));
-        lP.emplace_back(key, primClass, rect, tag, defaultText, prop);
-      } catch(std::runtime_error e) {
-        DebugLevel::warning("Could not parse Control!\n"s + e.what());
-      }
+      auto primClass = getFromJson<PrimitiveClasses>(value, "Class", [](std::string u){return toPrimitiveClasses(u);});
+      auto prop = getFromJson<PrimitiveProperty>(value, "Property", [](std::string u){return toPrimitiveProperty(u);});
+      auto tag = getFromJson<PrimitiveTag>(value, "Tag");
+      auto defaultText = getFromJson<DefaultText>(value, "Default");
+      auto rect = parseRect(value.at("Rect"));
+      lP.emplace_back(key, primClass, rect, tag, defaultText, prop);
+
     }
     return lP;
   }
 
-  void createControls(json controlText)
+  std::list<ControlClass> createControls(json controlText)
   {
+    std::list<ControlClass> l_cc;
+
     for(json::iterator critera = controlText.begin(); critera != controlText.end(); ++critera)
     {
-      auto name = critera.key();
-      auto primitiveList = critera.value();
-      DebugLevel::info("register control", name);
-      ControlRegistry::get().registerControl(ControlClass(name, createPrimitives(primitiveList)));
+      l_cc.push_back(ControlClass(critera.key(), createPrimitives(critera.value())));
     }
+
+    return l_cc;
   }
 
   void registerControls(json j)
   {
-    try
-    {
-      createControls(j);
-    }
-    catch(std::exception e)
-    {
-      DebugLevel::error(to_string("JSON Parsing Error: ") + e.what());
+    for(auto& c: createControls(j)) {
+      ControlRegistry::get().registerControl(std::move(c));
     }
   }
 
