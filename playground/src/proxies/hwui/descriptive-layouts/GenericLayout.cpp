@@ -22,8 +22,11 @@ namespace DescriptiveLayouts
     for(auto &c : m_prototype.controls)
     {
       auto control = c.instantiate();
-      control->style(m_prototype.id);
-      control->connect();
+      if(auto g = dynamic_cast<GenericControl*>(control))
+      {
+        g->style(m_prototype.id);
+        g->connect();
+      }
       addControl(control);
     }
   }
