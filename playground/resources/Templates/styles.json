@@ -37,6 +37,17 @@
 				"TextAlign": "Center"
 			}
 		},
+		"test-text-3": {
+			"selector": {
+				"PrimitiveInstances": "TestLabel",
+				"ControlInstances": "TestLabel"
+			},
+			"styles": {
+				"FontSize": 12,
+				"BackgroundColor": "C255",
+				"Color": "C103"
+			}
+		},
 		"moduleHeaderBackground": {
 			"selector": {
 				"ControlClasses": "HeaderLabel"

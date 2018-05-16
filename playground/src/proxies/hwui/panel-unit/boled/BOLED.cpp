@@ -15,6 +15,7 @@
 #include <proxies/hwui/panel-unit/boled/undo/UndoLayout.h>
 #include <proxies/hwui/descriptive-layouts/LayoutFactory.h>
 #include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
+#include <proxies/hwui/debug-oled/DebugLayout.h>
 
 BOLED::BOLED () :
     OLEDProxy (Rect (0, 0, 256, 64))
@@ -37,44 +38,12 @@ void BOLED::bruteForce()
   setupFocusAndMode(Application::get().getHWUI()->getFocusAndMode());
 }
 
-void BOLED::setupFocusAndMode (FocusAndMode focusAndMode)
-{
+void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
   try {
-    reset (DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
-    return;
-  } catch(...) {
-    DebugLevel::error("Could not find Layout! Going with old Layout-Switch-Case!");
-
-    switch (focusAndMode.focus)
-    {
-      case UIFocus::Parameters:
-        setupParameterScreen (focusAndMode);
-        break;
-
-      case UIFocus::Presets:
-        setupPresetScreen (focusAndMode);
-        break;
-
-      case UIFocus::Banks:
-        setupBankScreen (focusAndMode);
-        break;
-
-      case UIFocus::Sound:
-        setupSoundScreen (focusAndMode);
-        break;
-
-      case UIFocus::Setup:
-        reset (new SetupLayout (focusAndMode));
-        break;
-
-      default:
-        g_assert_not_reached()
-                ;
-        break;
-    }
+    reset(DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
+  } catch (std::exception e) {
+    reset(new DebugLayout(e));
   }
-
-
 }
 
 void BOLED::setupSoundScreen (FocusAndMode focusAndMode)

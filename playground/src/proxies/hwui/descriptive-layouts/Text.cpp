@@ -9,6 +9,9 @@ namespace DescriptiveLayouts
       super(e.relativePosition),
       m_primitive(e)
   {
+    if(!m_primitive.defaultText.empty()) {
+      setText(m_primitive.defaultText, 0);
+    }
   }
 
   Text::~Text()
