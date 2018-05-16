@@ -43,19 +43,19 @@ void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
   try {
     reset(DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
   } catch (nlohmann::json::out_of_range &e) {
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
-  } catch (std::runtime_error &e) {
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::out_of_range\n"s + e.what()));
   } catch (nlohmann::json::parse_error &e) {
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::parse_error:\n"s + e.what()));
   } catch (std::out_of_range &e) {
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("std::out_of_range\n "s + e.what()));
+  } catch (std::runtime_error &e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("runtime_error\n"s + e.what()));
   } catch(std::exception& e) {
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("Uncaught Exception of Type: "s
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("Uncaught Exception of Type:\n"s
     + e.what()));
   } catch(...) {
     auto description = ExceptionTools::handle_eptr(std::current_exception());
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(description));
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("...\n"s + description));
   }
 }
 

@@ -74,7 +74,7 @@ namespace EnumTools
     static auto map = EnumTools::reverse(EnumTools::createMap<enumName, type, Values>(#enums)); \
     auto it = map.find(e); \
     if(it != map.end()) return it->second;\
-    DebugLevel::error("Could not find value", e, "in enum map for", #enumName); \
+    throw std::runtime_error("Could not find value"s + e + "in enum map for"s + std::to_string(#enumName)); \
     return (enumName)0; \
   } \
   inline std::string toString(const enumName &e) \
@@ -83,7 +83,7 @@ namespace EnumTools
     static auto map = EnumTools::createMap<enumName, type, Values>(#enums); \
     auto it = map.find(e); \
     if(it != map.end()) return it->second;\
-    DebugLevel::error("Could not find value", (int)e, "in enum map for", #enumName); \
+    throw std::runtime_error("Could not find value"s + std::to_string((int)e) + "in enum map for"s + std::to_string(#enumName)); \
     return ""; \
   }
 

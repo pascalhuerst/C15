@@ -44,8 +44,6 @@ void LayoutFolderMonitor::bruteForce()
   DescriptiveLayouts::StyleSheet::get().clear();
 
   auto enumerator = m_file->enumerate_children();
-
-
   try {
 
     //throw std::runtime_error("TEST!");
@@ -75,13 +73,13 @@ void LayoutFolderMonitor::bruteForce()
   {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
-  catch(std::runtime_error& e) {
+  catch (std::out_of_range &e) {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
   catch(nlohmann::json::parse_error& e) {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
-  catch (std::out_of_range &e) {
+  catch(std::runtime_error& e) {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
   catch(std::exception& e) {
@@ -91,6 +89,8 @@ void LayoutFolderMonitor::bruteForce()
     auto description = ExceptionTools::handle_eptr(std::current_exception());
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(description));
   }
+
+
 }
 
 sigc::connection LayoutFolderMonitor::onChange(std::function<void()> cb)
