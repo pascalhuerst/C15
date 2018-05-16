@@ -34,12 +34,8 @@
 		"EditLabel": {
 			"Text": {
 				"Class": "Text",
-				"Rect": {
-					"X": 0,
-					"Y": 0,
-					"W": 48,
-					"H": 12
-				}
+				"Rect": "0,0,48,12",
+				"Default": "Edit"
 			}
 		},
 		"Label128x14": {
