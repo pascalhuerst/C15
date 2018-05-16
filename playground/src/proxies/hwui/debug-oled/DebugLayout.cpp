@@ -4,11 +4,7 @@
 
 DebugLayout::DebugLayout(Glib::ustring e) {
   super();
-
-  DebugLevel::warning("Installing Debug Layout!\n" + e);
-
-  addControl(new Label("Debug!", Rect(0, 0, 125, 10)));
-
   auto text = addControl(new MultiLineLabel(e));
-  text->setPosition(Rect(0, 10, 125, 90));
+  auto pos = text->getPosition();
+  text->setPosition(Rect(0, 0, 250, 100));
 }
