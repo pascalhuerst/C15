@@ -117,16 +117,16 @@ namespace DescriptiveLayouts
 
   void importLayout(const std::string &fileName)
   {
-    try
+    DebugLevel::info("importing layouts from file", fileName);
+    std::ifstream i(fileName);
+    json j;
+    i >> j;
+
+    auto it = j.find("layouts");
+    if(it != j.end())
     {
-      DebugLevel::info("importing layouts from file", fileName);
-      std::ifstream i(fileName);
-      json j;
-      i >> j;
-      parseLayout(j.at("layouts"));
-    }
-    catch(...)
-    {
+      json layouts = *it;
+      parseLayout(layouts);
     }
   }
 

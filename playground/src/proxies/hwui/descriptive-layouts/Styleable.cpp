@@ -36,16 +36,7 @@ namespace DescriptiveLayouts
 
   int Styleable::getStyleValue(StyleKey s) const
   {
-    try
-    {
       return m_currentStyle.map.at(s);
-    }
-    catch(...)
-    {
-      const PrimitiveInstance &p = getPrimitive();
-      DebugLevel::error("Have to define a default for key", toString(s), " for primitive class", toString(p.primitveClass));
-      return 0;
-    }
   }
 
 }

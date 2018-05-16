@@ -1,11 +1,11 @@
 #pragma once
 
 #include <proxies/hwui/DFBLayout.h>
+#include <tools/json.h>
 
 class DebugLayout : public DFBLayout {
 protected:
-    std::exception m_exception;
     using super = DFBLayout;
 public:
-    DebugLayout(std::exception e);
+    explicit DebugLayout(Glib::ustring e);
 };
