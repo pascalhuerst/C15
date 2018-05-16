@@ -13,31 +13,49 @@ namespace DescriptiveLayouts
   {
     std::list<Selector> selectors;
 
-    try {
+    try
+    {
       selectors.push_back(toUIFocus(selector.at("UIFocus")));
-    } catch(...) {
+    }
+    catch(...)
+    {
       selectors.push_back(UIFocus::Any);
     }
-    try {
+    try
+    {
       selectors.push_back(toUIMode(selector.at("UIMode")));
-    } catch(...) {
+    }
+    catch(...)
+    {
       selectors.push_back(UIMode::Any);
     }
-    try {
+    try
+    {
       selectors.push_back(toUIFocusAndModeDetail(selector.at("UIFocusAndModeDetail")));
-    } catch(...) {
+    }
+    catch(...)
+    {
       selectors.push_back(UIFocusAndModeDetail::Any);
     }
 
     return selectors;
   }
 
-  Point toPoint(json control)
+  Point toPoint(json pt)
   {
-    auto x = control.at("X");
-    auto y = control.at("Y");
-
-    return Point(x, y);
+    try
+    {
+      std::string compact = pt;
+      std::vector<std::string> splits;
+      boost::split(splits, compact, boost::is_any_of(","));
+      return Point(std::stoi(splits[0]), std::stoi(splits[1]));
+    }
+    catch(...)
+    {
+      auto x = pt.at("X");
+      auto y = pt.at("Y");
+      return Point(x, y);
+    }
   }
 
   LayoutClass::ControlInstanceList toControlInstanceList(json j)
@@ -65,7 +83,6 @@ namespace DescriptiveLayouts
     }
     return l;
   }
-
 
   LayoutClass::EventSinkList toEventSinkList(json j)
   {

@@ -5,7 +5,8 @@
 				"PrimitiveClasses": "Border"
 			},
 			"styles": {
-			    "BorderStyle": "Solid"
+				"BorderStyle": "Solid",
+				"Color": "C128"
 			}
 		},
 		"defaultBar": {
@@ -16,20 +17,17 @@
 				"Color": "C103"
 			}
 		},
-		"defaultText": {
+		"centerMark": {
 			"selector": {
-				"PrimitiveClasses": "Text"
-			},
-			"styles": {
-				"FontSize": 9,
-				"BackgroundColor": "C43",
-				"Color": "C255",
-				"TextAlign": "Center"
+				"PrimitiveClasses": "Bar",
+				"PrimitiveInstances": "CenterMark"
+			}, 
+			"styles": { 
+				"Color": "C255"
 			}
 		},
-		"defaultText2": {
+		"defaultText": {
 			"selector": {
-				"ControlInstances": "ParameterName",
 				"PrimitiveClasses": "Text"
 			},
 			"styles": {
@@ -50,42 +48,62 @@
 		},
 		"emptyButtonBorder": {
 			"selector": {
-			    "UIFocus": "Parameters",
-			    "ControlClasses": "EmptyButton",
-			    "PrimitiveClasses": "Border"
+				"UIFocus": "Parameters",
+				"ControlClasses": "EmptyButton",
+				"PrimitiveClasses": "Border"
 			},
 			"styles": {
-			    "Color": "C103",
-			    "TextAlign": "Left"
+				"Color": "C103",
+				"TextAlign": "Left"
 			}
 		},
-	    "emptyButtonBG": {
-		"selector": {
-		    "PrimitiveClasses": "Bar",
-		    "Tag": "Button"
+		"emptyButtonBG": {
+			"selector": {
+				"PrimitiveClasses": "Bar",
+				"Tag": "Button"
+			},
+			"styles": {
+				"Color": "C77"
+			}
 		},
-		"styles": {
-		    "Color": "C77"
-		}
-	    },
-	    "buttonCover": {
-			  "selector": {
-			      "UIFocus": "Parameters",
-			      "Tag": "Cover",
-			      "PrimitiveClasses": "Bar"
-			  },
-		"styles": {
-		    "Color": "C43",
-		    "TextAlign": "Left"
-		}
-	    },
-	    "slider-foreground": {
-		"selector": {
-		    "PrimitiveInstances": "Slider",
-		    "PrimitiveClasses": "Bar"
+		"buttonCover": {
+			"selector": {
+				"UIFocus": "Parameters",
+				"Tag": "Cover",
+				"PrimitiveClasses": "Bar"
+			},
+			"styles": {
+				"Color": "C43",
+				"TextAlign": "Left"
+			}
+		},
+		"slider-foreground": {
+			"selector": {
+				"PrimitiveInstances": "Slider",
+				"PrimitiveClasses": "Bar"
 			},
 			"styles": {
 				"Color": "C255"
+			}
+		},
+		"EditLabel-Colors": {
+			"selector": {
+				"ControlClasses": "EditLabel"
+			},
+			"styles": {
+				"BackgroundColor": "C255",
+				"Color": "C43"
+			}
+		},
+		"ParamNameLabel-Selected": {
+			"selector": {
+				"ControlClasses": "ParameterNameLabel"
+			},
+			"styles": { 
+				"FontSize": 9,
+				"BackgroundColor": "C43",
+				"Color": "C255",
+				"TextAlign": "Center"
 			}
 		}
 	}

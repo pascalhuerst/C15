@@ -37,6 +37,16 @@ namespace DescriptiveLayouts
       if(auto p = eb->getSelected())
       p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
+
+    registerEvent(EventSinks::SwitchToEditMode, [eb, hwui]()
+    {
+      hwui->undoableSetFocusAndMode(UIMode::Edit);
+    });
+
+    registerEvent(EventSinks::SwitchToSelectMode, [eb, hwui]()
+    {
+      hwui->undoableSetFocusAndMode(UIMode::Select);
+    });
   }
 
   void EventSinkBroker::registerEvent(EventSinks sink, tAction action)

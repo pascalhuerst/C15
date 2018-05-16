@@ -7,7 +7,7 @@
 
 namespace DescriptiveLayouts
 {
-  ENUM(EventSinks, uint8_t, IncParam, DecParam);
+  ENUM(EventSinks, uint8_t, IncParam, DecParam, SwitchToEditMode, SwitchToSelectMode);
 
   struct EventSinkMapping
   {

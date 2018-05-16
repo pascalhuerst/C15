@@ -8,6 +8,7 @@
 #include <tuple>
 #include <tools/json.h>
 #include <device-settings/DebugLevel.h>
+#include <boost/algorithm/string.hpp>
 
 using json = nlohmann::json;
 
@@ -15,12 +16,21 @@ namespace DescriptiveLayouts
 {
   Rect parseRect(json rect)
   {
-    auto x = rect.at("X");
-    auto y = rect.at("Y");
-    auto w = rect.at("W");
-    auto h = rect.at("H");
-
-    return Rect(x,y,w,h);
+    try
+    {
+      std::string compact = rect;
+      std::vector<std::string> splits;
+      boost::split(splits, compact, boost::is_any_of(","));
+      return Rect(std::stoi(splits[0]), std::stoi(splits[1]), std::stoi(splits[2]), std::stoi(splits[3]));
+    }
+    catch(...)
+    {
+      auto x = rect.at("X");
+      auto y = rect.at("Y");
+      auto w = rect.at("W");
+      auto h = rect.at("H");
+      return Rect(x, y, w, h);
+    }
   }
 
   std::list<PrimitiveInstance> createPrimitives(json primitives)

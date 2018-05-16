@@ -1,5 +1,6 @@
 #include "ControlInstance.h"
 #include "GenericControl.h"
+#include "proxies/hwui/panel-unit/boled/parameter-screens/controls/ParameterEditButtonMenu.h"
 
 namespace DescriptiveLayouts
 {
@@ -13,8 +14,12 @@ namespace DescriptiveLayouts
   {
   }
 
-  GenericControl* ControlInstance::instantiate() const
+  Control* ControlInstance::instantiate() const
   {
+    if(controlClass == "ParameterEditButtonMenu")
+    {
+      return new ParameterEditButtonMenu(Rect(position.getX(), position.getY(), 64, 128));
+    }
     return new GenericControl(*this);
   }
 }
