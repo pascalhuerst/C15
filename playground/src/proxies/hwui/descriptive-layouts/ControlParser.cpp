@@ -23,29 +23,37 @@ namespace DescriptiveLayouts
     return Rect(x,y,w,h);
   }
 
+   template <class T>
+   T getFromJson(json j, std::string key, std::function<T(std::string)> converter = nullptr) {
+     T property;
+     auto itProp = j.find(key);
+
+     if(itProp != j.end()) {
+       if(converter != nullptr)
+         return converter(*itProp);
+       else
+         return *itProp;
+     }
+     return T{};
+   }
+
   std::list<PrimitiveInstance> createPrimitives(json primitives)
   {
     std::list<PrimitiveInstance> lP;
-    for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive)
-    {
+    for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive) {
       auto key = primitive.key();
       auto value = primitive.value();
 
-      DebugLevel::info("add primitve", key);
-
-      PrimitiveProperty prop = PrimitiveProperty::None;
-      auto itProp = value.find("Property");
-
-      if(itProp != value.end())
-        prop = toPrimitiveProperty(*itProp);
-
-      PrimitiveTag tag = PrimitiveTag::None;
-      auto itTag = value.find("Tag");
-
-      if(itTag != value.end())
-        tag = *itTag;
-
-      lP.emplace_back(key, toPrimitiveClasses(value.at("Class")), parseRect(value.at("Rect")), tag, prop);
+      try {
+        auto primClass = getFromJson<PrimitiveClasses>(value, "Class", [](std::string u){return toPrimitiveClasses(u);});
+        auto prop = getFromJson<PrimitiveProperty>(value, "Property", [](std::string u){return toPrimitiveProperty(u);});
+        auto tag = getFromJson<PrimitiveTag>(value, "Tag");
+        auto defaultText = getFromJson<DefaultText>(value, "Default");
+        auto rect = parseRect(value.at("Rect"));
+        lP.emplace_back(key, primClass, rect, tag, defaultText, prop);
+      } catch(std::runtime_error e) {
+        DebugLevel::warning("Could not parse Control!\n"s + e.what());
+      }
     }
     return lP;
   }

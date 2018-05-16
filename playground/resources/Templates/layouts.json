@@ -43,6 +43,13 @@
                     "EventSource": "ParameterName",
                     "PrimitiveInstanceEventTarget": "Text"
                 },
+                "testText": {
+                  "Class": "TestLabel",
+                  "Position": {
+                    "X": 40,
+                    "Y": 30
+                  }
+                },
                 "ButtonA": {
                     "Class": "EmptyButton",
                     "Position": {

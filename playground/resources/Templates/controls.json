@@ -63,7 +63,20 @@
                 "Property": "Text"
             }
         },
-	"ParamNameLabel": {
+        "TestLabel": {
+          "Text": {
+            "Class": "Text",
+            "Rect": {
+              "X": 0,
+              "Y": 0,
+              "W": 128,
+              "H": 14
+            },
+            "Default": "Test-Text",
+            "Property": "Text"
+          }
+        },
+        "ParamNameLabel": {
             "Text": {
                 "Class": "Text",
                 "Rect": {
