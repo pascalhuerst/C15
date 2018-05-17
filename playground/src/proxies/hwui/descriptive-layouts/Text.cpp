@@ -1,4 +1,5 @@
 #include <proxies/hwui/FrameBuffer.h>
+#include <tools/ExceptionTools.h>
 #include "Text.h"
 #include "PrimitiveInstance.h"
 
@@ -47,7 +48,7 @@ namespace DescriptiveLayouts
       case StyleValues::Alignment::Right:
         return Font::Justification::Right;
     }
-    throw std::runtime_error("unkown text align style");
+    throw ExceptionTools::TemplateException("unkown text align style for key: " + getStyleValue(StyleKey::TextAlign), "__LINE__ __FILE__");
   }
 
   int Text::getFontHeight() const

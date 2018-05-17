@@ -3,6 +3,7 @@
 #include "Application.h"
 #include <proxies/hwui/HWUI.h>
 #include <device-settings/DebugLevel.h>
+#include <proxies/hwui/debug-oled/DebugLayout.h>
 
 namespace DescriptiveLayouts
 {
@@ -20,7 +21,7 @@ namespace DescriptiveLayouts
     const StyleSheet s = StyleSheet::get();
     auto fam = Application::get().getHWUI()->getFocusAndMode();
     const PrimitiveInstance &p = getPrimitive();
-    DebugLevel::info("Styling primitive", p.primitiveInstance, "of class", toString(p.primitveClass));
+    DebugLevel::info("Styling primitive ", p.primitiveInstance, "of class ", toString(p.primitveClass));
 
     s.applyStyle(fam.focus, fam.mode, fam.detail, li, cc, ci, p.primitveClass, p.tag, p.primitiveInstance, this);
   }
@@ -34,9 +35,17 @@ namespace DescriptiveLayouts
     }
   }
 
+  int getDefaultStyleValueForKey(StyleKey s) {
+    return 0;
+  }
+
   int Styleable::getStyleValue(StyleKey s) const
   {
-      return m_currentStyle.map.at(s);
+    auto it = m_currentStyle.map.find(s);
+    if(it != m_currentStyle.map.end()) {
+      return it->second;
+    }
+    return getDefaultStyleValueForKey(s);
   }
 
 }

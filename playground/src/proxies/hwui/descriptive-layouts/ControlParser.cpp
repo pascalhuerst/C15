@@ -9,6 +9,7 @@
 #include <tools/json.h>
 #include <device-settings/DebugLevel.h>
 #include <boost/algorithm/string.hpp>
+#include <tools/ExceptionTools.h>
 
 using json = nlohmann::json;
 
@@ -16,14 +17,14 @@ namespace DescriptiveLayouts
 {
   Rect parseRect(json rect)
   {
-    try
+    if(rect.is_string())
     {
       std::string compact = rect;
       std::vector<std::string> splits;
       boost::split(splits, compact, boost::is_any_of(","));
       return Rect(std::stoi(splits[0]), std::stoi(splits[1]), std::stoi(splits[2]), std::stoi(splits[3]));
     }
-    catch(...)
+    else
     {
       auto x = rect.at("X");
       auto y = rect.at("Y");
@@ -33,33 +34,47 @@ namespace DescriptiveLayouts
     }
   }
 
-   template <class T>
-   T getFromJson(json j, std::string key, std::function<T(std::string)> converter = nullptr) {
-     T property;
-     auto itProp = j.find(key);
+  Rect parseRect(json value, const std::string &key)
+  {
+    try
+    {
+      return parseRect(value.at("Rect"));
+    }
+    catch(...)
+    {
+      DebugLevel::throwException("No rect defined for primitive", key);
+      return { 0, 0, 0, 0};
+    }
+  }
 
-     if(itProp != j.end()) {
-       if(converter != nullptr)
-         return converter(*itProp);
-       else
-         return *itProp;
-     }
-     return T{};
-   }
+  template<class T>
+    T getFromJson(json j, std::string key, std::function<T(std::string)> converter = nullptr)
+    {
+      auto itProp = j.find(key);
+      if(itProp != j.end())
+      {
+        if(converter)
+          return converter(*itProp);
+        else
+          return (T) *itProp;
+      }
+      return T { };
+    }
 
   std::list<PrimitiveInstance> createPrimitives(json primitives)
   {
     std::list<PrimitiveInstance> lP;
-    for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive) {
+    for(json::iterator primitive = primitives.begin(); primitive != primitives.end(); ++primitive)
+    {
       auto key = primitive.key();
       auto value = primitive.value();
 
-      auto primClass = getFromJson<PrimitiveClasses>(value, "Class", [](std::string u){return toPrimitiveClasses(u);});
+      auto primClass = getFromJson<PrimitiveClasses>(value, "Class", toPrimitiveClasses);
+      auto prop = getFromJson<PrimitiveProperty>(value, "Property", toPrimitiveProperty);
       auto tag = getFromJson<PrimitiveTag>(value, "Tag");
       auto defaultText = getFromJson<DefaultText>(value, "Default");
-      auto rect = parseRect(value.at("Rect"));
+      auto rect = parseRect(value, key);
       lP.emplace_back(key, primClass, rect, tag, defaultText);
-
     }
     return lP;
   }
@@ -78,7 +93,8 @@ namespace DescriptiveLayouts
 
   void registerControls(json j)
   {
-    for(auto& c: createControls(j)) {
+    for(auto& c : createControls(j))
+    {
       ControlRegistry::get().registerControl(std::move(c));
     }
   }

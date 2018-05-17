@@ -91,7 +91,7 @@ namespace DescriptiveLayouts
 
   StyleMap parseStylePairs(json styles)
   {
-    StyleMap theStyles;
+    StyleMap theStyles{};
     for(json::iterator style = styles.begin(); style != styles.end(); ++style)
     {
       auto styleKey = toStyleKey(style.key());
