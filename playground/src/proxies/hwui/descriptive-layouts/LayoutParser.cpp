@@ -55,6 +55,37 @@ namespace DescriptiveLayouts
     }
   }
 
+  ControlInstance::EventConnection parseEventConnection(const std::string &srcString, const std::string &instString, const std::string &propString)
+  {
+    auto src = toEventSources(boost::trim_copy(srcString));
+    auto inst = boost::trim_copy(instString);
+    auto prop = toPrimitiveProperty(boost::trim_copy(propString));
+    return { src, inst, prop };
+  }
+
+  ControlInstance::EventConnection stringToEventConnection(const std::string& s)
+  {
+    static std::regex reg("(.*)=>(.*)\\[(.*)\\]");
+    std::smatch m;
+
+    if(std::regex_search(s, m, reg))
+    {
+      try
+      {
+        return parseEventConnection(m[1], m[2], m[3]);
+      }
+      catch(const std::exception& e)
+      {
+        DebugLevel::throwException("Could not parse 'Events' property:", s, "(", e.what(), ")");
+      }
+    }
+    else
+    {
+      DebugLevel::throwException("Could not parse 'Events' property:", s);
+    }
+    return {};
+  }
+
   ControlInstance::EventConnections parseEventConnections(json j)
   {
     ControlInstance::EventConnections ret;
@@ -65,29 +96,7 @@ namespace DescriptiveLayouts
       std::string str = *it;
       std::list<std::string> connections;
       boost::split(connections, str, boost::is_any_of(","));
-
-      static std::regex reg("(.*)=>(.*)\\[(.*)\\]");
-
-      for(auto s : connections)
-      {
-        std::smatch m;
-
-        while(std::regex_search(s, m, reg))
-        {
-          if(m.size() >= 4)
-          {
-            std::string srcString = m[1];
-            std::string instString = m[2];
-            std::string propString = m[3];
-            auto src = toEventSources(boost::trim_copy(srcString));
-            auto inst = boost::trim_copy(instString);
-            auto prop = toPrimitiveProperty(boost::trim_copy(propString));
-            ret.push_back( { src, inst, prop });
-
-          }
-          s = m.suffix().str();
-        }
-      }
+      std::transform(connections.begin(),  connections.end(), std::back_inserter(ret), stringToEventConnection);
     }
     return ret;
   }

@@ -14,7 +14,7 @@
 				"Slider": {
 					"Class": "BigSlider",
 					"Position": "77,24",
-					"Events": "SliderRange => Slider[Range], IsBipolar <= CenterMark[Visibility]"
+					"Events": "SliderRange => Slider[Range], IsBipolar => CenterMark[Visibility]"
 				},
 				"ParameterValue": {
 					"Class": "ParameterValueLabel",
