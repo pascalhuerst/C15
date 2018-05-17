@@ -56,13 +56,15 @@ namespace DescriptiveLayouts
     }
   }
 
+
   std::string removeSpaces(std::string str) {
     str.erase(remove_if(str.begin(), str.end(), ::isspace), str.end());
     return str;
   }
 
   std::string removeLastCharacter(std::string str) {
-    return str.substr(0, str.size()-1);
+    str.pop_back();
+    return str;
   }
 
   ControlInstance::EventConnections parseEventConnections(json j)
