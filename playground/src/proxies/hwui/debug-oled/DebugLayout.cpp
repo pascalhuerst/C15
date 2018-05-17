@@ -1,7 +1,10 @@
 #include <proxies/hwui/controls/Label.h>
+#include <proxies/hwui/panel-unit/boled/parameter-screens/controls/MultiLineLabel.h>
 #include "DebugLayout.h"
 
-DebugLayout::DebugLayout(std::exception e) : m_exception(e) {
+DebugLayout::DebugLayout(Glib::ustring e) {
   super();
-  addControl(new Label(e.what(), Rect(0,0,124,14)));
+  auto text = addControl(new MultiLineLabel(e));
+  auto pos = text->getPosition();
+  text->setPosition(Rect(0, 0, 250, 100));
 }

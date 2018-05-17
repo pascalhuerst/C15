@@ -16,6 +16,7 @@
 #include <proxies/hwui/descriptive-layouts/LayoutFactory.h>
 #include <proxies/hwui/descriptive-layouts/LayoutFolderMonitor.h>
 #include <proxies/hwui/debug-oled/DebugLayout.h>
+#include <tools/ExceptionTools.h>
 
 BOLED::BOLED () :
     OLEDProxy (Rect (0, 0, 256, 64))
@@ -41,8 +42,20 @@ void BOLED::bruteForce()
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
   try {
     reset(DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
-  } catch (std::exception e) {
-    reset(new DebugLayout(e));
+  } catch (nlohmann::json::out_of_range &e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::out_of_range\n"s + e.what()));
+  } catch (nlohmann::json::parse_error &e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::parse_error:\n"s + e.what()));
+  } catch (std::out_of_range &e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("std::out_of_range\n "s + e.what()));
+  } catch (std::runtime_error &e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("runtime_error\n"s + e.what()));
+  } catch(std::exception& e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("Uncaught Exception of Type:\n"s
+    + e.what()));
+  } catch(...) {
+    auto description = ExceptionTools::handle_eptr(std::current_exception());
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("...\n"s + description));
   }
 }
 

@@ -120,34 +120,25 @@ namespace DescriptiveLayouts
 
   void registerStyle(std::string name, json style)
   {
-    try
-    {
-      auto selector = parseSelector(style.at("selector"));
-      auto styles = parseStylePairs(style.at("styles"));
-      styles.name = name;
-      StyleSheet::get().registerStyle(selector, styles);
-    }
-    catch(std::exception e)
-    {
-      DebugLevel::error(to_string("JSON Parse Error: ") + e.what());
-    }
+    auto selector = parseSelector(style.at("selector"));
+    auto styles = parseStylePairs(style.at("styles"));
+    styles.name = name;
+    StyleSheet::get().registerStyle(selector, styles);
   }
 
   void importStyles(const std::string &fileName)
   {
-    try
-    {
-      DebugLevel::info("importing styles from file", fileName);
-      std::ifstream i(fileName);
-      json j;
-      i >> j;
-      auto styles = j.at("styles");
+    DebugLevel::info("importing styles from file", fileName);
+    std::ifstream i(fileName);
+    json j;
+    i >> j;
 
+    auto it = j.find("styles");
+    if(it != j.end())
+    {
+      json styles = *it;
       for(json::iterator style = styles.begin(); style != styles.end(); ++style)
         registerStyle(style.key(), style.value());
-    }
-    catch(...)
-    {
     }
   }
 

@@ -45,14 +45,14 @@ namespace DescriptiveLayouts
 
   Point toPoint(json pt)
   {
-    try
+    if(pt.is_string())
     {
       std::string compact = pt;
       std::vector<std::string> splits;
       boost::split(splits, compact, boost::is_any_of(","));
       return Point(std::stoi(splits[0]), std::stoi(splits[1]));
     }
-    catch(...)
+    else
     {
       auto x = pt.at("X");
       auto y = pt.at("Y");
@@ -63,10 +63,11 @@ namespace DescriptiveLayouts
   ControlInstance::EventConnections parseEventConnections(json j)
   {
     ControlInstance::EventConnections ret;
+    auto it = j.find("Events");
 
-    try
+    if(it != j.end())
     {
-      std::string str = j.at("Events");
+      std::string str = *it;
       std::list<std::string> connections;
       boost::split(connections, str, boost::is_any_of(","));
 
@@ -86,16 +87,12 @@ namespace DescriptiveLayouts
             auto src = toEventSources(boost::trim_copy(srcString));
             auto inst = boost::trim_copy(instString);
             auto prop = toPrimitiveProperty(boost::trim_copy(propString));
-            ret.push_back({src, inst, prop});
+            ret.push_back( { src, inst, prop });
 
           }
           s = m.suffix().str();
         }
-
       }
-    }
-    catch(...)
-    {
     }
     return ret;
   }
@@ -148,16 +145,16 @@ namespace DescriptiveLayouts
 
   void importLayout(const std::string &fileName)
   {
-    try
+    DebugLevel::info("importing layouts from file", fileName);
+    std::ifstream i(fileName);
+    json j;
+    i >> j;
+
+    auto it = j.find("layouts");
+    if(it != j.end())
     {
-      DebugLevel::info("importing layouts from file", fileName);
-      std::ifstream i(fileName);
-      json j;
-      i >> j;
-      parseLayout(j.at("layouts"));
-    }
-    catch(...)
-    {
+      json layouts = *it;
+      parseLayout(layouts);
     }
   }
 

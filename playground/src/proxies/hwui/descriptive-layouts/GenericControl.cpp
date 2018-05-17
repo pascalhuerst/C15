@@ -28,25 +28,18 @@ namespace DescriptiveLayouts
     int maxX = 0;
     int maxY = 0;
 
-    try
-    {
-      const ControlClass& controlClass = ControlRegistry::get().find(m_prototype.controlClass);
+    const ControlClass& controlClass = ControlRegistry::get().find(m_prototype.controlClass);
 
-      for(auto &p : controlClass.primitves)
-      {
-        auto c = addControl(p.instantiate());
-        maxX = std::max(maxX, c->getPosition().getRight());
-        maxY = std::max(maxY, c->getPosition().getBottom());
-      }
-
-      rect.setWidth(maxX + 1);
-      rect.setHeight(maxY + 1);
-      setPosition(rect);
-    }
-    catch(std::exception& e)
+    for(auto &p : controlClass.primitves)
     {
-      DebugLevel::error("Could not add Primitives! Control: " + m_prototype.controlInstance);
+      auto c = addControl(p.instantiate());
+      maxX = std::max(maxX, c->getPosition().getRight());
+      maxY = std::max(maxY, c->getPosition().getBottom());
     }
+
+    rect.setWidth(maxX + 1);
+    rect.setHeight(maxY + 1);
+    setPosition(rect);
   }
 
   void GenericControl::style(LayoutClasses layout)

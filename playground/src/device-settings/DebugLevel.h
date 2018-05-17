@@ -141,6 +141,5 @@ class DebugLevel : public EnumSetting<DebugLevels>
   }
 };
 
-#define DEBUG_TRACE(...) DebugLevel::debug(__PRETTY_FUNCTION__, "Line",__LINE__, "->", __VA_ARGS__)
-#define DEBUG_TRACE_EMPTY() DebugLevel::debug(__PRETTY_FUNCTION__, "Line", __LINE__)
+
 

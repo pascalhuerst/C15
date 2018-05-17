@@ -22,8 +22,8 @@ Window::Window()
   m_ribbonBox.pack_end(m_ribbonDown, false, false);
   m_ribbonBox.set_homogeneous(true);
   m_box.pack_start(m_playPanel, true, true);
-  m_box.pack_end(m_editPanel, false, false);
-  m_box.pack_start(m_ribbonBox, false, false);
+//  m_box.pack_end(m_editPanel, false, false);
+ // m_box.pack_start(m_ribbonBox, false, false);
   add(m_box);
 
   show_all_children(true);

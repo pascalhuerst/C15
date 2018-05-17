@@ -2,6 +2,10 @@
 #include "LayoutFactory.h"
 #include <Application.h>
 #include <Options.h>
+#include <proxies/hwui/debug-oled/DebugLayout.h>
+#include <tools/json.h>
+#include <execinfo.h>
+#include <tools/ExceptionTools.h>
 #include "LayoutParser.h"
 #include "ControlRegistry.h"
 #include "ControlParser.h"
@@ -40,30 +44,53 @@ void LayoutFolderMonitor::bruteForce()
   DescriptiveLayouts::StyleSheet::get().clear();
 
   auto enumerator = m_file->enumerate_children();
+  try {
 
-  while(auto file = enumerator->next_file())
+    //throw std::runtime_error("TEST!");
+
+    while (auto file = enumerator->next_file()) {
+      auto name = file->get_name();
+      auto path = m_file->get_path() + '/' + name;
+
+      if (g_str_has_suffix(name.c_str(), ".json")) {
+        DescriptiveLayouts::importControls(path);
+        DescriptiveLayouts::importLayout(path);
+        DescriptiveLayouts::importStyles(path);
+      } else if (g_str_has_suffix(name.c_str(), ".yaml")) {
+        auto tmpPath = "/tmp/__nl_style.json";
+        SpawnCommandLine cmd("yaml2json " + path);
+        g_file_set_contents(tmpPath, cmd.getStdOutput().c_str(), -1, nullptr);
+        DescriptiveLayouts::importControls(tmpPath);
+        DescriptiveLayouts::importLayout(tmpPath);
+        DescriptiveLayouts::importStyles(tmpPath);
+      }
+    }
+
+    m_onChange.send();
+
+  }
+  catch (nlohmann::json::out_of_range& e)
   {
-    auto name = file->get_name();
-    auto path = m_file->get_path() + '/' + name;
-
-    if(g_str_has_suffix(name.c_str(), ".json"))
-    {
-      DescriptiveLayouts::importControls(path);
-      DescriptiveLayouts::importLayout(path);
-      DescriptiveLayouts::importStyles(path);
-    }
-    else if(g_str_has_suffix(name.c_str(), ".yaml"))
-    {
-      auto tmpPath = "/tmp/__nl_style.json";
-      SpawnCommandLine cmd("yaml2json " + path);
-      g_file_set_contents(tmpPath, cmd.getStdOutput().c_str(), -1, nullptr);
-      DescriptiveLayouts::importControls(tmpPath);
-      DescriptiveLayouts::importLayout(tmpPath);
-      DescriptiveLayouts::importStyles(tmpPath);
-    }
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+  }
+  catch (std::out_of_range &e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+  }
+  catch(nlohmann::json::parse_error& e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+  }
+  catch(std::runtime_error& e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
+  }
+  catch(std::exception& e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("Uncaught Exception of Type: "s + e.what()));
+  }
+  catch(...) {
+    auto description = ExceptionTools::handle_eptr(std::current_exception());
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(description));
   }
 
-  m_onChange.send();
+
 }
 
 sigc::connection LayoutFolderMonitor::onChange(std::function<void()> cb)

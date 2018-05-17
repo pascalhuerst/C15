@@ -85,16 +85,16 @@ namespace DescriptiveLayouts
 
   void importControls(const std::string &fileName)
   {
-    try
+    DebugLevel::info("importing controls from file", fileName);
+    std::ifstream i(fileName);
+    json j;
+    i >> j;
+
+    auto it = j.find("controls");
+    if(it != j.end())
     {
-      DebugLevel::info("importing controls from file", fileName);
-      std::ifstream i(fileName);
-      json j;
-      i >> j;
-      registerControls(j.at("controls"));
-    }
-    catch(...)
-    {
+      json control = *it;
+      registerControls(control);
     }
   }
 

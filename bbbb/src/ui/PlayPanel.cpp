@@ -83,7 +83,7 @@ PlayPanel::PlayPanel() :
 
   m_buttons.set_selection_mode(Gtk::SelectionMode::SELECTION_NONE);
   m_box.pack_start(m_boled, true, true);
-  m_box.pack_start(m_buttons, false, false);
+  //m_box.pack_start(m_buttons, false, false);
   add(m_box);
 
   m_rotary.set_range(-100, 100);

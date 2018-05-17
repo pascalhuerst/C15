@@ -172,7 +172,7 @@ namespace DescriptiveLayouts
   {
     m_map[EventSources::ParameterGroupName] = std::make_unique<ParameterGroupNameEventSource>();
     m_map[EventSources::SliderRange] = std::make_unique<SliderRangeEventSource>();
-    m_map[EventSources::IsBiploar] = std::make_unique<ParamIsBipolarEventSource>();
+    m_map[EventSources::IsBipolar] = std::make_unique<ParamIsBipolarEventSource>();
     m_map[EventSources::ParameterName] = std::make_unique<ParameterNameEventSource>();
     m_map[EventSources::ParameterDisplayString] = std::make_unique<ParameterDisplayStringEventSource>();
   }
