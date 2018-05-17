@@ -1,3 +1,4 @@
+#include <tools/ExceptionTools.h>
 #include "Border.h"
 #include "PrimitiveInstance.h"
 
@@ -38,7 +39,7 @@ namespace DescriptiveLayouts
         fb.drawRect(getPosition());
         return true;
     }
-    throw std::runtime_error("unkown border style");
+    throw ExceptionTools::TemplateException("unkown border style: " + getStyleValue(StyleKey::BorderStyle), "__LINE__ __FILE__");
     return true;
   }
 

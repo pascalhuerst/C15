@@ -9,34 +9,27 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
+  template<class T>
+  bool readFieldFromJson(json j, Glib::ustring key, std::function<T(std::string)> converter, std::list<Selector>& outList) {
+    auto it = j.find(key);
+    if(it != j.end()) {
+      T x = converter(*it);
+      outList.push_back(x);
+      return true;
+    }
+    return false;
+  }
+
   std::list<Selector> toSelectors(json selector)
   {
     std::list<Selector> selectors;
 
-    try
-    {
-      selectors.push_back(toUIFocus(selector.at("UIFocus")));
-    }
-    catch(...)
-    {
+    if(!readFieldFromJson<UIFocus>(selector, "UIFocus", toUIFocus, selectors))
       selectors.push_back(UIFocus::Any);
-    }
-    try
-    {
-      selectors.push_back(toUIMode(selector.at("UIMode")));
-    }
-    catch(...)
-    {
+    if(!readFieldFromJson<UIMode>(selector, "UIMode", toUIMode, selectors))
       selectors.push_back(UIMode::Any);
-    }
-    try
-    {
-      selectors.push_back(toUIFocusAndModeDetail(selector.at("UIFocusAndModeDetail")));
-    }
-    catch(...)
-    {
+    if(readFieldFromJson<UIFocusAndModeDetail>(selector, "UIFocusAndModeDetail", toUIFocusAndModeDetail, selectors))
       selectors.push_back(UIFocusAndModeDetail::Any);
-    }
 
     return selectors;
   }

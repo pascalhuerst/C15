@@ -9,6 +9,7 @@
 #include <tools/json.h>
 #include <device-settings/DebugLevel.h>
 #include <boost/algorithm/string.hpp>
+#include <tools/ExceptionTools.h>
 
 using json = nlohmann::json;
 
@@ -35,14 +36,12 @@ namespace DescriptiveLayouts
 
    template <class T>
    T getFromJson(json j, std::string key, std::function<T(std::string)> converter = nullptr) {
-     T property;
      auto itProp = j.find(key);
-
      if(itProp != j.end()) {
-       if(converter != nullptr)
+       if(converter)
          return converter(*itProp);
        else
-         return *itProp;
+         return (T)*itProp;
      }
      return T{};
    }
@@ -54,12 +53,18 @@ namespace DescriptiveLayouts
       auto key = primitive.key();
       auto value = primitive.value();
 
-      auto primClass = getFromJson<PrimitiveClasses>(value, "Class", [](std::string u){return toPrimitiveClasses(u);});
-      auto prop = getFromJson<PrimitiveProperty>(value, "Property", [](std::string u){return toPrimitiveProperty(u);});
+      auto primClass = getFromJson<PrimitiveClasses>(value, "Class", toPrimitiveClasses);
+      auto prop = getFromJson<PrimitiveProperty>(value, "Property", toPrimitiveProperty);
       auto tag = getFromJson<PrimitiveTag>(value, "Tag");
       auto defaultText = getFromJson<DefaultText>(value, "Default");
-      auto rect = parseRect(value.at("Rect"));
-      lP.emplace_back(key, primClass, rect, tag, defaultText, prop);
+      try {
+        auto rect = parseRect(value.at("Rect"));
+        lP.emplace_back(key, primClass, rect, tag, defaultText, prop);
+      } catch(...) {
+        auto e = std::current_exception();
+        auto desc = ExceptionTools::handle_eptr(e);
+        throw ExceptionTools::TemplateException(desc, "__LINE__ __FILE__");
+      }
 
     }
     return lP;

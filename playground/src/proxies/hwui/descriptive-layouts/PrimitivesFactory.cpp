@@ -1,3 +1,4 @@
+#include <tools/ExceptionTools.h>
 #include "PrimitivesFactory.h"
 #include "TemplateEnums.h"
 #include "PrimitiveInstance.h"
@@ -18,7 +19,7 @@ namespace DescriptiveLayouts
       case PrimitiveClasses::Text:
         return new Text(primitive);
       default:
-        throw new std::runtime_error("PrimitiveInstance Type not found.");
+        throw ExceptionTools::TemplateException(Glib::ustring("PrimitiveInstance Type not found: ") + toString(primitive.primitveClass), "__LINE__ __FILE__");
     }
   }
 }

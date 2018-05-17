@@ -46,8 +46,6 @@ void LayoutFolderMonitor::bruteForce()
   auto enumerator = m_file->enumerate_children();
   try {
 
-    //throw std::runtime_error("TEST!");
-
     while (auto file = enumerator->next_file()) {
       auto name = file->get_name();
       auto path = m_file->get_path() + '/' + name;
@@ -68,6 +66,9 @@ void LayoutFolderMonitor::bruteForce()
 
     m_onChange.send();
 
+  }
+  catch(ExceptionTools::TemplateException& e) {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what() + e.where()));
   }
   catch (nlohmann::json::out_of_range& e)
   {

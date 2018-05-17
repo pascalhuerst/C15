@@ -3,6 +3,7 @@
 #include "GenericLayout.h"
 #include <Application.h>
 #include <proxies/hwui/HWUI.h>
+#include <tools/ExceptionTools.h>
 #include "ControlClass.h"
 #include "ControlInstance.h"
 #include "Selector.h"
@@ -38,7 +39,13 @@ namespace DescriptiveLayouts
 
     if(it == m_layouts.end())
     {
-      throw std::runtime_error("No matching layout found.");
+      throw ExceptionTools::TemplateException("No matching layout found! current modes:" + [&]() -> Glib::ustring {
+        Glib::ustring ret;
+        ret += toString(fam.focus);
+        ret += toString(fam.mode);
+        ret += toString(fam.detail);
+        return ret;
+      }(), "__LINE__ __FILE__");
     }
 
     return *it;
