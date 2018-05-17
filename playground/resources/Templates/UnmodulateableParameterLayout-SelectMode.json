@@ -41,6 +41,11 @@
 				"ButtonD": {
 					"Class": "EmptyButton",
 					"Position": "192,52"
+				},
+				"LockIndicator": {
+					"Class": "LockIndicator1Letter",
+					"Position": "65,1",
+					"Events": "LockStatus => Text[Visibility]"
 				}
 			},
 			"EventSinks": {

@@ -14,7 +14,7 @@
 				"Slider": {
 					"Class": "BigSlider",
 					"Position": "77,24",
-					"Events": "SliderRange => Slider[Range], IsBipolar <= CenterMark[Visibility]"
+					"Events": "SliderRange => Slider[Range], IsBipolar => CenterMark[Visibility]"
 				},
 				"ParameterValue": {
 					"Class": "ParameterValueLabel",
@@ -45,7 +45,13 @@
 				"EditLabel": {
 					"Class": "EditLabel",
 					"Position": "8,26"
-				}
+				},
+                                "LockIndicator": {
+                                        "Class": "LockIndicator1Letter",
+                                        "Position": "65,1",
+                                        "Events": "LockStatus => Text[Visibility]"
+                                }
+
 			},
 			"EventSinks": {
 				"BUTTON_INC": "IncParam",

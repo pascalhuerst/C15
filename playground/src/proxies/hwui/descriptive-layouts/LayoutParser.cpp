@@ -6,6 +6,7 @@
 #include "LayoutFactory.h"
 #include <boost/algorithm/string.hpp>
 #include <regex>
+#include <tools/StringTools.h>
 
 using json = nlohmann::json;
 
@@ -55,38 +56,35 @@ namespace DescriptiveLayouts
     }
   }
 
+  std::string removeSpaces(std::string str) {
+    str.erase(remove_if(str.begin(), str.end(), ::isspace), str.end());
+    return str;
+  }
+
+  std::string removeLastCharacter(std::string str) {
+    return str.substr(0, str.size()-1);
+  }
+
   ControlInstance::EventConnections parseEventConnections(json j)
   {
     ControlInstance::EventConnections ret;
     auto it = j.find("Events");
-
     if(it != j.end())
     {
-      std::string str = *it;
-      std::list<std::string> connections;
-      boost::split(connections, str, boost::is_any_of(","));
+      auto connections = StringTools::splitStringOnAnyDelimiter(*it, ',');
+      for(auto& connection: connections) {
 
-      static std::regex reg("(.*)=>(.*)\\[(.*)\\]");
+        if(connection.find("=>") == connection.npos)
+          DebugLevel::throwException("Event Routing syntax error: missing \"=>\"", connection);
 
-      for(auto s : connections)
-      {
-        std::smatch m;
+        auto parts = StringTools::splitStringOnStringDelimiter(connection, "=>");
+        auto eventTargetParts = StringTools::splitStringOnAnyDelimiter(parts[1], '[');
 
-        while(std::regex_search(s, m, reg))
-        {
-          if(m.size() >= 4)
-          {
-            std::string srcString = m[1];
-            std::string instString = m[2];
-            std::string propString = m[3];
-            auto src = toEventSources(boost::trim_copy(srcString));
-            auto inst = boost::trim_copy(instString);
-            auto prop = toPrimitiveProperty(boost::trim_copy(propString));
-            ret.push_back( { src, inst, prop });
+        auto eventSource = toEventSources(removeSpaces(parts[0]));
+        auto eventTargetObject = removeSpaces(eventTargetParts[0]);
+        auto eventTargetProperty = toPrimitiveProperty(removeSpaces(removeLastCharacter(eventTargetParts[1])));
 
-          }
-          s = m.suffix().str();
-        }
+        ret.push_back( { eventSource, eventTargetObject, eventTargetProperty });
       }
     }
     return ret;

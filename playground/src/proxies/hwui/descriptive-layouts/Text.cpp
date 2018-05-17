@@ -66,6 +66,14 @@ namespace DescriptiveLayouts
         setText(a.first, a.second);
         break;
       }
+      case PrimitiveProperty::Visibility:
+      {
+        bool vis = std::any_cast<bool>(value);
+        setVisible(vis);
+        break;
+      }
+      default:
+        DebugLevel::throwException("Property", toString(key), "not implemented for Text");
     }
   }
 

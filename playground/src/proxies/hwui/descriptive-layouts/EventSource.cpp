@@ -162,6 +162,29 @@ namespace DescriptiveLayouts
       sigc::connection m_connection;
   };
 
+    class CurrentParameterGroupLockStatus : public EventSource<bool> {
+    public:
+        CurrentParameterGroupLockStatus()
+        {
+          Application::get().getPresetManager()->getEditBuffer()->onLocksChanged(
+                  sigc::mem_fun(this, &CurrentParameterGroupLockStatus::onLockChanged));
+
+          Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged(
+                  sigc::mem_fun(this, &CurrentParameterGroupLockStatus::onParameterSelectionChanged));
+        }
+
+    private:
+        void onParameterSelectionChanged(Parameter *oldParam, Parameter *newParam)
+        {
+            onLockChanged();
+        }
+
+        void onLockChanged()
+        {
+            setValue(Application::get().getPresetManager()->getEditBuffer()->getSelected()->isLocked());
+        }
+    };
+
   EventSourceBroker& EventSourceBroker::get()
   {
     static EventSourceBroker s;
@@ -175,6 +198,7 @@ namespace DescriptiveLayouts
     m_map[EventSources::IsBipolar] = std::make_unique<ParamIsBipolarEventSource>();
     m_map[EventSources::ParameterName] = std::make_unique<ParameterNameEventSource>();
     m_map[EventSources::ParameterDisplayString] = std::make_unique<ParameterDisplayStringEventSource>();
+    m_map[EventSources::LockStatus] = std::make_unique<CurrentParameterGroupLockStatus>();
   }
 
   sigc::connection EventSourceBroker::connect(EventSources source, std::function<void(std::any)> cb)
