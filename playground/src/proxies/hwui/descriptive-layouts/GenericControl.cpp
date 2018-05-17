@@ -17,7 +17,8 @@ namespace DescriptiveLayouts
 
   GenericControl::~GenericControl()
   {
-    m_connection.disconnect();
+    for(auto &c : m_connections)
+      c.disconnect();
   }
 
   void GenericControl::addPrimitives()
@@ -27,8 +28,8 @@ namespace DescriptiveLayouts
     int maxX = 0;
     int maxY = 0;
 
-
-    try {
+    try
+    {
       const ControlClass& controlClass = ControlRegistry::get().find(m_prototype.controlClass);
 
       for(auto &p : controlClass.primitves)
@@ -41,7 +42,9 @@ namespace DescriptiveLayouts
       rect.setWidth(maxX + 1);
       rect.setHeight(maxY + 1);
       setPosition(rect);
-    } catch(std::exception& e) {
+    }
+    catch(std::exception& e)
+    {
       DebugLevel::error("Could not add Primitives! Control: " + m_prototype.controlInstance);
     }
   }
@@ -61,10 +64,16 @@ namespace DescriptiveLayouts
 
   void GenericControl::connect()
   {
-    m_connection = EventSourceBroker::get().connect(m_prototype.eventSource, sigc::mem_fun(this, &GenericControl::onEventFired));
+    DebugLevel::warning(m_prototype.eventConnections.size());
+
+    for(auto &c : m_prototype.eventConnections)
+    {
+      m_connections.push_back(
+          EventSourceBroker::get().connect(c.src, sigc::bind < 1 > (sigc::mem_fun(this, &GenericControl::onEventFired), c)));
+    }
   }
 
-  void GenericControl::onEventFired(std::any v)
+  void GenericControl::onEventFired(std::any v, const ControlInstance::EventConnection &connection)
   {
     for(auto c : getControls())
     {
@@ -72,14 +81,12 @@ namespace DescriptiveLayouts
       {
         const auto &primitive = a->getPrimitive();
 
-        if(primitive.primitiveInstance == m_prototype.eventTarget)
+        if(primitive.primitiveInstance == connection.targetInstance)
         {
           if(auto p = dynamic_pointer_cast<PropertyOwner>(c))
           {
-            p->setProperty(primitive.eventTarget, v);
+            p->setProperty(connection.targetProperty, v);
           }
-
-          break;
         }
       }
     }

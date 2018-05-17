@@ -4,13 +4,11 @@
 
 namespace DescriptiveLayouts
 {
-  ControlInstance::ControlInstance(ControlInstances controlInstance, ControlClasses control, Point position, EventSources eventSource,
-                                   PrimitiveInstances eventTarget) :
+  ControlInstance::ControlInstance(ControlInstances controlInstance, ControlClasses control, Point position, const EventConnections &eventConnections) :
       controlInstance(controlInstance),
       controlClass(control),
       position(position),
-      eventSource(eventSource),
-      eventTarget(eventTarget)
+      eventConnections(eventConnections)
   {
   }
 
@@ -18,7 +16,7 @@ namespace DescriptiveLayouts
   {
     if(controlClass == "ParameterEditButtonMenu")
     {
-      return new ParameterEditButtonMenu(Rect(position.getX(), position.getY(), 64, 128));
+      return new ParameterEditButtonMenu(Rect(position.getX(), position.getY(), 58, 62));
     }
     return new GenericControl(*this);
   }

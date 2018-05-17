@@ -24,7 +24,7 @@ namespace DescriptiveLayouts
     ENUM(BorderStyle, uint8_t, Solid, Rounded, None);
   }
 
-  ENUM(EventSources, uint8_t, Any, None, ParameterName, SliderRange, ParameterType, ParameterDisplayString, ParameterGroupName);
+  ENUM(EventSources, uint8_t, Any, None, ParameterName, SliderRange, ParameterDisplayString, ParameterGroupName, IsBiploar);
   ENUM(PrimitiveClasses, uint8_t, Any, Bar, Border, Text);
 
   template<typename Derived>

@@ -55,11 +55,10 @@ namespace DescriptiveLayouts
       auto value = primitive.value();
 
       auto primClass = getFromJson<PrimitiveClasses>(value, "Class", [](std::string u){return toPrimitiveClasses(u);});
-      auto prop = getFromJson<PrimitiveProperty>(value, "Property", [](std::string u){return toPrimitiveProperty(u);});
       auto tag = getFromJson<PrimitiveTag>(value, "Tag");
       auto defaultText = getFromJson<DefaultText>(value, "Default");
       auto rect = parseRect(value.at("Rect"));
-      lP.emplace_back(key, primClass, rect, tag, defaultText, prop);
+      lP.emplace_back(key, primClass, rect, tag, defaultText);
 
     }
     return lP;

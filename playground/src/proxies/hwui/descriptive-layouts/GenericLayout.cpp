@@ -4,6 +4,10 @@
 #include "Border.h"
 #include "Text.h"
 
+#include "Application.h"
+#include "proxies/hwui/controls/ButtonMenu.h"
+#include "proxies/hwui/HWUI.h"
+
 namespace DescriptiveLayouts
 {
   GenericLayout::GenericLayout(const LayoutClass &prototype) :
@@ -39,11 +43,37 @@ namespace DescriptiveLayouts
       {
         if(m.button == i)
         {
-          EventSinkBroker::get().fire(m.sink);
+          if(!handleEventSink(m.sink))
+          {
+            EventSinkBroker::get().fire(m.sink);
+          }
           return true;
         }
       }
     }
+    return false;
+  }
+
+  bool GenericLayout::handleEventSink(EventSinks s)
+  {
+    switch(s)
+    {
+      case EventSinks::IncButtonMenu:
+        if(auto m = findControlOfType<ButtonMenu>())
+          if(Application::get().getHWUI()->getButtonModifiers()[ButtonModifier::SHIFT])
+            m->antiToggle();
+          else
+            m->toggle();
+
+        return true;
+
+      case EventSinks::FireButtonMenu:
+        if(auto m = findControlOfType<ButtonMenu>())
+          m->doAction();
+
+        return true;
+    }
+
     return false;
   }
 

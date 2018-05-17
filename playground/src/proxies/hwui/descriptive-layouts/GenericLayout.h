@@ -20,6 +20,7 @@ namespace DescriptiveLayouts
       bool onRotary (int inc, ::ButtonModifiers modifiers) override;
 
     private:
+      bool handleEventSink(EventSinks s);
       void createControls();
 
       LayoutClass m_prototype;

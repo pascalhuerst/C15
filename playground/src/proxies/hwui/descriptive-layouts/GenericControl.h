@@ -16,10 +16,10 @@ namespace DescriptiveLayouts
 
     private:
       void addPrimitives();
-      void onEventFired(std::any v);
+      void onEventFired(std::any v, const ControlInstance::EventConnection &c);
 
       ControlInstance m_prototype;
-      sigc::connection m_connection;
+      std::list<sigc::connection> m_connections;
   };
 
 }

@@ -47,13 +47,13 @@ namespace DescriptiveLayouts
       }
   };
 
-  class ParameterTypeEventSource : public EventSource<uint8_t>
+  class ParamIsBipolarEventSource : public EventSource<bool>
   {
     public:
-      ParameterTypeEventSource()
+      ParamIsBipolarEventSource()
       {
         Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged(
-            sigc::mem_fun(this, &ParameterTypeEventSource::onParameterSelectionChanged));
+            sigc::mem_fun(this, &ParamIsBipolarEventSource::onParameterSelectionChanged));
       }
 
     private:
@@ -61,14 +61,7 @@ namespace DescriptiveLayouts
       {
         if(newParam)
         {
-          uint8_t mask = 0;
-
-          if(newParam->isBiPolar())
-            mask |= (uint8_t) ParameterType::Bipolar;
-          else
-            mask |= (uint8_t) ParameterType::Unipolar;
-
-          setValue(mask);
+          setValue(newParam->isBiPolar());
         }
       }
   };
@@ -179,8 +172,7 @@ namespace DescriptiveLayouts
   {
     m_map[EventSources::ParameterGroupName] = std::make_unique<ParameterGroupNameEventSource>();
     m_map[EventSources::SliderRange] = std::make_unique<SliderRangeEventSource>();
-    m_map[EventSources::ParameterType] = std::make_unique<ParameterTypeEventSource>();
-
+    m_map[EventSources::IsBiploar] = std::make_unique<ParamIsBipolarEventSource>();
     m_map[EventSources::ParameterName] = std::make_unique<ParameterNameEventSource>();
     m_map[EventSources::ParameterDisplayString] = std::make_unique<ParameterDisplayStringEventSource>();
   }

@@ -9,10 +9,17 @@ namespace DescriptiveLayouts
 
   struct ControlInstance
   {
-
     public:
-      ControlInstance(ControlInstances controlInstance, ControlClasses control, Point position, EventSources eventSource = EventSources::None,
-                      PrimitiveInstances eventTarget = PrimitiveInstances::None);
+      struct EventConnection
+      {
+          EventSources src;
+          PrimitiveInstances targetInstance;
+          PrimitiveProperty targetProperty;
+      };
+
+      using EventConnections = std::list<EventConnection>;
+
+      ControlInstance(ControlInstances controlInstance, ControlClasses control, Point position, const EventConnections &eventConnections);
 
       Control* instantiate() const;
 
@@ -20,8 +27,7 @@ namespace DescriptiveLayouts
       ControlInstances controlInstance;
       ControlClasses controlClass;
       Point position;
-      EventSources eventSource;
-      PrimitiveInstances eventTarget;
+      EventConnections eventConnections;
 
       friend class GenericControl;
   };
