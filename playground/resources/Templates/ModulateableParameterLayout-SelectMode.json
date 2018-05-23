@@ -3,8 +3,7 @@
     "ModulateableParameter-SelectMode": {
       "Selector": {
         "UIFocus": "Parameters",
-        "UIMode": "Select",
-        "UIDetail": "Any"
+        "UIMode": "Select"
       },
       "Conditions": "isParameterModulateable",
       "Controls": {

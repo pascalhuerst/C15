@@ -3,8 +3,7 @@
 		"UnmodulateableParameterLayout-EditMode": {
 			"Selector": {
 				"UIFocus": "Parameters",
-				"UIMode": "Edit",
-                "UIDetail": "Any"
+				"UIMode": "Edit"
 			},
 			"Controls": {
 				"GroupHeader": {

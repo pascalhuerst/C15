@@ -38,19 +38,23 @@ namespace DescriptiveLayouts
       p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
 
-    registerEvent(EventSinks::SwitchToEditMode, [eb, hwui]()
+    registerEvent(EventSinks::SwitchToEditMode, [hwui]()
     {
       hwui->undoableSetFocusAndMode(UIMode::Edit);
     });
 
-    registerEvent(EventSinks::SwitchToSelectMode, [eb, hwui]()
+    registerEvent(EventSinks::SwitchToSelectMode, [hwui]()
     {
       hwui->undoableSetFocusAndMode(UIMode::Select);
     });
 
-    registerEvent(EventSinks::SwitchToMCSelectDetail, [eb, hwui]()
+    registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui]()
     {
       hwui->setUiModeDetail(UIFocusAndModeDetail::MCSelect);
+    });
+
+    registerEvent(EventSinks::SwitchToInitDetail, [&](){
+      hwui->setUiModeDetail(UIFocusAndModeDetail::Init);
     });
   }
 
