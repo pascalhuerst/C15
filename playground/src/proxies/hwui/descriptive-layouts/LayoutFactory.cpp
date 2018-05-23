@@ -34,7 +34,7 @@ namespace DescriptiveLayouts
   {
     auto it = std::find_if(m_layouts.begin(), m_layouts.end(), [=](const LayoutClass& e)
     {
-      return e.matches(fam);
+      return e.matches(fam) && e.meetsConditions();
     });
 
     if(it == m_layouts.end())

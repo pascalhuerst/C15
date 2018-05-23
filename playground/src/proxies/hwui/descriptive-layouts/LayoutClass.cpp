@@ -20,6 +20,11 @@ namespace DescriptiveLayouts
     selectors.push_back(s);
   }
 
+  void LayoutClass::addToList(std::function<bool()> c)
+  {
+    conditions.push_back(c);
+  }
+
   DFBLayout* LayoutClass::instantiate() const
   {
     return new GenericLayout(*this);
@@ -32,4 +37,11 @@ namespace DescriptiveLayouts
       return s.test(fam);
     });
   }
+
+    bool LayoutClass::meetsConditions() const
+    {
+      return std::all_of(conditions.begin(), conditions.end(), [](const std::function<bool()> c) {
+        return c();
+      });
+    }
 }

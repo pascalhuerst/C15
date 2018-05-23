@@ -34,8 +34,9 @@ namespace DescriptiveLayouts
       void registerLayout(LayoutClasses id,
                           std::list<Selector> sel,
                           std::list<ControlInstance> ci,
-                          std::list<EventSinkMapping> esm) {
-        m_layouts.emplace_back(id, sel, ci, esm);
+                          std::list<EventSinkMapping> esm,
+                          std::list<std::function<bool()>> con) {
+        m_layouts.emplace_back(id, sel, ci, esm, con);
       }
 
     private:

@@ -57,7 +57,6 @@ namespace DescriptiveLayouts
 
   void GenericControl::connect()
   {
-    DebugLevel::warning(m_prototype.eventConnections.size());
 
     for(auto &c : m_prototype.eventConnections)
     {

@@ -17,6 +17,7 @@ namespace DescriptiveLayouts
     public:
       using ControlInstanceList = std::list<ControlInstance>;
       using EventSinkList = std::list<EventSinkMapping>;
+      using ConditionList = std::list<std::function<bool()>>;
 
       template<typename ... Args>
         LayoutClass(LayoutClasses id, Args ... args) :
@@ -27,7 +28,8 @@ namespace DescriptiveLayouts
 
       LayoutClass(LayoutClasses id, std::list<Selector> sel,
                       std::list<ControlInstance> ci,
-                      std::list<EventSinkMapping> esm) : id(id)
+                      std::list<EventSinkMapping> esm,
+                      ConditionList con) : id(id)
       {
         for(auto s: sel)
           addToList(s);
@@ -35,9 +37,12 @@ namespace DescriptiveLayouts
           addToList(c);
         for(auto e: esm)
           addToList(e);
+        for(auto c: con)
+          addToList(c);
       }
 
       bool matches(FocusAndMode fam) const;
+      bool meetsConditions() const;
 
       DFBLayout* instantiate() const;
 
@@ -45,9 +50,11 @@ namespace DescriptiveLayouts
       void addToList(Selector s);
       void addToList(ControlInstance s);
       void addToList(EventSinkMapping s);
+      void addToList(std::function<bool()> c);
 
       LayoutClasses id;
       std::list<Selector> selectors;
+      ConditionList conditions;
       ControlInstanceList controls;
       EventSinkList sinkMappings;
 

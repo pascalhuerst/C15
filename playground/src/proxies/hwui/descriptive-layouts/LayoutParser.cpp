@@ -4,6 +4,7 @@
 #include <tools/json.h>
 #include "LayoutParser.h"
 #include "LayoutFactory.h"
+#include "ConditionRegistry.h"
 #include <boost/algorithm/string.hpp>
 #include <regex>
 #include <tools/StringTools.h>
@@ -12,6 +13,7 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
+    using tConditionList = std::list<std::function<bool()>>;
   template<class T>
     bool readFieldFromJson(json j, Glib::ustring key, std::function<T(std::string)> converter, std::list<Selector>& outList)
     {
@@ -33,9 +35,8 @@ namespace DescriptiveLayouts
       selectors.push_back(UIFocus::Any);
     if(!readFieldFromJson<UIMode>(selector, "UIMode", toUIMode, selectors))
       selectors.push_back(UIMode::Any);
-    if(readFieldFromJson<UIFocusAndModeDetail>(selector, "UIFocusAndModeDetail", toUIFocusAndModeDetail, selectors))
+    if(!readFieldFromJson<UIFocusAndModeDetail>(selector, "UIFocusAndModeDetail", toUIFocusAndModeDetail, selectors))
       selectors.push_back(UIFocusAndModeDetail::Any);
-
     return selectors;
   }
 
@@ -117,6 +118,19 @@ namespace DescriptiveLayouts
     return l;
   }
 
+  tConditionList toConditions(json j)
+  {
+    tConditionList ret;
+    for(json::iterator condition = j.begin(); condition != j.end(); ++condition)
+    {
+      auto conditonStrings = StringTools::splitStringOnAnyDelimiter(condition.value(), ',');
+      for(auto conditionString: conditonStrings) {
+        ret.push_back(ConditionRegistry::get().getLambda(conditionString));
+      }
+    }
+    return ret;
+  }
+
   void parseLayout(json j)
   {
     for(json::iterator layout = j.begin(); layout != j.end(); ++layout)
@@ -125,16 +139,24 @@ namespace DescriptiveLayouts
 
       DebugLevel::info("importing layout", name);
 
+
       auto layoutContent = layout.value();
       auto selectorContent = layoutContent.at("Selector");
+      tConditionList selectonConditions;
+
       auto controlContent = layoutContent.at("Controls");
       auto eventSinkContent = layoutContent.at("EventSinks");
+
+      if(layoutContent.find("Conditions") != layoutContent.end()) {
+        auto conditionContent = layoutContent.at("Conditons");
+        selectonConditions = toConditions(conditionContent);
+      }
 
       auto id = name;
       auto selectors = toSelectors(selectorContent);
       auto controls = toControlInstanceList(controlContent);
       auto sinkMappings = toEventSinkList(eventSinkContent);
-      BoledLayoutFactory::get().registerLayout(id, selectors, controls, sinkMappings);
+      BoledLayoutFactory::get().registerLayout(id, selectors, controls, sinkMappings, selectonConditions);
     }
   }
 

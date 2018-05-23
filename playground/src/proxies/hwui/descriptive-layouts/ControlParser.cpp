@@ -48,18 +48,26 @@ namespace DescriptiveLayouts
   }
 
   template<class T>
-    T getFromJson(json j, std::string key, std::function<T(std::string)> converter = nullptr)
-    {
+  constexpr T getFromJson(json j, std::string key)
+  {
       auto itProp = j.find(key);
       if(itProp != j.end())
       {
-        if(converter)
-          return converter(*itProp);
-        else
-          return (T) *itProp;
+        return *itProp;
       }
       return T { };
-    }
+  }
+
+  template<class T>
+  T getFromJson(json j, std::string key, std::function<T(std::string)> converter)
+  {
+      auto itProp = j.find(key);
+      if(itProp != j.end())
+      {
+        return converter(*itProp);
+      }
+      return T { };
+  }
 
   std::list<PrimitiveInstance> createPrimitives(json primitives)
   {
