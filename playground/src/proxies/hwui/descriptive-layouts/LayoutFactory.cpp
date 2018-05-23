@@ -39,7 +39,8 @@ namespace DescriptiveLayouts
 
     if(it == m_layouts.end())
     {
-      throw ExceptionTools::TemplateException("No matching layout found! current modes:" + [&]() -> Glib::ustring {
+      throw ExceptionTools::TemplateException("No matching layout found! current modes:" + [&]() -> Glib::ustring
+      {
         Glib::ustring ret;
         ret += toString(fam.focus);
         ret += toString(fam.mode);

@@ -15,6 +15,7 @@ namespace DescriptiveLayouts
   ENUM(ButtonEvents, uint8_t, Down = true, Up = false);
   ENUM(ButtonModifiers, uint8_t, None = 0, Shift = 1 << 0);
 
+
   namespace StyleValues
   {
     ENUM(Font, uint8_t, Bold, Regular);
