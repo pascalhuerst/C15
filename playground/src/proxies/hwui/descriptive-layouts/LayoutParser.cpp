@@ -38,7 +38,7 @@ namespace DescriptiveLayouts
 
     if(!readFieldFromJson<UIFocusAndModeDetail>(selector, "UIFocusAndModeDetail", toUIFocusAndModeDetail, selectors))
       selectors.push_back(UIFocusAndModeDetail::Any);
-    
+
     return selectors;
   }
 
@@ -150,7 +150,7 @@ namespace DescriptiveLayouts
       auto eventSinkContent = layoutContent.at("EventSinks");
 
       if(layoutContent.find("Conditions") != layoutContent.end()) {
-        auto conditionContent = layoutContent.at("Conditons");
+        auto conditionContent = layoutContent.at("Conditions");
         selectonConditions = toConditions(conditionContent);
       }
 

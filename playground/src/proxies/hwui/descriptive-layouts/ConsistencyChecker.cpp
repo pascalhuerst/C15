@@ -1,6 +1,7 @@
 #include "ConsistencyChecker.h"
 #include "LayoutFactory.h"
 #include "ControlRegistry.h"
+#include "Styles.h"
 
 namespace DescriptiveLayouts
 {
@@ -14,10 +15,8 @@ namespace DescriptiveLayouts
     bool ret = checkLayoutSelectorsUnique();
     ret &= checkLayoutsContainOnlyKnownControlClasses();
     ret &= checkEventTargetsAreKnown();
-    ret &= checkStyleSelectorsUseKnownPrimitiveInstances();
-    ret &= checkStyleSelectorsUseKnownControlClasses();
+    ret &= checkStyleSelectorsUseKnownEntities();
     ret &= checkAllControlClassesAreUsed();
-    ret &= checkAllStylesAreUsed();
     return ret;
   }
 
@@ -113,23 +112,96 @@ namespace DescriptiveLayouts
     return true;
   }
 
-  bool ConsistencyChecker::checkStyleSelectorsUseKnownPrimitiveInstances()
+  bool ConsistencyChecker::checkStyleSelectorsUseKnownEntities()
   {
-    return true;
-  }
+    const auto &styles = StyleSheet::get();
+    const auto &layoutFactory = BoledLayoutFactory::get();
 
-  bool ConsistencyChecker::checkStyleSelectorsUseKnownControlClasses()
-  {
-    return true;
+    bool result = true;
+
+    styles.iterateStyles([&](const Detail::StyleSelector &selector, const auto &style)
+    {
+      bool foundControlInstance = selector.ci == ControlInstances::Any;
+      bool foundLayoutClass = selector.l == LayoutClasses::Any;
+      bool foundPrimitiveInstance = selector.pi == PrimitiveInstances::Any;
+      bool foundPrimitiveTag = selector.pt == PrimitiveTag::Any;
+
+      for(const auto &layout : layoutFactory.m_layouts)
+      {
+        foundLayoutClass |= layout.id == selector.l;
+
+        for(const auto &control : layout.controls)
+        {
+          foundControlInstance |= control.controlInstance == selector.ci;
+
+          try
+          {
+            const auto &ctrl = ControlRegistry::get().find(selector.cc);
+
+            for(const auto p : ctrl.primitves)
+            {
+              foundPrimitiveInstance |= p.primitiveInstance == selector.pi;
+              foundPrimitiveTag |= p.tag == selector.pt;
+            }
+          }
+          catch(...)
+          {
+            m_out << "Style " << style.name << " references unknown control class " << selector.cc << std::endl;
+            result = false;
+          }
+        }
+      }
+
+      if(!foundLayoutClass)
+      {
+        m_out << "Style " << style.name << " contains selector for not existing layout " << selector.l << std::endl;
+        result = false;
+      }
+
+      if(!foundControlInstance)
+      {
+        m_out << "Style " << style.name << " references unknown control instance " << selector.ci << std::endl;
+        result = false;
+      }
+
+      if(!foundPrimitiveInstance)
+      {
+        m_out << "Style " << style.name << " references unknown primitive instance " << selector.pi << std::endl;
+        result = false;
+      }
+
+      if(!foundPrimitiveTag)
+      {
+        m_out << "Style " << style.name << " references unknown primitive tag " << selector.pt << std::endl;
+        result = false;
+      }
+    });
+
+    return result;
   }
 
   bool ConsistencyChecker::checkAllControlClassesAreUsed()
   {
-    return true;
-  }
+    const auto &layoutFactory = BoledLayoutFactory::get();
 
-  bool ConsistencyChecker::checkAllStylesAreUsed()
-  {
+    for(const auto &a : ControlRegistry::get().m_controlRegistry)
+    {
+      for(const auto &layout : layoutFactory.m_layouts)
+      {
+        bool found = false;
+
+        for(const auto &control : layout.controls)
+        {
+          found |= control.controlClass == a.first;
+        }
+
+        if(!found)
+        {
+          m_out << "Control class " << a.first << " is never used in a layout." << std::endl;
+          return false;
+        }
+      }
+    }
     return true;
   }
 

@@ -54,8 +54,7 @@
         "BUTTON_DEC": "DecParam",
         "ROTARY_PLUS": "IncParam",
         "ROTARY_MINUS": "DecParam",
-        "BUTTON_EDIT": "SwitchToEditMode",
-        "BUTTON_B": "SwitchToMCSelectMode"
+        "BUTTON_EDIT": "SwitchToEditMode"
       }
     }
   }

@@ -20,6 +20,8 @@ namespace DescriptiveLayouts
 
     private:
       std::map<ControlClasses, ControlClass> m_controlRegistry;
+
+      friend class ConsistencyChecker;
   };
 }
 

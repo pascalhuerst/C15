@@ -16,10 +16,8 @@ namespace DescriptiveLayouts
       bool checkLayoutSelectorsUnique();
       bool checkLayoutsContainOnlyKnownControlClasses();
       bool checkEventTargetsAreKnown();
-      bool checkStyleSelectorsUseKnownPrimitiveInstances();
-      bool checkStyleSelectorsUseKnownControlClasses();
+      bool checkStyleSelectorsUseKnownEntities();
       bool checkAllControlClassesAreUsed();
-      bool checkAllStylesAreUsed();
 
       std::ostream &m_out;
   };
