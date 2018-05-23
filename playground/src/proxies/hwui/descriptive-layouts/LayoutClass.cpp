@@ -40,6 +40,9 @@ namespace DescriptiveLayouts
 
     bool LayoutClass::meetsConditions() const
     {
+      if(conditions.size() == 0)
+        return true;
+
       return std::all_of(conditions.begin(), conditions.end(), [](const std::function<bool()> c) {
         return c();
       });

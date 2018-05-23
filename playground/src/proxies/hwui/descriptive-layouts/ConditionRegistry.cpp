@@ -28,6 +28,10 @@ ConditionRegistry::ConditionRegistry() {
     return modParam != nullptr;
   };
 
+  m_theConditonMap["isParameterUnmodulateable"] = [&]() {
+    return !m_theConditonMap["isParameterModulateable"];
+  };
+
   m_theConditonMap["hasNoMcSelected"] = []() {
     auto modParam = dynamic_cast<ModulateableParameter*>(getSelectedParam());
     if(modParam != nullptr) {
