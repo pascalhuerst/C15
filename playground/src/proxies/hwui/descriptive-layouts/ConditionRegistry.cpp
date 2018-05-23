@@ -6,7 +6,7 @@
 #include "ConditionRegistry.h"
 
 ConditionRegistry::tCondition ConditionRegistry::getLambda(std::string key) {
-  return m_theConditonMap[key];
+  return m_theConditonMap.at(key);
 }
 
 ConditionRegistry& ConditionRegistry::get() {

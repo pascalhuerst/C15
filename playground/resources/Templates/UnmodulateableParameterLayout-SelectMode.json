@@ -5,6 +5,7 @@
 				"UIFocus": "Parameters",
 				"UIMode": "Select"
 			},
+            "Conditions": "isParameterUnmodulateable",
 			"Controls": {
 				"GroupHeader": {
 					"Class": "ParameterGroupName",
