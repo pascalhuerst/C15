@@ -27,6 +27,7 @@ class HWUI
     void indicateBlockingMainThread ();
 
     void undoableSetFocusAndMode (UNDO::Scope::tTransactionPtr transaction, FocusAndMode focusAndMode);
+    void setUiModeDetail(UIFocusAndModeDetail detail);
     void undoableSetFocusAndMode (FocusAndMode focusAndMode);
     void setFocusAndMode (FocusAndMode focusAndMode);
     FocusAndMode getFocusAndMode () const;

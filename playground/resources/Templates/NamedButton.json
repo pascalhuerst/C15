@@ -1,10 +1,15 @@
 {
   "controls": {
-    "NamedButton": {
+    "McSelButton": {
       "Background": {
         "Class": "Bar",
         "Tag": "Button",
         "Rect": "3, 2, 56,9"
+      },
+      "Text": {
+        "Class": "Text",
+        "Rect": "3, 2, 56,9",
+        "Default": "MC Sel"
       },
       "Border": {
         "Class": "Border",
@@ -33,9 +38,9 @@
     }
   },
   "styles": {
-    "NamedButton-Border": {
+    "McSelButton-Border": {
       "selector": {
-        "ControlClasses": "NamedButton",
+        "ControlClasses": "McSelButton",
         "PrimitiveClasses": "Border"
       },
       "styles": {
@@ -43,18 +48,27 @@
         "TextAlign": "Left"
       }
     },
-    "NamedButton-Background": {
+    "McSelButton-Background": {
       "selector": {
-        "ControlClasses": "NamedButton",
+        "ControlClasses": "McSelButton",
         "PrimitiveClasses": "Bar"
       },
       "styles": {
         "Color": "C77"
       }
     },
-    "NamedButton-Covers": {
+    "McSelButton-Text": {
       "selector": {
-        "ControlClasses": "NamedButton",
+        "ControlClasses": "McSelButton",
+        "PrimitiveClasses": "Text"
+      },
+      "styles": {
+        "BackgroundColor": "C77"
+      }
+    },
+    "McSelButton-Covers": {
+      "selector": {
+        "ControlClasses": "McSelButton",
         "Tag": "Cover",
         "PrimitiveClasses": "Bar"
       },

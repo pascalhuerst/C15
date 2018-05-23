@@ -47,6 +47,11 @@ namespace DescriptiveLayouts
     {
       hwui->undoableSetFocusAndMode(UIMode::Select);
     });
+
+    registerEvent(EventSinks::SwitchToMCSelectDetail, [eb, hwui]()
+    {
+      hwui->setUiModeDetail(UIFocusAndModeDetail::MCSelect);
+    });
   }
 
   void EventSinkBroker::registerEvent(EventSinks sink, tAction action)

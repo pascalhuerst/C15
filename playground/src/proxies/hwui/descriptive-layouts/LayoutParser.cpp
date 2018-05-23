@@ -148,7 +148,7 @@ namespace DescriptiveLayouts
       auto eventSinkContent = layoutContent.at("EventSinks");
 
       if(layoutContent.find("Conditions") != layoutContent.end()) {
-        auto conditionContent = layoutContent.at("Conditons");
+        auto conditionContent = layoutContent.at("Conditions");
         selectonConditions = toConditions(conditionContent);
       }
 
@@ -162,7 +162,7 @@ namespace DescriptiveLayouts
 
   void importLayout(const std::string &fileName)
   {
-    DebugLevel::info("importing layouts from file", fileName);
+    DebugLevel::warning("importing layouts from file", fileName);
     std::ifstream i(fileName);
     json j;
     i >> j;
@@ -173,6 +173,8 @@ namespace DescriptiveLayouts
       json layouts = *it;
       parseLayout(layouts);
     }
+
+    BoledLayoutFactory::get().sortByPriority();
   }
 
 }

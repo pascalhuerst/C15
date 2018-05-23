@@ -491,6 +491,11 @@ void HWUI::undoableSetFocusAndMode(FocusAndMode focusAndMode)
   undoableSetFocusAndMode(scope->getTransaction(), focusAndMode);
 }
 
+void HWUI::setUiModeDetail(UIFocusAndModeDetail detail)
+{
+  m_focusAndMode.detail = detail;
+}
+
 void HWUI::freezeFocusAndMode()
 {
   m_focusAndModeFrozen = true;

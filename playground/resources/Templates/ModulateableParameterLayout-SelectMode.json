@@ -3,9 +3,10 @@
     "ModulateableParameter-SelectMode": {
       "Selector": {
         "UIFocus": "Parameters",
-        "UIMode": "Select"
+        "UIMode": "Select",
+        "UIDetail": "Any"
       },
-      "Conditions": "isParameterModulateable,hasNoMcSelected",
+      "Conditions": "isParameterModulateable",
       "Controls": {
         "GroupHeader": {
           "Class": "ParameterGroupName",
@@ -32,7 +33,7 @@
           "Position": "0,52"
         },
         "ButtonB": {
-          "Class": "MCButton",
+          "Class": "McSelButton",
           "Position": "64,52"
         },
         "ButtonC": {
@@ -55,7 +56,7 @@
         "ROTARY_PLUS": "IncParam",
         "ROTARY_MINUS": "DecParam",
         "BUTTON_EDIT": "SwitchToEditMode",
-        "BUTTON_B": "SwitchToMCSelectMode"
+        "BUTTON_B": "SwitchToMCSelectDetail"
       }
     }
   }
