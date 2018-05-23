@@ -40,9 +40,9 @@ void BOLED::bruteForce()
 }
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
-  //try {
+  try {
     reset(DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
- /* } catch (nlohmann::json::out_of_range &e) {
+  } catch (nlohmann::json::out_of_range &e) {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::out_of_range\n"s + e.what()));
   } catch (nlohmann::json::parse_error &e) {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::parse_error:\n"s + e.what()));
@@ -56,7 +56,7 @@ void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
   } catch(...) {
     auto description = ExceptionTools::handle_eptr(std::current_exception());
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("...\n"s + description));
-  }*/
+  }
 }
 
 void BOLED::setupSoundScreen (FocusAndMode focusAndMode)
