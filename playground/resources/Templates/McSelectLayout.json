@@ -1,10 +1,10 @@
 {
   "layouts": {
-    "ModulateableParameter-SelectMode": {
+    "ModulateableParameter-SelectMode-MCSelect": {
       "Selector": {
         "UIFocus": "Parameters",
         "UIMode": "Select",
-        "UIDetail": "Init"
+        "UIDetail": "MCSelect"
       },
       "Conditions": "isParameterModulateable",
       "Controls": {
@@ -18,11 +18,6 @@
           "Position": "77,24",
           "Events": "IsBipolar => CenterMark[Visibility], SliderRange => Slider[Range]"
         },
-        "ParameterValue": {
-          "Class": "ParameterValueLabel",
-          "Position": "90,33",
-          "Events": "ParameterDisplayString => Text[Text]"
-        },
         "ParameterName": {
           "Class": "ParameterNameLabel",
           "Position": "72,8",
@@ -31,6 +26,11 @@
         "ButtonA": {
           "Class": "EmptyButton",
           "Position": "0,52"
+        },
+        "MCName": {
+          "Class": "MCName",
+          "Position": "72, 35",
+          "Events": "MacroControlSymbol => Text[Text]"
         },
         "ButtonB": {
           "Class": "McSelButton",
@@ -51,12 +51,12 @@
         }
       },
       "EventSinks": {
-        "BUTTON_INC": "IncParam",
-        "BUTTON_DEC": "DecParam",
-        "ROTARY_PLUS": "IncParam",
-        "ROTARY_MINUS": "DecParam",
+        "BUTTON_INC": "IncMCSel",
+        "BUTTON_DEC": "DecMCSel",
+        "ROTARY_PLUS": "IncMCSel",
+        "ROTARY_MINUS": "DecMCSel",
         "BUTTON_EDIT": "SwitchToEditMode",
-        "BUTTON_B": "SwitchToMCSelectDetail"
+        "BUTTON_B": "SwitchToInitDetail"
       }
     }
   }

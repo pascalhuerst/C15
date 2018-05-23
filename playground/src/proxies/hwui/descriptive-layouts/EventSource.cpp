@@ -4,6 +4,8 @@
 #include <proxies/hwui/HWUI.h>
 #include <presets/PresetManager.h>
 #include <presets/EditBuffer.h>
+#include <parameters/ModulateableParameter.h>
+#include <groups/MacroControlsGroup.h>
 
 namespace DescriptiveLayouts
 {
@@ -185,6 +187,42 @@ namespace DescriptiveLayouts
         }
     };
 
+    class CurrentMacroControlSymbol : public EventSource<DisplayString> {
+    public:
+        CurrentMacroControlSymbol()
+        {
+          Application::get ().getPresetManager ()->getEditBuffer ()->onSelectionChanged (sigc::mem_fun (this, &CurrentMacroControlSymbol::onParameterSelectionChanged));
+        }
+
+    private:
+        sigc::connection m_paramValueConnection;
+
+        void onParameterSelectionChanged(Parameter *oldParam, Parameter *newParam)
+        {
+          if (newParam)
+          {
+            m_paramValueConnection.disconnect ();
+            m_paramValueConnection = newParam->onParameterChanged (sigc::mem_fun (this, &CurrentMacroControlSymbol::onParamValueChanged));
+          }
+        }
+
+        void onParamValueChanged (const Parameter* param)
+        {
+          if (const auto *modP = dynamic_cast<const ModulateableParameter*> (param))
+          {
+            uint16_t id = MacroControlsGroup::modSrcToParamID (modP->getModulationSource ());
+
+            if (auto mc = Application::get ().getPresetManager ()->getEditBuffer ()->findParameterByID (id))
+            {
+              DisplayString s(mc->getShortName(), 0);
+              setValue(s);
+              return;
+            }
+          }
+          DisplayString s("[-]", 0);
+          setValue(s);
+        }
+    };
   EventSourceBroker& EventSourceBroker::get()
   {
     static EventSourceBroker s;
@@ -199,6 +237,7 @@ namespace DescriptiveLayouts
     m_map[EventSources::ParameterName] = std::make_unique<ParameterNameEventSource>();
     m_map[EventSources::ParameterDisplayString] = std::make_unique<ParameterDisplayStringEventSource>();
     m_map[EventSources::LockStatus] = std::make_unique<CurrentParameterGroupLockStatus>();
+    m_map[EventSources::MacroControlSymbol] = std::make_unique<CurrentMacroControlSymbol>();
   }
 
   sigc::connection EventSourceBroker::connect(EventSources source, std::function<void(std::any)> cb)
