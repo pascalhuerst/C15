@@ -22,9 +22,9 @@ LayoutFolderMonitor& LayoutFolderMonitor::get()
 LayoutFolderMonitor::LayoutFolderMonitor()
 {
   auto folder = Application::get().getOptions()->getLayoutFolder();
-  m_file = Gio::File::create_for_path(folder);
-  m_monitor = m_file->monitor(Gio::FILE_MONITOR_WATCH_MOUNTS);
-  m_monitor->signal_changed().connect(sigc::mem_fun(this, &LayoutFolderMonitor::onFileChanged));
+  m_rootFolder = Gio::File::create_for_path(folder);
+  m_rootMonitor = m_rootFolder->monitor(Gio::FILE_MONITOR_WATCH_MOUNTS);
+  m_rootMonitor->signal_changed().connect(sigc::mem_fun(this, &LayoutFolderMonitor::onFileChanged));
   bruteForce();
 }
 
@@ -37,15 +37,24 @@ void LayoutFolderMonitor::onFileChanged(const Glib::RefPtr<Gio::File>&, const Gl
   bruteForce();
 }
 
+void LayoutFolderMonitor::handleFolder(Glib::RefPtr<Gio::File>& folder) {
+  if(m_monitorMap.find(folder) == m_monitorMap.end())
+  {
+    m_monitorMap.emplace(folder, folder->monitor(Gio::FILE_MON));
+  }
+}
+
 void LayoutFolderMonitor::bruteForce()
 {
   DescriptiveLayouts::BoledLayoutFactory::get().clear();
   DescriptiveLayouts::ControlRegistry::get().clear();
   DescriptiveLayouts::StyleSheet::get().clear();
 
-  auto enumerator = m_file->enumerate_children();
+  auto enumerator = m_rootFolder->enumerate_children();
   try {
+    while(auto file = enumerator->next_file()) {
 
+    }
     while (auto file = enumerator->next_file()) {
       auto name = file->get_name();
       auto path = m_file->get_path() + '/' + name;
