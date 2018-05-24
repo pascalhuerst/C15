@@ -52,7 +52,7 @@ class HWUI
     sigc::connection onModifiersChanged (slot<void, ButtonModifiers> cb);
     sigc::connection connectToBlinkTimer (slot<void, int> cb);
     void deInit();
-
+    const bool getOldLayoutsSetting() const;
     private:
     void onButtonMessage(WebSocketSession::tMessage msg);
     void onButtonPressed (Buttons buttonID, bool state);
@@ -86,6 +86,7 @@ class HWUI
     std::array<bool, (size_t)Buttons::NUM_BUTTONS>  m_buttonStates;
 
     int m_affengriffState = 0;
+    bool m_oldLayouts = false;
 
     FocusAndMode m_focusAndMode;
 
