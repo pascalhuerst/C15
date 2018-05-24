@@ -48,16 +48,17 @@
         "TextAlign": "Left"
       }
     },
-    "McSelButton-Background": {
+    "McSelButton-Text-Highlight": {
       "selector": {
         "ControlClasses": "McSelButton",
-        "PrimitiveClasses": "Bar"
+        "UIDetail": "MCSelect",
+        "PrimitiveClasses": "Text"
       },
       "styles": {
-        "Color": "C77"
+        "BackgroundColor": "C128"
       }
     },
-    "McSelButton-Text": {
+    "McSelButton-Text-NonHighlight": {
       "selector": {
         "ControlClasses": "McSelButton",
         "PrimitiveClasses": "Text"

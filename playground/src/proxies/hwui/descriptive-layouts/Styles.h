@@ -92,7 +92,7 @@ namespace DescriptiveLayouts
             m = v;
           }
 
-          void setupSelector(UIFocusAndModeDetail v)
+          void setupSelector(UIDetail v)
           {
             d = v;
           }
@@ -129,7 +129,7 @@ namespace DescriptiveLayouts
 
           UIFocus f = UIFocus::Any;
           UIMode m = UIMode::Any;
-          UIFocusAndModeDetail d = UIFocusAndModeDetail::Any;
+          UIDetail d = UIDetail::Any;
           LayoutClasses l = LayoutClasses::Any;
           ControlClasses cc = ControlClasses::Any;
           ControlInstances ci = ControlInstances::Any;
@@ -143,20 +143,20 @@ namespace DescriptiveLayouts
         registerStyleFull(s.f, s.m, s.d, s.l, s.cc, s.ci, s.pc, s.pt, s.pi, style);
       }
 
-      void registerStyleFull(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
+      void registerStyleFull(UIFocus f, UIMode m, UIDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
                              PrimitiveClasses pc, PrimitiveTag pt, PrimitiveInstances pi, const StyleMap &s);
 
-      void applyStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
+      void applyStyle(UIFocus f, UIMode m, UIDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
                       PrimitiveClasses pc, PrimitiveTag pt, PrimitiveInstances pi, Styleable *target) const;
 
       void clear();
     private:
       StyleSheet();
   public:
-      void registerStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
+      void registerStyle(UIFocus f, UIMode m, UIDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
                          PrimitiveClasses pc, PrimitiveTag pt, PrimitiveInstances pi, const StyleMap &s);
   private:
-      using Styles = SubTree<UIFocus, UIMode, UIFocusAndModeDetail, LayoutClasses, ControlClasses, ControlInstances, PrimitiveClasses, PrimitiveTag, PrimitiveInstances>;
+      using Styles = SubTree<UIFocus, UIMode, UIDetail, LayoutClasses, ControlClasses, ControlInstances, PrimitiveClasses, PrimitiveTag, PrimitiveInstances>;
       Styles m_styles;
   };
 

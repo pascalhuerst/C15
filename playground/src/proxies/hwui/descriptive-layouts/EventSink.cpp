@@ -51,21 +51,19 @@ namespace DescriptiveLayouts
 
     registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui]()
     {
-      hwui->setUiModeDetail(UIFocusAndModeDetail::MCSelect);
+      hwui->setUiModeDetail(UIDetail::MCSelect);
     });
 
-    registerEvent(EventSinks::SwitchToInitDetail, [&](){
-      hwui->setUiModeDetail(UIFocusAndModeDetail::Init);
+    registerEvent(EventSinks::SwitchToInitDetail, [hwui](){
+      hwui->setUiModeDetail(UIDetail::Init);
     });
 
-    registerEvent(EventSinks::IncMCSel, [&](){
-      auto eb = Application::get().getPresetManager()->getEditBuffer();
+    registerEvent(EventSinks::IncMCSel, [eb](){
       if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
         modParam->undoableIncrementMCSelect(1);
     });
 
-    registerEvent(EventSinks::DecMCSel, [&](){
-      auto eb = Application::get().getPresetManager()->getEditBuffer();
+    registerEvent(EventSinks::DecMCSel, [eb](){
       if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
         modParam->undoableIncrementMCSelect(-1);
     });

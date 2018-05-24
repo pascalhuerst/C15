@@ -8,8 +8,7 @@ namespace DescriptiveLayouts
 {
   class Selector
   {
-      using Lambda = std::function<bool()>;
-      using Criteria = std::variant<UIFocus, UIMode, UIFocusAndModeDetail, Lambda>;
+      using Criteria = std::variant<UIFocus, UIMode, UIDetail>;
 
       struct Tester
       {
@@ -29,14 +28,9 @@ namespace DescriptiveLayouts
             return m == fam.mode || m == UIMode::Any || fam.mode == UIMode::Any;
           }
 
-          bool operator ()(UIFocusAndModeDetail d)
+          bool operator ()(UIDetail d)
           {
-            return d == fam.detail || d == UIFocusAndModeDetail::Any || fam.detail == UIFocusAndModeDetail::Any;
-          }
-
-          bool operator()(Lambda l)
-          {
-            return l();
+            return d == fam.detail || d == UIDetail::Any || fam.detail == UIDetail::Any;
           }
       };
 
@@ -52,7 +46,7 @@ namespace DescriptiveLayouts
       Selector(UIMode m) :
         criteria(m) {}
 
-      Selector(UIFocusAndModeDetail d) :
+      Selector(UIDetail d) :
         criteria(d) {}
 
       bool test(FocusAndMode fam) const

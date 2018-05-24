@@ -35,8 +35,8 @@ namespace DescriptiveLayouts
       selectors.push_back(UIFocus::Any);
     if(!readFieldFromJson<UIMode>(selector, "UIMode", toUIMode, selectors))
       selectors.push_back(UIMode::Any);
-    if(!readFieldFromJson<UIFocusAndModeDetail>(selector, "UIFocusAndModeDetail", toUIFocusAndModeDetail, selectors))
-      selectors.push_back(UIFocusAndModeDetail::Any);
+    if(!readFieldFromJson<UIDetail>(selector, "UIDetail", toUIDetail, selectors))
+      selectors.push_back(UIDetail::Any);
     return selectors;
   }
 

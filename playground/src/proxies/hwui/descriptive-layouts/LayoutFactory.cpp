@@ -51,6 +51,11 @@ namespace DescriptiveLayouts
 
     }
 
+    DebugLevel::warning("Current Modes:",
+                        toString(fam.focus),
+                        toString(fam.mode),
+                        toString(fam.detail));
+
     return *it;
   }
 
