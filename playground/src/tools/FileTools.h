@@ -85,5 +85,13 @@ namespace FileTools
     g_free(stringPtr);
     return ret;
   }
+
+  static Glib::ustring getFileName(const Glib::RefPtr<Gio::File>& file) {
+    return file->query_info()->get_name();
+  }
+
+  static Glib::ustring getFullPath(const Glib::RefPtr<Gio::File>& file) {
+    return file->get_path();
+  }
 };
 
