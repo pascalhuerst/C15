@@ -17,10 +17,10 @@ namespace FileTools {
                                                                                            m_callBack(callback),
                                                                                            m_monitors(0)
         {
-          rebuildDirectoryMap();
+          rebuildDirectoryList();
         }
 
-        void rebuildDirectoryMap()
+        void rebuildDirectoryList()
         {
           m_monitors.clear();
           addMonitor(m_rootFolder);
@@ -40,7 +40,7 @@ namespace FileTools {
         void onFileChanged(const Glib::RefPtr<Gio::File>& oldFile,const Glib::RefPtr<Gio::File>& newFile,Gio::FileMonitorEvent monitorEvent)
         {
           m_callBack(oldFile, newFile, monitorEvent);
-          rebuildDirectoryMap();
+          rebuildDirectoryList();
         }
 
         std::list<Glib::RefPtr<Gio::File>> getAllFilesBeingMonitored()
@@ -58,7 +58,7 @@ namespace FileTools {
             if (fileInfo->get_file_type() == Gio::FILE_TYPE_DIRECTORY)
             {
               ret.emplace_back(file);
-              for(auto& f: getAllFilesInFolder(file))
+              for(auto& f: getAllDirectorysInDirectory(file))
               {
                 ret.emplace_back(f);
               }

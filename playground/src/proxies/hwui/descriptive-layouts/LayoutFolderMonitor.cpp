@@ -29,7 +29,6 @@ LayoutFolderMonitor::LayoutFolderMonitor() : m_rootFolder(Gio::File::create_for_
 
 void LayoutFolderMonitor::onFileChanged(const Glib::RefPtr<Gio::File>& o, const Glib::RefPtr<Gio::File>& n, Gio::FileMonitorEvent e)
 {
-  DebugLevel::warning("changed file:", FileTools::getFileName(o));
   bruteForce();
 }
 
