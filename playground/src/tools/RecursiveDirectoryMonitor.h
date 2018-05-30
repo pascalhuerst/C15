@@ -6,14 +6,14 @@
 #include <iostream>
 
 namespace FileTools {
-    template<class T>
     class RecursiveDirectoryMonitor : public sigc::trackable {
     protected:
-        T m_callBack;
+        using tCallBack = std::function<void(const Glib::RefPtr<Gio::File>&,const Glib::RefPtr<Gio::File>&,Gio::FileMonitorEvent)>;
+        tCallBack m_callBack;
         Glib::RefPtr<Gio::File> m_rootFolder;
         std::vector<Glib::RefPtr<Gio::FileMonitor>> m_monitors;
     public:
-        RecursiveDirectoryMonitor(const Glib::RefPtr<Gio::File>& rootFolder, T callback) : m_rootFolder(rootFolder),
+        RecursiveDirectoryMonitor(const Glib::RefPtr<Gio::File>& rootFolder, tCallBack callback) : m_rootFolder(rootFolder),
                                                                                            m_callBack(callback),
                                                                                            m_monitors(0)
         {

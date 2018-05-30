@@ -3,8 +3,6 @@
 #include <Application.h>
 #include <Options.h>
 #include <proxies/hwui/debug-oled/DebugLayout.h>
-#include <tools/json.h>
-#include <execinfo.h>
 #include <tools/ExceptionTools.h>
 #include <tools/FileTools.h>
 #include "LayoutParser.h"
@@ -20,13 +18,18 @@ LayoutFolderMonitor& LayoutFolderMonitor::get()
 }
 
 LayoutFolderMonitor::LayoutFolderMonitor() : m_rootFolder(Gio::File::create_for_path(Application::get().getOptions()->getLayoutFolder())),
-                                             m_recMonitor(Gio::File::create_for_path(Application::get().getOptions()->getLayoutFolder()), m_myCallback)
+                                             m_recMonitor(m_rootFolder, std::bind(&LayoutFolderMonitor::onFileChanged,
+                                                                                  this,
+                                                                                  std::placeholders::_1,
+                                                                                  std::placeholders::_2,
+                                                                                  std::placeholders::_3))
 {
   bruteForce();
 }
 
-void LayoutFolderMonitor::onFileChanged(const Glib::RefPtr<Gio::File>&, const Glib::RefPtr<Gio::File>&, Gio::FileMonitorEvent)
+void LayoutFolderMonitor::onFileChanged(const Glib::RefPtr<Gio::File>& o, const Glib::RefPtr<Gio::File>& n, Gio::FileMonitorEvent e)
 {
+  DebugLevel::warning("changed file:", FileTools::getFileName(o));
   bruteForce();
 }
 
