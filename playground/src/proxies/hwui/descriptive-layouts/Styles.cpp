@@ -10,13 +10,13 @@ namespace DescriptiveLayouts
 
   }
 
-  void StyleSheet::registerStyleFull(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
+  void StyleSheet::registerStyleFull(UIFocus f, UIMode m, UIDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
                                      PrimitiveClasses pc, PrimitiveTag pt, PrimitiveInstances pi, const StyleMap &s)
   {
     m_styles[f][m][d][l][cc][ci][pc][pt][pi] = s;
   }
 
-  void StyleSheet::applyStyle(UIFocus f, UIMode m, UIFocusAndModeDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
+  void StyleSheet::applyStyle(UIFocus f, UIMode m, UIDetail d, LayoutClasses l, ControlClasses cc, ControlInstances ci,
                               PrimitiveClasses pc, PrimitiveTag pt, PrimitiveInstances pi, Styleable *target) const
   {
     StyleMap style;

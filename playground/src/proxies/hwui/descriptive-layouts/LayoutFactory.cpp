@@ -30,6 +30,11 @@ namespace DescriptiveLayouts
     m_layouts.clear();
   }
 
+  void BoledLayoutFactory::sortByPriority()
+  {
+    m_layouts.sort([](const LayoutClass & a, const LayoutClass & b) { return a.getWeight() > b.getWeight(); });
+  }
+
   const DescriptiveLayouts::LayoutClass& BoledLayoutFactory::find(FocusAndMode fam) const
   {
     auto it = std::find_if(m_layouts.begin(), m_layouts.end(), [=](const LayoutClass& e)
@@ -39,15 +44,16 @@ namespace DescriptiveLayouts
 
     if(it == m_layouts.end())
     {
-      throw ExceptionTools::TemplateException("No matching layout found! current modes:" + [&]() -> Glib::ustring
-      {
-        Glib::ustring ret;
-        ret += toString(fam.focus);
-        ret += toString(fam.mode);
-        ret += toString(fam.detail);
-        return ret;
-      }(), "__LINE__ __FILE__");
+      DebugLevel::throwException("No matching layout found! current modes:" ,
+                                 toString(fam.focus),
+                                 toString(fam.mode),
+                                 toString(fam.detail));
     }
+
+    DebugLevel::warning("Current Modes:",
+                        toString(fam.focus),
+                        toString(fam.mode),
+                        toString(fam.detail));
 
     return *it;
   }

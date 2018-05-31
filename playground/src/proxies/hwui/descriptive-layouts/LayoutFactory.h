@@ -30,6 +30,7 @@ namespace DescriptiveLayouts
       void registerLayout(LayoutClasses id, Args ... args)
       {
         m_layouts.emplace_back(id, args...);
+        DebugLevel::warning("registered Layout:", id);
       }
 
       void registerLayout(LayoutClasses id,
@@ -38,8 +39,9 @@ namespace DescriptiveLayouts
                           std::list<EventSinkMapping> esm,
                           std::list<std::function<bool()>> con) {
         m_layouts.emplace_back(id, sel, ci, esm, con);
+        DebugLevel::warning("registered Layout:", id);
       }
-
+      void sortByPriority();
     private:
       BoledLayoutFactory();
 

@@ -1,3 +1,4 @@
+#include <parameters/ModulateableParameter.h>
 #include "EventSink.h"
 #include "Application.h"
 #include "presets/PresetManager.h"
@@ -23,7 +24,7 @@ namespace DescriptiveLayouts
 
   EventSinkBroker::EventSinkBroker()
   {
-    auto eb = Application::get().getPresetManager()->getEditBuffer();
+    auto eb = Application::get().getPresetManager()->getEditBuffer(); // Warum crasht? bei inc dec mc?!
     auto hwui = Application::get().getHWUI();
 
     registerEvent(EventSinks::IncParam, [eb, hwui]()
@@ -38,14 +39,33 @@ namespace DescriptiveLayouts
       p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
 
-    registerEvent(EventSinks::SwitchToEditMode, [eb, hwui]()
+    registerEvent(EventSinks::SwitchToEditMode, [hwui]()
     {
       hwui->undoableSetFocusAndMode(UIMode::Edit);
     });
 
-    registerEvent(EventSinks::SwitchToSelectMode, [eb, hwui]()
+    registerEvent(EventSinks::SwitchToSelectMode, [hwui]()
     {
       hwui->undoableSetFocusAndMode(UIMode::Select);
+    });
+
+    registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui]()
+    {
+      hwui->setUiModeDetail(UIDetail::MCSelect);
+    });
+
+    registerEvent(EventSinks::SwitchToInitDetail, [hwui](){
+      hwui->setUiModeDetail(UIDetail::Init);
+    });
+
+    registerEvent(EventSinks::IncMCSel, [eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
+        modParam->undoableIncrementMCSelect(1);
+    });
+
+    registerEvent(EventSinks::DecMCSel, [eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
+        modParam->undoableIncrementMCSelect(-1);
     });
   }
 

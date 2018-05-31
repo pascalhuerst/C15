@@ -44,6 +44,7 @@ namespace DescriptiveLayouts
 
       bool matches(FocusAndMode fam) const;
       bool meetsConditions() const;
+      const unsigned long getWeight() const;
 
       DFBLayout* instantiate() const;
 

@@ -491,6 +491,12 @@ void HWUI::undoableSetFocusAndMode(FocusAndMode focusAndMode)
   undoableSetFocusAndMode(scope->getTransaction(), focusAndMode);
 }
 
+void HWUI::setUiModeDetail(UIDetail detail)
+{
+  m_focusAndMode.detail = detail;
+  setupFocusAndMode();
+}
+
 void HWUI::freezeFocusAndMode()
 {
   m_focusAndModeFrozen = true;
@@ -524,7 +530,6 @@ FocusAndMode HWUI::restrictFocusAndMode(FocusAndMode in) const
   {
     if(m_focusAndMode.mode == UIMode::Edit)
     {
-      // ticket: BOLED: "Edit"-Mode (immer) beenden, wenn zwischen  Preset/Bank-Screen und Parameter-Screen gewechselt wird.
       in.mode = UIMode::Select;
     }
   }

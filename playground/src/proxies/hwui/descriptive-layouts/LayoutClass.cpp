@@ -27,6 +27,7 @@ namespace DescriptiveLayouts
 
   DFBLayout* LayoutClass::instantiate() const
   {
+    DebugLevel::warning("instantiating Layout:", id);
     return new GenericLayout(*this);
   }
 
@@ -38,10 +39,14 @@ namespace DescriptiveLayouts
     });
   }
 
-    bool LayoutClass::meetsConditions() const
-    {
-      return std::all_of(conditions.begin(), conditions.end(), [](const std::function<bool()> c) {
-        return c();
-      });
-    }
+  bool LayoutClass::meetsConditions() const
+  {
+    return conditions.size() == 0 || std::all_of(conditions.begin(), conditions.end(), [](const std::function<bool()> c) {
+      return c();
+    });
+  }
+
+  const unsigned long LayoutClass::getWeight() const {
+    return conditions.size() + selectors.size();
+  }
 }

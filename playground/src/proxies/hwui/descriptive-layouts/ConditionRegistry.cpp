@@ -6,7 +6,7 @@
 #include "ConditionRegistry.h"
 
 ConditionRegistry::tCondition ConditionRegistry::getLambda(std::string key) {
-  return m_theConditonMap[key];
+  return m_theConditonMap.at(key);
 }
 
 ConditionRegistry& ConditionRegistry::get() {
@@ -26,6 +26,10 @@ ConditionRegistry::ConditionRegistry() {
   m_theConditonMap["isParameterModulateable"] = []() {
     auto modParam = dynamic_cast<ModulateableParameter*>(getSelectedParam());
     return modParam != nullptr;
+  };
+
+  m_theConditonMap["isParameterUnmodulateable"] = [&]() {
+    return !m_theConditonMap["isParameterModulateable"];
   };
 
   m_theConditonMap["hasNoMcSelected"] = []() {

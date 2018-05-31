@@ -36,8 +36,8 @@ namespace DescriptiveLayouts
     if(!readFieldFromJson<UIMode>(selector, "UIMode", toUIMode, selectors))
       selectors.push_back(UIMode::Any);
 
-    if(!readFieldFromJson<UIFocusAndModeDetail>(selector, "UIFocusAndModeDetail", toUIFocusAndModeDetail, selectors))
-      selectors.push_back(UIFocusAndModeDetail::Any);
+    if(!readFieldFromJson<UIDetail>(selector, "UIDetail", toUIDetail, selectors))
+      selectors.push_back(UIDetail::Any);
 
     return selectors;
   }
@@ -164,7 +164,7 @@ namespace DescriptiveLayouts
 
   void importLayout(const std::string &fileName)
   {
-    DebugLevel::info("importing layouts from file", fileName);
+    DebugLevel::warning("importing layouts from file", fileName);
     std::ifstream i(fileName);
     json j;
     i >> j;
@@ -175,5 +175,7 @@ namespace DescriptiveLayouts
       json layouts = *it;
       parseLayout(layouts);
     }
+
+    BoledLayoutFactory::get().sortByPriority();
   }
 }

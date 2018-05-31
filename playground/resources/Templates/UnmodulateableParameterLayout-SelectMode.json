@@ -3,7 +3,8 @@
 		"UnmodulateableParameterLayout-SelectMode": {
 			"Selector": {
 				"UIFocus": "Parameters",
-				"UIMode": "Select"
+				"UIMode": "Select",
+                "UIDetail": "Init"
 			},
 			"Controls": {
 				"GroupHeader": {

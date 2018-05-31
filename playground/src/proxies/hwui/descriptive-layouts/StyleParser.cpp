@@ -40,7 +40,7 @@ namespace DescriptiveLayouts
 
     try
     {
-      theSelector.d = toUIFocusAndModeDetail(selector.at("UIFocusAndModeDetail"));
+      theSelector.d = toUIDetail(selector.at("UIDetail"));
     }
     catch(...)
     {
