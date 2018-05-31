@@ -4,7 +4,7 @@
 			"Selector": {
 				"UIFocus": "Parameters",
 				"UIMode": "Edit",
-                "UIDetail": "Init"
+                "UIDetail": "Any"
 			},
 			"Controls": {
 				"GroupHeader": {

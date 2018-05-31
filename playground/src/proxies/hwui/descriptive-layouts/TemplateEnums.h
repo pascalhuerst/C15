@@ -36,7 +36,7 @@ namespace DescriptiveLayouts
       public:
         StringId() = default;
 
-        StringId(const super &i) :
+        constexpr StringId(const super &i) :
             super(i)
         {
         }

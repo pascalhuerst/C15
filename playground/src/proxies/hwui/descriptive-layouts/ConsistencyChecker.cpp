@@ -68,11 +68,7 @@ namespace DescriptiveLayouts
     {
       for(const auto &control : layout.controls)
       {
-        try
-        {
-          ControlRegistry::get().find(control.controlClass);
-        }
-        catch(...)
+        if(!ControlRegistry::get().exists(control.controlClass))
         {
           m_out << "Layout " << layout.id << " references unknown control class " << control.controlClass << std::endl;
           return false;
@@ -186,20 +182,21 @@ namespace DescriptiveLayouts
 
     for(const auto &a : ControlRegistry::get().m_controlRegistry)
     {
+      bool found = false;
+
       for(const auto &layout : layoutFactory.m_layouts)
       {
-        bool found = false;
-
         for(const auto &control : layout.controls)
         {
           found |= control.controlClass == a.first;
+          if(found)
+            break;
         }
-
-        if(!found)
-        {
-          m_out << "Control class " << a.first << " is never used in a layout." << std::endl;
-          return false;
-        }
+      }
+      if(!found)
+      {
+        m_out << "Control class " << a.first << " is never used in a layout." << std::endl;
+        return false;
       }
     }
     return true;
