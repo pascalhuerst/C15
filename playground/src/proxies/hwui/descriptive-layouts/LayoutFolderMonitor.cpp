@@ -39,7 +39,7 @@ void LayoutFolderMonitor::bruteForce()
   DescriptiveLayouts::StyleSheet::get().clear();
 
   try {
-    auto allFiles = m_recMonitor.getAllFilesBeingMonitored();
+    auto allFiles = m_recMonitor.getAllFilesInFolder(m_rootFolder);
 
     for(auto& file: allFiles) {
       auto path = FileTools::getFullPath(file);

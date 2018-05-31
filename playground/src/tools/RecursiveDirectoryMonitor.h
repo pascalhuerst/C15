@@ -8,91 +8,24 @@
 namespace FileTools {
     class RecursiveDirectoryMonitor : public sigc::trackable {
     protected:
-        using tCallBack = std::function<void(const Glib::RefPtr<Gio::File>&,const Glib::RefPtr<Gio::File>&,Gio::FileMonitorEvent)>;
+        using tFile = Glib::RefPtr<Gio::File>;
+        using tCallBack = std::function<void(const tFile&,const tFile&,Gio::FileMonitorEvent)>;
+        using tFileCallBack = std::function<void(const tFile&)>;
+        using tFileList = std::list<tFile>;
+        using tMonitor = Glib::RefPtr<Gio::FileMonitor>;
+
         tCallBack m_callBack;
-        Glib::RefPtr<Gio::File> m_rootFolder;
-        std::vector<Glib::RefPtr<Gio::FileMonitor>> m_monitors;
+        tFile m_rootFolder;
+        std::vector<tMonitor> m_monitors;
     public:
-        RecursiveDirectoryMonitor(const Glib::RefPtr<Gio::File>& rootFolder, tCallBack callback) : m_rootFolder(rootFolder),
-                                                                                           m_callBack(callback),
-                                                                                           m_monitors(0)
-        {
-          rebuildDirectoryList();
-        }
-
-        void rebuildDirectoryList()
-        {
-          m_monitors.clear();
-          addMonitor(m_rootFolder);
-          for(auto& dir: getAllDirectorysInDirectory(m_rootFolder))
-          {
-            addMonitor(dir);
-          }
-        }
-
-        void addMonitor(const Glib::RefPtr<Gio::File>& file)
-        {
-          auto monitor = file->monitor(Gio::FILE_MONITOR_WATCH_MOUNTS);
-          monitor->signal_changed().connect(sigc::mem_fun(this, &RecursiveDirectoryMonitor::onFileChanged));
-          m_monitors.emplace_back(std::move(monitor));
-        }
-
-        void onFileChanged(const Glib::RefPtr<Gio::File>& oldFile,const Glib::RefPtr<Gio::File>& newFile,Gio::FileMonitorEvent monitorEvent)
-        {
-          m_callBack(oldFile, newFile, monitorEvent);
-          rebuildDirectoryList();
-        }
-
-        std::list<Glib::RefPtr<Gio::File>> getAllFilesBeingMonitored()
-        {
-          return getAllFilesInFolder(m_rootFolder);
-        }
-
-        std::list<Glib::RefPtr<Gio::File>> getAllDirectorysInDirectory(const Glib::RefPtr<Gio::File>& folder)
-        {
-          std::list<Glib::RefPtr<Gio::File>> ret;
-          auto fileIt = folder->enumerate_children();
-          while (auto fileInfo = fileIt->next_file())
-          {
-            auto file = getFileFromFileInfo(folder, fileInfo);
-            if (fileInfo->get_file_type() == Gio::FILE_TYPE_DIRECTORY)
-            {
-              ret.emplace_back(file);
-              for(auto& f: getAllDirectorysInDirectory(file))
-              {
-                ret.emplace_back(f);
-              }
-            }
-          }
-          return ret;
-        }
-
-        std::list<Glib::RefPtr<Gio::File>> getAllFilesInFolder(Glib::RefPtr<Gio::File> folder)
-        {
-          std::list<Glib::RefPtr<Gio::File>> ret;
-          auto fileIt = folder->enumerate_children();
-          while (auto fileInfo = fileIt->next_file()) {
-            auto file = getFileFromFileInfo(folder, fileInfo);
-            if (fileInfo->get_file_type()  == Gio::FILE_TYPE_DIRECTORY)
-            {
-              for(auto f: getAllFilesInFolder(file))
-              {
-                ret.emplace_back(f);
-              }
-            }
-            else
-            {
-              ret.emplace_back(file);
-            }
-          }
-          return ret;
-        }
+        RecursiveDirectoryMonitor(const tFile& rootFolder, tCallBack callback);
+        void rebuildDirectoryList();
+        void addMonitor(const tFile& file);
+        void onFileChanged(const tFile& oldFile, const tFile& newFile, Gio::FileMonitorEvent monitorEvent);
+        void recurseDirectory(const tFile& start, tFileCallBack filter);
+        tFileList getAllDirectorysInDirectory(const tFile& folder);
+        tFileList getAllFilesInFolder(const tFile& folder);
     protected:
-        Glib::RefPtr<Gio::File> getFileFromFileInfo(const Glib::RefPtr<Gio::File>& currentFolder, const Glib::RefPtr<Gio::FileInfo>& fileInfo)
-        {
-          auto name = fileInfo->get_name();
-          auto path = currentFolder->get_path() + '/' + name;
-          return Gio::File::create_for_path(path);
-        }
+        tFile getFileFromFileInfo(const tFile& currentFolder, const Glib::RefPtr<Gio::FileInfo>& fileInfo);
     };
 }
