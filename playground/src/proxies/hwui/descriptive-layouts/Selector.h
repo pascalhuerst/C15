@@ -41,13 +41,22 @@ namespace DescriptiveLayouts
       }
 
       Selector(UIFocus f) :
-        criteria(f) {}
+          criteria(f)
+      {
+      }
 
       Selector(UIMode m) :
-        criteria(m) {}
+          criteria(m)
+      {
+      }
 
       Selector(UIDetail d) :
         criteria(d) {}
+
+      bool operator==(const Selector &other) const
+      {
+        return criteria == other.criteria;
+      }
 
       bool test(FocusAndMode fam) const
       {
@@ -56,5 +65,7 @@ namespace DescriptiveLayouts
 
     private:
       Criteria criteria;
+
+      friend class ConsistencyChecker;
   };
 }

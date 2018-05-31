@@ -10,6 +10,8 @@
 #include "ControlParser.h"
 #include "Styles.h"
 #include "StyleParser.h"
+#include "tools/SpawnCommandLine.h"
+#include "ConsistencyChecker.h"
 
 LayoutFolderMonitor& LayoutFolderMonitor::get()
 {
@@ -38,17 +40,21 @@ void LayoutFolderMonitor::bruteForce()
   DescriptiveLayouts::ControlRegistry::get().clear();
   DescriptiveLayouts::StyleSheet::get().clear();
 
+
   try {
     auto allFiles = m_recMonitor.getAllFilesInFolder(m_rootFolder);
 
     for(auto& file: allFiles) {
       auto path = FileTools::getFullPath(file);
 
-      if (g_str_has_suffix(path.c_str(), ".json")) {
+      if (g_str_has_suffix(path.c_str(), ".json")) 
+      {
         DescriptiveLayouts::importControls(path);
         DescriptiveLayouts::importLayout(path);
         DescriptiveLayouts::importStyles(path);
-      } else if (g_str_has_suffix(path.c_str(), ".yaml")) {
+      } 
+      else if (g_str_has_suffix(path.c_str(), ".yaml")) 
+      {
         auto tmpPath = "/tmp/__nl_style.json";
         SpawnCommandLine cmd("yaml2json " + path);
         g_file_set_contents(tmpPath, cmd.getStdOutput().c_str(), -1, nullptr);
@@ -57,32 +63,41 @@ void LayoutFolderMonitor::bruteForce()
         DescriptiveLayouts::importStyles(tmpPath);
       }
     }
+
+    DescriptiveLayouts::ConsistencyChecker checker(std::cout);
+    checker.checkAll();
     m_onChange.send();
   }
-  catch(ExceptionTools::TemplateException& e) {
+  catch(ExceptionTools::TemplateException& e)
+  {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what() + e.where()));
   }
-  catch (nlohmann::json::out_of_range& e)
+  catch(nlohmann::json::out_of_range& e)
   {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
-  catch (std::out_of_range &e) {
+  catch(std::out_of_range &e)
+  {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
-  catch(nlohmann::json::parse_error& e) {
+  catch(nlohmann::json::parse_error& e)
+  {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
-  catch(std::runtime_error& e) {
+  catch(std::runtime_error& e)
+  {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(e.what()));
   }
-  catch(std::exception& e) {
-    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("Uncaught Exception of Type: "s + e.what()));
+  catch(std::exception& e)
+  {
+    Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(
+        new DebugLayout("Uncaught Exception of Type: "s + e.what()));
   }
-  catch(...) {
+  catch(...)
+  {
     auto description = ExceptionTools::handle_eptr(std::current_exception());
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(description));
   }
-
 
 }
 

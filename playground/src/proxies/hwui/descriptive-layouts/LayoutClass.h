@@ -4,6 +4,7 @@
 #include "Selector.h"
 #include "EventSink.h"
 #include "ControlInstance.h"
+#include <set>
 
 class DFBLayout;
 
@@ -60,6 +61,7 @@ namespace DescriptiveLayouts
       EventSinkList sinkMappings;
 
       friend class GenericLayout;
+      friend class ConsistencyChecker;
   };
 
 }

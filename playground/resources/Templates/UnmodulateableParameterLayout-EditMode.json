@@ -47,12 +47,11 @@
 					"Class": "EditLabel",
 					"Position": "8,26"
 				},
-                "LockIndicator": {
-                        "Class": "LockIndicator1Letter",
-                        "Position": "65,1",
-                        "Events": "LockStatus => Text[Visibility]"
-                }
-
+				"LockIndicator": {
+					"Class": "LockIndicator1Letter",
+					"Position": "65,1",
+					"Events": "LockStatus => Text[Visibility]"
+				}
 			},
 			"EventSinks": {
 				"BUTTON_INC": "IncParam",

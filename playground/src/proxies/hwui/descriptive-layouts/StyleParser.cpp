@@ -9,9 +9,9 @@ using json = nlohmann::json;
 
 namespace DescriptiveLayouts
 {
-  StyleSheet::StyleSelector parseSelector(json selector)
+  Detail::StyleSelector parseSelector(json selector)
   {
-    StyleSheet::StyleSelector theSelector;
+    Detail::StyleSelector theSelector;
 
     try
     {

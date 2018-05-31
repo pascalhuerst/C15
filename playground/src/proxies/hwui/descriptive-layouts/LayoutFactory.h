@@ -26,6 +26,7 @@ namespace DescriptiveLayouts
       std::shared_ptr<DFBLayout> instantiate(FocusAndMode fam);
 
       template<typename ... Args>
+
       void registerLayout(LayoutClasses id, Args ... args)
       {
         m_layouts.emplace_back(id, args...);
@@ -44,11 +45,11 @@ namespace DescriptiveLayouts
     private:
       BoledLayoutFactory();
 
-
-
-
       const LayoutClass& find(FocusAndMode fam) const;
 
       std::list<LayoutClass> m_layouts;
+
+      friend class ConsistencyChecker;
   };
+
 }

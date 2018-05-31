@@ -23,12 +23,12 @@ namespace DescriptiveLayouts
 
       Control* instantiate() const;
 
-    private:
       ControlInstances controlInstance;
       ControlClasses controlClass;
       Point position;
       EventConnections eventConnections;
 
       friend class GenericControl;
+      friend class ConsistencyChecker;
   };
 }

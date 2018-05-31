@@ -6,7 +6,6 @@
 #include "LayoutFactory.h"
 #include "ConditionRegistry.h"
 #include <boost/algorithm/string.hpp>
-#include <regex>
 #include <tools/StringTools.h>
 
 using json = nlohmann::json;
@@ -33,10 +32,13 @@ namespace DescriptiveLayouts
 
     if(!readFieldFromJson<UIFocus>(selector, "UIFocus", toUIFocus, selectors))
       selectors.push_back(UIFocus::Any);
+
     if(!readFieldFromJson<UIMode>(selector, "UIMode", toUIMode, selectors))
       selectors.push_back(UIMode::Any);
+
     if(!readFieldFromJson<UIDetail>(selector, "UIDetail", toUIDetail, selectors))
       selectors.push_back(UIDetail::Any);
+
     return selectors;
   }
 
@@ -176,5 +178,4 @@ namespace DescriptiveLayouts
 
     BoledLayoutFactory::get().sortByPriority();
   }
-
 }
