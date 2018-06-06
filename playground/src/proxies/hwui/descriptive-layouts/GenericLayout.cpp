@@ -1,9 +1,9 @@
 #include <proxies/hwui/panel-unit/boled/parameter-screens/controls/ModulationCarousel.h>
 #include "GenericLayout.h"
 #include "GenericControl.h"
-#include "Bar.h"
-#include "Border.h"
-#include "Text.h"
+#include "proxies/hwui/descriptive-layouts/Primitives/Bar.h"
+#include "proxies/hwui/descriptive-layouts/Primitives/Border.h"
+#include "proxies/hwui/descriptive-layouts/Primitives/Text.h"
 
 #include "Application.h"
 #include "proxies/hwui/controls/ButtonMenu.h"

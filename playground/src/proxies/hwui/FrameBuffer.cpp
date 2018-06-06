@@ -8,6 +8,7 @@
 #include <iostream>
 #include <io/network/WebSocketSession.h>
 #include <Application.h>
+#include <cmath>
 
 FrameBuffer::StackScopeGuard::StackScopeGuard(FrameBuffer *fb) :
     m_fb(fb)
@@ -161,6 +162,25 @@ void FrameBuffer::fillRect(const Rect &rect)
 
     for(auto y = fill.getTop(); y <= bottom; y++)
       drawRawHorizontalLine(left, y, width);
+  }
+}
+
+void FrameBuffer::fillCircle(const Rect& rect, int radius)
+{
+
+  for (int i = rect.getX(); i <= 2*radius; i++)
+  {
+    for (int j = rect.getY(); j <= 2*radius; j++)
+    {
+      auto distance_to_centre = sqrt((i - radius)*(i - radius) + (j - radius)*(j - radius));
+      if (distance_to_centre > radius && distance_to_centre < radius)
+      {
+        auto fromIdx = getIndex(i, j);
+        auto data = m_backBuffer.data() + fromIdx;
+        data[0] = m_currentColor;
+      }
+    }
+    cout << endl;
   }
 }
 

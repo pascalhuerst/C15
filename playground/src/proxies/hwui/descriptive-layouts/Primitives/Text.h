@@ -1,9 +1,9 @@
 #pragma once
 
-#include "LayoutFactory.h"
-#include "Styleable.h"
-#include "PropertyOwner.h"
-#include "PrimitiveInstance.h"
+#include "proxies/hwui/descriptive-layouts/LayoutFactory.h"
+#include "proxies/hwui/descriptive-layouts/Styleable.h"
+#include "proxies/hwui/descriptive-layouts/PropertyOwner.h"
+#include "proxies/hwui/descriptive-layouts/PrimitiveInstance.h"
 #include <proxies/hwui/controls/Label.h>
 
 namespace DescriptiveLayouts

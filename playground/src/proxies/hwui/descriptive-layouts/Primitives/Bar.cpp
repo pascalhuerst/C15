@@ -1,5 +1,5 @@
 #include "Bar.h"
-#include "PrimitiveInstance.h"
+#include "proxies/hwui/descriptive-layouts/PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {

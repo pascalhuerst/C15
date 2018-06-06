@@ -26,7 +26,7 @@ namespace DescriptiveLayouts
   }
 
   ENUM(EventSources, uint8_t, Any, None, ParameterName, SliderRange, ParameterDisplayString, ParameterGroupName, IsBipolar, LockStatus, MacroControlSymbol, MacroControlAsignment, MacroControlAmount);
-  ENUM(PrimitiveClasses, uint8_t, Any, Bar, Border, Text);
+  ENUM(PrimitiveClasses, uint8_t, Any, Bar, Border, Text, Circle);
 
   template<typename Derived>
     class StringId : public std::string
