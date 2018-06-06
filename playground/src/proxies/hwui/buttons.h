@@ -138,11 +138,15 @@ ENUM(Buttons, uint16_t,
   BUTTON_PLUS = 121,
   BUTTON_FUNCTION = 122,
   BUTTON_MODE = 123,
-
+  OLD_LAYOUTS = 127,
   NUM_BUTTONS = 128,
 
   ROTARY_MINUS,
   ROTARY_PLUS,
 
+
+
   INVALID
-);
+)
+
+class Values;;

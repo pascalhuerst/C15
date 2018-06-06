@@ -40,8 +40,18 @@ void BOLED::bruteForce()
 }
 
 void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
-  //try {
-    reset(DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
+  if(Application::get().getHWUI()->getOldLayoutsSetting()) {
+    installOldLayouts(focusAndMode);
+  }
+  else {
+    try {
+      reset(DescriptiveLayouts::BoledLayoutFactory::get().instantiate(focusAndMode));
+    } catch(...) {
+      auto description = ExceptionTools::handle_eptr(std::current_exception());
+      Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(description));
+    }
+  }
+  /*try {
  /* } catch (nlohmann::json::out_of_range &e) {
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("nlohmann::json::out_of_range\n"s + e.what()));
   } catch (nlohmann::json::parse_error &e) {
@@ -57,6 +67,37 @@ void BOLED::setupFocusAndMode (FocusAndMode focusAndMode) {
     auto description = ExceptionTools::handle_eptr(std::current_exception());
     Application::get().getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout("...\n"s + description));
   }*/
+}
+
+void BOLED::installOldLayouts(FocusAndMode focusAndMode)
+{
+  switch (focusAndMode.focus)
+  {
+    case UIFocus::Parameters:
+      setupParameterScreen (focusAndMode);
+      break;
+
+    case UIFocus::Presets:
+      setupPresetScreen (focusAndMode);
+      break;
+
+    case UIFocus::Banks:
+      setupBankScreen (focusAndMode);
+      break;
+
+    case UIFocus::Sound:
+      setupSoundScreen (focusAndMode);
+      break;
+
+    case UIFocus::Setup:
+      reset (new SetupLayout (focusAndMode));
+      break;
+
+    default:
+      g_assert_not_reached()
+              ;
+      break;
+  }
 }
 
 void BOLED::setupSoundScreen (FocusAndMode focusAndMode)

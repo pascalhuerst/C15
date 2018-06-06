@@ -50,6 +50,11 @@ void HWUI::deInit()
   Oleds::get().deInit();
 }
 
+const bool HWUI::getOldLayoutsSetting() const
+{
+  return m_oldLayouts;
+}
+
 void HWUI::onButtonMessage(WebSocketSession::tMessage msg)
 {
   gsize numBytes = 0;
@@ -289,6 +294,11 @@ void HWUI::onButtonPressed(Buttons buttonID, bool state)
   m_buttonStates[(int)buttonID] = state;
 
   setModifiers(buttonID, state);
+
+  if(buttonID == Buttons::OLD_LAYOUTS) {
+    m_oldLayouts = state;
+    getPanelUnit().getEditPanel().getBoled().setupFocusAndMode(getFocusAndMode());
+  }
 
   if(!detectAffengriff(buttonID, state))
   {

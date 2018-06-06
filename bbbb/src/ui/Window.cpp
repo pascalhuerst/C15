@@ -2,19 +2,26 @@
 
 #include <Application.h>
 #include <ui/Window.h>
+#include <io/FromButtonsBridge.h>
+#include <io/Bridges.h>
 
 class WebSocketReceiver;
 
 constexpr auto framebufferDimX = 256;
 constexpr auto framebufferDimY = 96;
 
-Window::Window()
+Window::Window() : m_oldScreen("show old layouts")
 {
   set_default_size(framebufferDimX, framebufferDimY * 2);
   set_size_request(framebufferDimX, framebufferDimY * 2);
 
   Application::get().getWebsocketServer()->onMessageReceived(Domain::Oled, sigc::mem_fun(this, &Window::onFrameBufferMessageReceived));
   Application::get().getWebsocketServer()->onMessageReceived(Domain::PanelLed, sigc::mem_fun(this, &Window::onPanelLEDsMessageReceived));
+
+  m_oldScreen.signal_clicked().connect([=](void){
+    auto b = Application::get().getBridges()->getBridge<FromButtonsBridge>();
+    b->sendKey(127, m_oldScreen.get_active());
+  });
 
   m_ribbonUp.set_vexpand(false);
   m_ribbonDown.set_vexpand(false);
@@ -23,6 +30,7 @@ Window::Window()
   m_ribbonBox.set_homogeneous(true);
   m_box.pack_start(m_playPanel, true, true);
   m_box.pack_end(m_editPanel, false, false);
+  m_box.pack_start(m_oldScreen, false, false);
   m_box.pack_start(m_ribbonBox, false, false);
   add(m_box);
 

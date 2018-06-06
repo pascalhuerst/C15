@@ -23,6 +23,7 @@ class Window : public Gtk::Window
 
     Gtk::VBox m_box;
     Gtk::VBox m_ribbonBox;
+    Gtk::CheckButton m_oldScreen;
     PlayPanel m_playPanel;
     PanelUnit m_editPanel;
     Ribbon m_ribbonUp;
