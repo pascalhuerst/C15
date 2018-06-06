@@ -46,6 +46,10 @@
           "Class": "EmptyButton",
           "Position": "0,52"
         },
+        "MCPosSlider": {
+          "Class": "MCPosSlider",
+          "Position": "5,24"
+        },
         "MCAmt": {
           "Class": "MCAmtLabel",
           "Position": "128, 35",
