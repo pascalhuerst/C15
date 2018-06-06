@@ -128,7 +128,7 @@ const PresetManager *EditBuffer::getParent() const
 
 sigc::connection EditBuffer::onSelectionChanged(slot<void, Parameter *, Parameter *> s)
 {
-  return m_signalSelectedParameter.connectAndInit(s, nullptr, getSelected());
+  return m_signalSelectedParameter.connectAndInit(s, nullptr, getSelectedParameter());
 }
 
 void EditBuffer::undoableSelectParameter(const Glib::ustring &id)
@@ -250,7 +250,7 @@ void EditBuffer::undoableSelectParameter(UNDO::Scope::tTransactionPtr transactio
   }
 }
 
-Parameter *EditBuffer::getSelected() const
+Parameter *EditBuffer::getSelectedParameter() const
 {
   return m_selectedParameter;
 }

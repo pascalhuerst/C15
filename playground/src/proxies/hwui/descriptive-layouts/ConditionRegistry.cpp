@@ -19,7 +19,7 @@ std::shared_ptr<PresetManager> getPresetManager() {
 }
 
 Parameter* getSelectedParam() {
-  return getPresetManager()->getEditBuffer()->getSelected();
+  return getPresetManager()->getEditBuffer()->getSelectedParameter();
 }
 
 ConditionRegistry::ConditionRegistry() {
@@ -39,4 +39,9 @@ ConditionRegistry::ConditionRegistry() {
     }
     return false;
   };
+
+  m_theConditonMap["hasMcSelected"] = [&]() {
+    return !m_theConditonMap["hasNoMcSelected"];
+  };
+
 }

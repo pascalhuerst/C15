@@ -24,18 +24,18 @@ namespace DescriptiveLayouts
 
   EventSinkBroker::EventSinkBroker()
   {
-    auto eb = Application::get().getPresetManager()->getEditBuffer(); // Warum crasht? bei inc dec mc?!
+    auto eb = Application::get().getPresetManager()->getEditBuffer();
     auto hwui = Application::get().getHWUI();
 
     registerEvent(EventSinks::IncParam, [eb, hwui]()
     {
-      if(auto p = eb->getSelected())
+      if(auto p = eb->getSelectedParameter())
       p->getValue().inc(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
 
     registerEvent(EventSinks::DecParam, [eb, hwui]()
     {
-      if(auto p = eb->getSelected())
+      if(auto p = eb->getSelectedParameter())
       p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
 
@@ -49,22 +49,35 @@ namespace DescriptiveLayouts
       hwui->undoableSetFocusAndMode(UIMode::Select);
     });
 
-    registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui]()
+    registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui, eb]()
     {
-      hwui->setUiModeDetail(UIDetail::MCSelect);
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
+      {
+        hwui->setUiModeDetail(UIDetail::MCSelect);
+      }
     });
 
     registerEvent(EventSinks::SwitchToInitDetail, [hwui](){
       hwui->setUiModeDetail(UIDetail::Init);
     });
 
+    registerEvent(EventSinks::SwitchToMCModRangeDetail, [hwui, eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
+      {
+        if(modParam->getModulationSource() != ModulateableParameter::ModulationSource::NONE)
+        {
+          hwui->setUiModeDetail(UIDetail::MCModRange);
+        }
+      }
+    });
+
     registerEvent(EventSinks::IncMCSel, [eb](){
-      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
         modParam->undoableIncrementMCSelect(1);
     });
 
     registerEvent(EventSinks::DecMCSel, [eb](){
-      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
         modParam->undoableIncrementMCSelect(-1);
     });
   }

@@ -144,7 +144,7 @@ namespace DescriptiveLayouts
 
       void onModifierChanged(::ButtonModifiers mods)
       {
-        onParameterChanged(Application::get().getPresetManager()->getEditBuffer()->getSelected());
+        onParameterChanged(Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter());
       }
 
       void onParameterChanged(const Parameter* p)
@@ -183,7 +183,7 @@ namespace DescriptiveLayouts
 
         void onLockChanged()
         {
-            setValue(Application::get().getPresetManager()->getEditBuffer()->getSelected()->isLocked());
+            setValue(Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter()->isLocked());
         }
     };
 

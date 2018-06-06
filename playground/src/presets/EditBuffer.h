@@ -27,7 +27,7 @@ class EditBuffer : public Preset
     void undoableSelectParameter (uint16_t id);
     void undoableSelectParameter (Parameter *p);
     void undoableSelectParameter(UNDO::Scope::tTransactionPtr transaction, Parameter *p);
-    Parameter *getSelected () const;
+    Parameter *getSelectedParameter() const;
 
     void undoableLoad (UNDO::Scope::tTransactionPtr transaction, shared_ptr<Preset> preset);
     void undoableLoad (shared_ptr<Preset> preset);

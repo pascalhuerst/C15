@@ -6,7 +6,9 @@
         "UIMode": "Select",
         "UIDetail": "MCSelect"
       },
-      "Conditions": "isParameterModulateable",
+      "Conditions": [
+        "isParameterModulateable"
+      ],
       "Controls": {
         "GroupHeader": {
           "Class": "ParameterGroupName",
@@ -23,7 +25,7 @@
           "Position": "72,8",
           "Events": "ParameterName => Text[Text]"
         },
-        "ButtonA": {
+        "ButtonA-Empty": {
           "Class": "EmptyButton",
           "Position": "0,52"
         },
@@ -32,17 +34,29 @@
           "Position": "72, 35",
           "Events": "MacroControlSymbol => Text[Text]"
         },
-        "ButtonB": {
+        "ButtonB-MCSel": {
           "Class": "McSelButton",
           "Position": "64,52"
         },
-        "ButtonC": {
+        "ButtonC-Empty": {
           "Class": "EmptyButton",
           "Position": "128,52"
         },
-        "ButtonD": {
+        "ButtonD-Empty": {
           "Class": "EmptyButton",
           "Position": "192,52"
+        },
+        "ButtonA-MCPos": {
+          "Class": "EmptyButton",
+          "Position": "0,52"
+        },
+        "ButtonC-MCAmt": {
+          "Class": "EmptyButton",
+          "Position": "128,52"
+        },
+        "MCMenu": {
+          "Class": "ModulationCarousel",
+          "Position": "194,2"
         },
         "LockIndicator": {
           "Class": "LockIndicator1Letter",
@@ -56,7 +70,8 @@
         "ROTARY_PLUS": "IncMCSel",
         "ROTARY_MINUS": "DecMCSel",
         "BUTTON_EDIT": "SwitchToEditMode",
-        "BUTTON_B": "SwitchToInitDetail"
+        "BUTTON_B": "SwitchToInitDetail",
+        "BUTTON_D": "SwitchToMCModRangeDetail"
       }
     }
   }

@@ -9,7 +9,7 @@ HeadlineLabel::HeadlineLabel (const Rect &pos) :
   super (pos)
 {
   Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged (mem_fun (this, &HeadlineLabel::updateText));
-  Application::get().getPresetManager()->getEditBuffer()->getSelected()->onParameterChanged(mem_fun(this, &HeadlineLabel::updateMc));
+  Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter()->onParameterChanged(mem_fun(this, &HeadlineLabel::updateMc));
 }
 
 shared_ptr<Font> HeadlineLabel::getFont() const

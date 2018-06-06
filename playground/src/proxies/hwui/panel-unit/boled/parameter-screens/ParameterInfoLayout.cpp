@@ -46,7 +46,7 @@ bool ParameterInfoLayout::onButton (Buttons i, bool down, ButtonModifiers modifi
 {
   if(i == Buttons::BUTTON_EDIT && down)
   {
-    if(dynamic_cast<MacroControlParameter*>(Application::get ().getPresetManager ()->getEditBuffer ()->getSelected()))
+    if(dynamic_cast<MacroControlParameter*>(Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter()))
     {
       Application::get ().getHWUI ()->getPanelUnit ().getEditPanel ().getBoled ().setOverlay (new EditMCInfoLayout ());
       return true;

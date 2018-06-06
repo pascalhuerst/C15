@@ -19,7 +19,7 @@ ParameterLayout2::ParameterLayout2 ()
 
 Parameter * ParameterLayout2::getCurrentParameter () const
 {
-  return Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ();
+  return Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter();
 }
 
 Parameter * ParameterLayout2::getCurrentEditParameter () const

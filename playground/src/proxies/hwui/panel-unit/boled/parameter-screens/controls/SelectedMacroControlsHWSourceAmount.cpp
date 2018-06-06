@@ -92,6 +92,6 @@ void SelectedMacroControlsHWSourceAmount::updateTextFromRouter (const Parameter 
 
 void SelectedMacroControlsHWSourceAmount::onModifiersChanged ()
 {
-  onParameterSelected (Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ());
+  onParameterSelected (Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter());
 }
 

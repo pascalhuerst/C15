@@ -58,7 +58,7 @@ void ScaleParameterSelectLayout::selectParameter (int inc)
   const auto range = (max - min) + 1;
 
   auto eb = Application::get ().getPresetManager ()->getEditBuffer ();
-  auto id = eb->getSelected ()->getID () + inc;
+  auto id = eb->getSelectedParameter()->getID () + inc;
 
   while (id > max)
     id -= range;

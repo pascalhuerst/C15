@@ -29,5 +29,5 @@ Glib::ustring RenameMCLayout::getInitialText () const
 
 MacroControlParameter *RenameMCLayout::getMacroControl () const
 {
-  return dynamic_cast<MacroControlParameter*> (Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ());
+  return dynamic_cast<MacroControlParameter*> (Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter());
 }

@@ -49,7 +49,7 @@ Parameter * UpperRibbon::getResponsibleParameter ()
   auto s = Application::get ().getSettings()->getSetting <BaseUnitUIMode> ();
 
   if(s->get() == BaseUnitUIModes::ParameterEdit)
-    return Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ();
+    return Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter();
 
   return Application::get ().getPresetManager ()->getEditBuffer ()->findParameterByID(HardwareSourcesGroup::getUpperRibbonParameterID());
 }
