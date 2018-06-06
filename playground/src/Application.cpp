@@ -109,12 +109,7 @@ void Application::run()
 {
   while(!m_isQuit) {
     DebugLevel::warning(__PRETTY_FUNCTION__);
-    try {
-      m_theMainLoop->run();
-    } catch(...) {
-      auto desc = ExceptionTools::handle_eptr(std::current_exception());
-      getHWUI()->getPanelUnit().getEditPanel().getBoled().reset(new DebugLayout(desc));
-    }
+    m_theMainLoop->run();
     DebugLevel::warning(__PRETTY_FUNCTION__);
   }
 }

@@ -36,8 +36,13 @@
           "Class": "EmptyButton",
           "Position": "0,52"
         },
+        "MCAmt": {
+          "Class": "MCAmtLabel",
+          "Position": "128, 35",
+          "Events": "MacroControlAmount => Text[Text]"
+        },
         "ButtonC-MCAmt": {
-          "Class": "EmptyButton",
+          "Class": "McAmtButton",
           "Position": "128,52"
         },
         "MCMenu": {
@@ -57,6 +62,7 @@
         "ROTARY_MINUS": "DecParam",
         "BUTTON_EDIT": "SwitchToEditMode",
         "BUTTON_B": "SwitchToMCSelectDetail",
+        "BUTTON_C": "SwitchToMCAmtDetail",
         "BUTTON_D": "IncButtonMenu"
       }
     }

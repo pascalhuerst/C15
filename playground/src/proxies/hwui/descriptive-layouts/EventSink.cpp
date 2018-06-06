@@ -51,7 +51,7 @@ namespace DescriptiveLayouts
 
     registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui, eb]()
     {
-      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
+      if(dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()) != nullptr)
       {
         hwui->setUiModeDetail(UIDetail::MCSelect);
       }
@@ -79,6 +79,28 @@ namespace DescriptiveLayouts
     registerEvent(EventSinks::DecMCSel, [eb](){
       if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
         modParam->undoableIncrementMCSelect(-1);
+    });
+
+    registerEvent(EventSinks::SwitchToMCAmtDetail, [hwui, eb]() {
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
+      {
+        if(modParam->getModulationSource() != ModulateableParameter::ModulationSource::NONE)
+        {
+          hwui->setUiModeDetail(UIDetail::MCAmount);
+        }
+      }
+    });
+
+    registerEvent(EventSinks::DecMCAmt, [hwui, eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter())) {
+        modParam->undoableIncrementMCAmount(-1);
+      }
+    });
+
+    registerEvent(EventSinks::IncMCAmt, [hwui, eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter())) {
+        modParam->undoableIncrementMCAmount(1);
+      }
     });
   }
 

@@ -48,6 +48,7 @@ class ModulateableParameter : public Parameter
     virtual Glib::ustring stringizeModulationAmount () const;
     virtual double getModulationAmountFineDenominator () const;
     virtual double getModulationAmountCoarseDenominator () const;
+    virtual Glib::ustring getModAmountAsDisplayValue() const;
 
     std::pair<Glib::ustring, Glib::ustring> getModRangeAsDisplayValues() const;
 

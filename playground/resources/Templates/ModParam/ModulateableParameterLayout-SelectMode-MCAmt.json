@@ -1,14 +1,12 @@
 {
   "layouts": {
-    "ModulateableParameter-SelectMode-MCSelect": {
+    "ModulateableParameter-SelectMode-MCModRange": {
       "Selector": {
         "UIFocus": "Parameters",
         "UIMode": "Select",
-        "UIDetail": "MCSelect"
+        "UIDetail": "MCAmount"
       },
-      "Conditions": [
-        "isParameterModulateable"
-      ],
+      "Conditions":"isParameterModulateable",
       "Controls": {
         "GroupHeader": {
           "Class": "ParameterGroupName",
@@ -25,36 +23,27 @@
           "Position": "72,8",
           "Events": "ParameterName => Text[Text]"
         },
-        "ButtonA-Empty": {
-          "Class": "EmptyButton",
-          "Position": "0,52"
-        },
         "MCName": {
           "Class": "MCName",
           "Position": "72, 35",
           "Events": "MacroControlSymbol => Text[Text]"
         },
+        "MCAmt": {
+          "Class": "MCAmtLabel",
+          "Position": "128, 35",
+          "Events": "MacroControlAmount => Text[Text]"
+        },
         "ButtonB-MCSel": {
           "Class": "McSelButton",
           "Position": "64,52"
-        },
-        "ButtonD-Empty": {
-          "Class": "EmptyButton",
-          "Position": "192,52"
         },
         "ButtonA-MCPos": {
           "Class": "EmptyButton",
           "Position": "0,52"
         },
-        "MCAmt": {
-          "Class": "MCAmtLabel",
-          "Position": "128, 35",
-          "Events": "MacroControlAmount => Text[Text], MacroControlAsignment => Text[Visibility]"
-        },
         "ButtonC-MCAmt": {
           "Class": "McAmtButton",
-          "Position": "128,52",
-          "Events": "MacroControlAsignment => Text[Visibility]"
+          "Position": "128,52"
         },
         "MCMenu": {
           "Class": "ModulationCarousel",
@@ -67,13 +56,12 @@
         }
       },
       "EventSinks": {
-        "BUTTON_INC": "IncMCSel",
-        "BUTTON_DEC": "DecMCSel",
-        "ROTARY_PLUS": "IncMCSel",
-        "ROTARY_MINUS": "DecMCSel",
+        "BUTTON_INC": "IncMCAmt",
+        "BUTTON_DEC": "DecMCAmt",
+        "ROTARY_PLUS": "IncMCAmt",
+        "ROTARY_MINUS": "DecMCAmt",
         "BUTTON_EDIT": "SwitchToEditMode",
-        "BUTTON_B": "SwitchToInitDetail",
-        "BUTTON_C": "SwitchToMCAmtDetail",
+        "BUTTON_B": "SwitchToMCSelectDetail",
         "BUTTON_D": "SwitchToMCModRangeDetail"
       }
     }

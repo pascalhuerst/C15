@@ -33,7 +33,7 @@ namespace DescriptiveLayouts
       sigc::connection connect(EventSources source, Callback cb);
 
     private:
-      EventSourceBroker();
+      explicit EventSourceBroker();
       std::unordered_map<EventSources, std::unique_ptr<EventSourceBase>> m_map;
   };
 }
