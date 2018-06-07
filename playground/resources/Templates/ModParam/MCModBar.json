@@ -8,6 +8,22 @@
       "lowerBar": {
         "Class": "Bar",
         "Rect": "0,6,100,6"
+      },
+      "backg": {
+        "Class": "Bar",
+        "Rect": "0, 2, 100, 12",
+        "Tag": "Cover"
+      }
+    }
+  },
+  "styles": {
+    "bg-trans": {
+      "selector": {
+        "Tag": "Cover",
+        "PrimitiveClasses": "Bar"
+      },
+      "styles": {
+        "Color": "C43"
       }
     }
   }

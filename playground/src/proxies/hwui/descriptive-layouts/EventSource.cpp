@@ -139,15 +139,7 @@ namespace DescriptiveLayouts {
     private:
         virtual void onParameterChanged(const Parameter *p) override {
           if(auto modP = dynamic_cast<const ModulateableParameter*>(p)) {
-            auto from = modP->getModulationRange().first;
-            auto to = modP->getModulationRange().second;
-            from = std::min (from, to);
-            to = std::max (from, to);
-            from = std::min<double>(from, 1.0f);
-            from = std::max<double>(from, 0.0f);
-            to = std::min<double>(to, 1.0f);
-            to = std::max<double>(to, 0.0f);
-            setValue(std::make_pair(from,to));
+            setValue(modP->getModulationRange());
           }
         }
     };
