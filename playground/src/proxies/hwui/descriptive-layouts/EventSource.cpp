@@ -47,6 +47,26 @@ namespace DescriptiveLayouts {
         virtual void onChange() = 0;
     };
 
+    class GenericRangeEventSource : public EventSource<std::pair<tControlPositionValue, tControlPositionValue>> {
+    public:
+        explicit GenericRangeEventSource() {
+          Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged(
+                  sigc::mem_fun(this, &GenericRangeEventSource::onParameterSelectionChanged));
+        }
+
+    private:
+        void onParameterSelectionChanged(Parameter *oldParam, Parameter *newParam) {
+          m_connection.disconnect();
+          if (newParam)
+            m_connection = newParam->onParameterChanged(
+                    sigc::mem_fun(this, &GenericRangeEventSource::onParameterChanged), true);
+        }
+
+        virtual void onParameterChanged(const Parameter *p) = 0;
+
+        sigc::connection m_connection;
+    };
+
     class ParameterGroupNameEventSource : public EventSource<DisplayString> {
     public:
         explicit ParameterGroupNameEventSource() {
@@ -75,22 +95,12 @@ namespace DescriptiveLayouts {
         }
     };
 
-    class SliderRangeEventSource : public EventSource<std::pair<tControlPositionValue, tControlPositionValue>> {
+    class SliderRangeEventSource : public GenericRangeEventSource {
     public:
-        explicit SliderRangeEventSource() {
-          Application::get().getPresetManager()->getEditBuffer()->onSelectionChanged(
-                  sigc::mem_fun(this, &SliderRangeEventSource::onParameterSelectionChanged));
+        explicit SliderRangeEventSource() : GenericRangeEventSource() {
         }
-
     private:
-        void onParameterSelectionChanged(Parameter *oldParam, Parameter *newParam) {
-          m_connection.disconnect();
-          if (newParam)
-            m_connection = newParam->onParameterChanged(
-                    sigc::mem_fun(this, &SliderRangeEventSource::onParameterChanged), true);
-        }
-
-        void onParameterChanged(const Parameter *p) {
+        virtual void onParameterChanged(const Parameter *p) override {
           auto v = p->getControlPositionValue();
 
           if (p->isBiPolar()) {
@@ -102,8 +112,20 @@ namespace DescriptiveLayouts {
             setValue(std::make_pair(0, v));
           }
         }
+    };
 
-        sigc::connection m_connection;
+    class CurrentMacroControlPosition : public GenericRangeEventSource {
+    public:
+        explicit CurrentMacroControlPosition() : GenericRangeEventSource() {
+        }
+    private:
+        virtual void onParameterChanged(const Parameter *p) override {
+          if(auto modP = dynamic_cast<const ModulateableParameter*>(p)) {
+            if(auto mc = modP->getMacroControl()) {
+              setValue(std::make_pair(0, mc->getControlPositionValue()));
+            }
+          }
+        }
     };
 
     class ParameterNameEventSource : public EventSource<DisplayString> {
@@ -220,16 +242,12 @@ namespace DescriptiveLayouts {
 
         void onParamValueChanged(const Parameter *param) {
           if (const auto *modP = dynamic_cast<const ModulateableParameter *> (param)) {
-            uint16_t id = MacroControlsGroup::modSrcToParamID(modP->getModulationSource());
-
-            if (auto mc = Application::get().getPresetManager()->getEditBuffer()->findParameterByID(id)) {
-              DisplayString s(mc->getShortName(), 0);
-              setValue(s);
+            if(auto mc = modP->getMacroControl()) {
+              setValue(DisplayString(mc->getShortName(), 0));
               return;
             }
           }
-          DisplayString s("[-]", 0);
-          setValue(s);
+          setValue(DisplayString("[-]", 0));
         }
     };
 
@@ -257,6 +275,7 @@ namespace DescriptiveLayouts {
       m_map[EventSources::MacroControlSymbol] = std::make_unique<CurrentMacroControlSymbol>();
       m_map[EventSources::MacroControlAsignment] = std::make_unique<CurrentMacroControlAsignment>();
       m_map[EventSources::MacroControlAmount] = std::make_unique<CurrentMacroControlAmount>();
+      m_map[EventSources::MacroControlPosition] = std::make_unique<CurrentMacroControlPosition>();
     }
 
     sigc::connection EventSourceBroker::connect(EventSources source, std::function<void(std::any)> cb) {

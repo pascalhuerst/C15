@@ -1,35 +1,39 @@
 {
   "controls": {
     "MCPosSlider": {
+      "BG": {
+        "Class": "Bar",
+        "Rect": "0,0,58,4",
+        "Tag": ""
+      },
       "Border": {
         "Class": "Border",
-        "Rect": "0,0,52,6"
+        "Rect": "3,0,52,4"
       },
       "CenterDot": {
         "Class": "Circle",
-        "Rect": "22,0,6,6"
+        "Rect": "3,0,0,5"
       }
     }
   },
-  "styles": {
-    "slider-foreground": {
+  "styles":  {
+    "CenterDot": {
       "selector": {
         "ControlClasses": "MCPosSlider",
-        "PrimitiveInstances": "Slider",
-        "PrimitiveClasses": "Bar"
+        "PrimitiveClasses": "Circle"
       },
       "styles": {
         "Color": "C255"
       }
     },
-    "centerMark": {
+    "TransparentBackground": {
       "selector": {
         "ControlClasses": "MCPosSlider",
         "PrimitiveClasses": "Bar",
-        "PrimitiveInstances": "CenterMarkVertical, CenterMarkHorizontal"
+        "PrimitveInstances": "BG"
       },
       "styles": {
-        "Color": "C255"
+        "Color": "Transparent"
       }
     }
   }

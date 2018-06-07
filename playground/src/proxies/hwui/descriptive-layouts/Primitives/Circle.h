@@ -27,5 +27,6 @@ namespace DescriptiveLayouts {
     private:
         PrimitiveInstance m_primitive;
         Range m_range;
+        int m_steps;
     };
 }

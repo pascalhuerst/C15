@@ -9,6 +9,8 @@
 #include <io/network/WebSocketSession.h>
 #include <Application.h>
 #include <cmath>
+#include <complex>
+#include <complex.h>
 
 FrameBuffer::StackScopeGuard::StackScopeGuard(FrameBuffer *fb) :
     m_fb(fb)
@@ -165,22 +167,29 @@ void FrameBuffer::fillRect(const Rect &rect)
   }
 }
 
-void FrameBuffer::fillCircle(const Rect& rect, int radius)
+void FrameBuffer::fillCircle(const Rect& rect, int radius, int steps)
 {
+  auto pos = rect.getCenter();
 
-  for (int i = rect.getX(); i <= 2*radius; i++)
-  {
-    for (int j = rect.getY(); j <= 2*radius; j++)
+
+  if(radius <= 6) {
+    fillRect(pos.getX() - radius / 2, pos.getY() - radius, radius, radius * 2);
+    fillRect(pos.getX() - radius, pos.getY() - radius / 2, radius * 2, radius);
+  }
+  else {
+    auto theta = 0;
+    auto h = pos.getX();
+    auto k = pos.getY();
+    auto step = steps;
+
+    while(theta <= 360)
     {
-      auto distance_to_centre = sqrt((i - radius)*(i - radius) + (j - radius)*(j - radius));
-      if (distance_to_centre > radius && distance_to_centre < radius)
-      {
-        auto fromIdx = getIndex(i, j);
-        auto data = m_backBuffer.data() + fromIdx;
-        data[0] = m_currentColor;
-      }
+      const auto x = h + radius*cos(theta);
+      const auto y = k + radius*sin(theta);
+      if(abs(x - h) <= radius + 0.5 && abs(x - h) >= radius - 0.5)
+        setPixel(x, y);
+      theta+=step;
     }
-    cout << endl;
   }
 }
 

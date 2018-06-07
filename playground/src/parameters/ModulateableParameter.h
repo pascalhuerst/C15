@@ -2,6 +2,8 @@
 
 #include "Parameter.h"
 
+class MacroControlParameter;
+
 class ModulateableParameter : public Parameter
 {
     typedef Parameter super;
@@ -58,6 +60,8 @@ class ModulateableParameter : public Parameter
     void *getAmountCookie ();
 
     std::pair<tControlPositionValue, tControlPositionValue> getModulationRange() const;
+
+    const MacroControlParameter* getMacroControl() const;
 
   protected:
     void writeDocProperties (Writer &writer, tUpdateID knownRevision) const override;

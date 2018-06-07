@@ -8,8 +8,8 @@ namespace DescriptiveLayouts
     Circle::Circle(const PrimitiveInstance &e) :
             Control(e.relativePosition),
             m_range(0.0, 1.0),
-            m_primitive(e)
-
+            m_primitive(e),
+            m_steps(5)
     {
     }
 
@@ -21,21 +21,17 @@ namespace DescriptiveLayouts
     {
       auto color = (FrameBuffer::Colors) getStyleValue(StyleKey::Color);
 
-      color = FrameBuffer::C204;
-
       Rect r = getPosition();
 
-      double controlWidth = r.getWidth();
-      double controlLeft = r.getLeft();
+      auto controlWidth = r.getWidth();
+      auto controlLeft = r.getLeft();
 
-      r.setLeft(controlLeft + m_range.first * controlWidth);
+      r.setWidth(controlWidth);
+      r.setLeft(controlLeft + m_range.second);
       r.normalize();
 
-      auto radius = m_primitive.relativePosition.getHeight();
-
       fb.setColor(color);
-      fb.fillCircle(r, radius);
-      fb.fillRect(r);
+      fb.fillCircle(r, m_primitive.relativePosition.getHeight() / 2, m_steps);
 
       return true;
     }

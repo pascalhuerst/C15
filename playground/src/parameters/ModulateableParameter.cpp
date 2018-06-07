@@ -339,6 +339,17 @@ std::pair<tControlPositionValue, tControlPositionValue> ModulateableParameter::g
   return std::make_pair(modLeft, modRight);
 }
 
+const MacroControlParameter* ModulateableParameter::getMacroControl() const {
+  if(getModulationSource() != ModulationSource::NONE) {
+    uint16_t id = MacroControlsGroup::modSrcToParamID(getModulationSource());
+    if (auto mc = Application::get().getPresetManager()->getEditBuffer()->findParameterByID(id)) {
+      return dynamic_cast<MacroControlParameter*>(mc);
+    }
+  }
+  return nullptr;
+}
+
+
 std::pair<Glib::ustring, Glib::ustring> ModulateableParameter::getModRangeAsDisplayValues() const
 {
   auto range = getModulationRange();
