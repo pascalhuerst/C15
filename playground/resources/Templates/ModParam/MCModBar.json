@@ -1,0 +1,14 @@
+{
+  "controls": {
+    "MCModBar": {
+      "upperBar": {
+        "Class": "Bar",
+        "Rect": "0,2,100,6"
+      },
+      "lowerBar": {
+        "Class": "Bar",
+        "Rect": "0,6,100,6"
+      }
+    }
+  }
+}

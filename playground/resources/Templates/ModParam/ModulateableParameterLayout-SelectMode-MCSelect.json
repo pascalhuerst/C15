@@ -49,7 +49,7 @@
         "MCPosSlider": {
           "Class": "MCPosSlider",
           "Position": "5,25",
-          "Events": "MacroControlPosition => Circle[Range]"
+          "Events": "MacroControlPosition => CenterDot[ControlPosition], MacroControlPositionText => MCPos-Label[Text]"
         },
         "MCAmt": {
           "Class": "MCAmtLabel",
@@ -69,6 +69,11 @@
           "Class": "LockIndicator1Letter",
           "Position": "65,1",
           "Events": "LockStatus => Text[Visibility]"
+        },
+        "MCAmtLabel": {
+          "Class": "MCModBar",
+          "Position": "78,20",
+          "Events": "MCModRange => upperBar[Range], MCModRange => lowerBar[Range]"
         }
       },
       "EventSinks": {

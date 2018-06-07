@@ -38,14 +38,13 @@ namespace DescriptiveLayouts
     {
       switch(key)
       {
-        case PrimitiveProperty::Range:
-          if(std::exchange(m_range, std::any_cast < Range > (value)) != m_range)
-            m_drawPosition = rangeToPosition(m_range);
-            setDirty();
-          break;
-
         case PrimitiveProperty::Visibility:
           setVisible(std::any_cast<bool>(value));
+          break;
+
+        case PrimitiveProperty::ControlPosition:
+          m_drawPosition = valueToPosition(std::any_cast<tControlPositionValue>(value));
+          setDirty();
           break;
       }
     }
@@ -55,12 +54,11 @@ namespace DescriptiveLayouts
       return m_primitive;
     }
 
-    const Point Circle::rangeToPosition(Circle::Range range) const {
+    const Point Circle::valueToPosition(tControlPositionValue range) const {
       Point p(getPosition().getLeft(), getPosition().getCenter().getY());
-      const auto controlPos = range.second;
+      const auto controlPos = range;
       const auto totalWidth = getPosition().getWidth();
-      const auto stepWidth = totalWidth / 100.0;
-      p.moveBy(stepWidth*controlPos*100,0);
+      p.moveBy(totalWidth*controlPos, 0);
       return p;
     }
 }

@@ -11,8 +11,7 @@
 			},
 			"Slider": {
 				"Class": "Bar",
-				"Rect": "1,1,100,4",
-				"Property": "Range"
+				"Rect": "1,1,100,4"
 			},
 			"CenterMark": {
 				"Class": "Bar",

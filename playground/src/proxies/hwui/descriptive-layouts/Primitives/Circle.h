@@ -21,7 +21,7 @@ namespace DescriptiveLayouts {
         bool redraw(FrameBuffer &fb) override;
         void setDirty() override;
         void drawBackground (FrameBuffer &fb) override;
-        const Point rangeToPosition(Range range) const;
+        const Point valueToPosition(tControlPositionValue range) const;
 
         const PrimitiveInstance &getPrimitive() const;
 

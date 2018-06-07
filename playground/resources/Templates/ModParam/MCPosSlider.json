@@ -3,16 +3,25 @@
     "MCPosSlider": {
       "BG": {
         "Class": "Bar",
-        "Rect": "0,0,58,4",
-        "Tag": ""
+        "Rect": "3,0,44,4"
       },
       "Border": {
         "Class": "Border",
-        "Rect": "3,0,52,4"
+        "Rect": "3,0,44,4"
       },
       "CenterDot": {
         "Class": "Circle",
-        "Rect": "3,0,50,5"
+        "Rect": "5,0,40,5"
+      },
+      "dots": {
+        "Class": "Text",
+        "Rect": "50, -6, 20, 10",
+        "Default": "....."
+      },
+      "MCPos-Label": {
+        "Class": "Text",
+        "Rect": "5, 10, 50, 9",
+        "Default": "0%"
       }
     }
   },
@@ -33,7 +42,7 @@
         "PrimitveInstances": "BG"
       },
       "styles": {
-        "Color": "Transparent"
+        "Color": "C103"
       }
     }
   }
