@@ -12,7 +12,7 @@
       },
       "CenterDot": {
         "Class": "Circle",
-        "Rect": "3,0,0,5"
+        "Rect": "3,0,50,5"
       }
     }
   },

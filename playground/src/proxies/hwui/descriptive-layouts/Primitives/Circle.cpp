@@ -1,6 +1,5 @@
 #include <proxies/hwui/descriptive-layouts/TemplateEnums.h>
 #include "Circle.h"
-#include "proxies/hwui/descriptive-layouts/PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {
@@ -9,7 +8,8 @@ namespace DescriptiveLayouts
             Control(e.relativePosition),
             m_range(0.0, 1.0),
             m_primitive(e),
-            m_steps(5)
+            m_steps(5),
+            m_drawPosition(getPosition().getLeft(), getPosition().getCenter().getY())
     {
     }
 
@@ -20,19 +20,8 @@ namespace DescriptiveLayouts
     bool Circle::redraw(FrameBuffer &fb)
     {
       auto color = (FrameBuffer::Colors) getStyleValue(StyleKey::Color);
-
-      Rect r = getPosition();
-
-      auto controlWidth = r.getWidth();
-      auto controlLeft = r.getLeft();
-
-      r.setWidth(controlWidth);
-      r.setLeft(controlLeft + m_range.second);
-      r.normalize();
-
       fb.setColor(color);
-      fb.fillCircle(r, m_primitive.relativePosition.getHeight() / 2, m_steps);
-
+      fb.fillCircle(m_drawPosition, m_primitive.relativePosition.getHeight() / 2, m_steps);
       return true;
     }
 
@@ -51,6 +40,7 @@ namespace DescriptiveLayouts
       {
         case PrimitiveProperty::Range:
           if(std::exchange(m_range, std::any_cast < Range > (value)) != m_range)
+            m_drawPosition = rangeToPosition(m_range);
             setDirty();
           break;
 
@@ -63,5 +53,14 @@ namespace DescriptiveLayouts
     const PrimitiveInstance &Circle::getPrimitive() const
     {
       return m_primitive;
+    }
+
+    const Point Circle::rangeToPosition(Circle::Range range) const {
+      Point p(getPosition().getLeft(), getPosition().getCenter().getY());
+      const auto controlPos = range.second;
+      const auto totalWidth = getPosition().getWidth();
+      const auto stepWidth = totalWidth / 100.0;
+      p.moveBy(stepWidth*controlPos*100,0);
+      return p;
     }
 }

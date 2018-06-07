@@ -21,12 +21,14 @@ namespace DescriptiveLayouts {
         bool redraw(FrameBuffer &fb) override;
         void setDirty() override;
         void drawBackground (FrameBuffer &fb) override;
+        const Point rangeToPosition(Range range) const;
 
         const PrimitiveInstance &getPrimitive() const;
 
     private:
         PrimitiveInstance m_primitive;
         Range m_range;
+        Point m_drawPosition;
         int m_steps;
     };
 }

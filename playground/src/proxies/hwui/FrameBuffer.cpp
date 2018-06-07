@@ -167,11 +167,8 @@ void FrameBuffer::fillRect(const Rect &rect)
   }
 }
 
-void FrameBuffer::fillCircle(const Rect& rect, int radius, int steps)
+void FrameBuffer::fillCircle(const Point& pos, int radius, int steps)
 {
-  auto pos = rect.getCenter();
-
-
   if(radius <= 6) {
     fillRect(pos.getX() - radius / 2, pos.getY() - radius, radius, radius * 2);
     fillRect(pos.getX() - radius, pos.getY() - radius / 2, radius * 2, radius);

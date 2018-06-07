@@ -102,11 +102,9 @@ namespace DescriptiveLayouts {
     private:
         virtual void onParameterChanged(const Parameter *p) override {
           auto v = p->getControlPositionValue();
-
           if (p->isBiPolar()) {
             auto value = (v + 1) / 2;
             auto width = value - 0.5;
-
             setValue(std::make_pair(0.5, width));
           } else {
             setValue(std::make_pair(0, v));
