@@ -137,9 +137,30 @@ namespace DescriptiveLayouts {
         explicit MCModRangeEventSource() : GenericRangeEventSource() {
         }
     private:
+
+        void setRange (float from, float to)
+        {
+          setRangeOrdered (std::min (from, to), std::max (from, to));
+        }
+
+        void setRangeOrdered (float from, float to)
+        {
+          from = std::min (from, 1.0f);
+          from = std::max (from, 0.0f);
+
+          to = std::min (to, 1.0f);
+          to = std::max (to, 0.0f);
+
+          setValue(std::make_pair(from, to));
+        }
+
         virtual void onParameterChanged(const Parameter *p) override {
           if(auto modP = dynamic_cast<const ModulateableParameter*>(p)) {
-            setValue(modP->getModulationRange());
+            auto lower = std::min(modP->getModulationRange().first, modP->getModulationRange().second);
+            lower = std::max(0., lower);
+            auto upper = std::max(modP->getModulationRange().first, modP->getModulationRange().second);
+            upper = std::min(1., upper);
+            setValue(std::make_pair(lower, upper));
           }
         }
     };

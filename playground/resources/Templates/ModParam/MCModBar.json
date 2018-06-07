@@ -12,14 +12,14 @@
       "backg": {
         "Class": "Bar",
         "Rect": "0, 2, 100, 12",
-        "Tag": "Cover"
+        "Tag": "Covert"
       }
     }
   },
   "styles": {
     "bg-trans": {
       "selector": {
-        "Tag": "Cover",
+        "Tag": "Covert",
         "PrimitiveClasses": "Bar"
       },
       "styles": {
