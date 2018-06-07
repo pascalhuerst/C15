@@ -24,8 +24,13 @@ namespace DescriptiveLayouts
     double controlWidth = r.getWidth();
     double controlLeft = r.getLeft();
 
-    r.setLeft(controlLeft + m_range.first * controlWidth);
-    r.setWidth(m_range.second * controlWidth);
+    auto from = std::min(m_range.first, m_range.second);
+    auto to = std::max(m_range.first, m_range.second);
+
+    auto left = round(r.getLeft () + from * r.getWidth ());
+    auto right = round(r.getLeft () + to * r.getWidth ());
+    r.setLeft (left);
+    r.setWidth (right - left);
     r.normalize();
 
     fb.setColor(color);
