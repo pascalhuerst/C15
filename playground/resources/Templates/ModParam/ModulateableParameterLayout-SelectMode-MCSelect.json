@@ -72,6 +72,7 @@
         }
       },
       "EventSinks": {
+        "BUTTON_PRESET": "IncMCPos",
         "BUTTON_INC": "IncMCSel",
         "BUTTON_DEC": "DecMCSel",
         "ROTARY_PLUS": "IncMCSel",

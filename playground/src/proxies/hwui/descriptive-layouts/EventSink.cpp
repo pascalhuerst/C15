@@ -1,8 +1,10 @@
 #include <parameters/ModulateableParameter.h>
+#include <libundo/undo/Scope.h>
 #include "EventSink.h"
 #include "Application.h"
 #include "presets/PresetManager.h"
 #include "presets/EditBuffer.h"
+#include "parameters/MacroControlParameter.h"
 #include "parameters/Parameter.h"
 #include "proxies/hwui/HWUI.h"
 
@@ -31,6 +33,15 @@ namespace DescriptiveLayouts
     {
       if(auto p = eb->getSelectedParameter())
       p->getValue().inc(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
+    });
+
+    registerEvent(EventSinks::IncMCPos, [eb, hwui](){
+      if(auto mc = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter())->getMacroControl())
+      {
+        UNDO::Scope::tTransactionScopePtr rootScope = eb->getParent()->getUndoScope().startTransaction("Big Bang");
+        auto trans = rootScope->getTransaction();
+        mc->stepCPFromHwui(trans, 1, hwui->getButtonModifiers());
+      }
     });
 
     registerEvent(EventSinks::DecParam, [eb, hwui]()

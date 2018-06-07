@@ -61,7 +61,7 @@ class ModulateableParameter : public Parameter
 
     std::pair<tControlPositionValue, tControlPositionValue> getModulationRange() const;
 
-    const MacroControlParameter* getMacroControl() const;
+    MacroControlParameter* getMacroControl() const;
 
   protected:
     void writeDocProperties (Writer &writer, tUpdateID knownRevision) const override;
