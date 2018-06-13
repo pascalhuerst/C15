@@ -60,5 +60,5 @@ void MCAmountLabel::setSuffixFontColor (FrameBuffer &fb) const
 
 void MCAmountLabel::onModifiersChanged ()
 {
-  update (Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ());
+  update (Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter());
 }

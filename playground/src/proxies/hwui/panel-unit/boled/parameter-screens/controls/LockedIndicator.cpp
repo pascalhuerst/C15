@@ -27,7 +27,7 @@ void LockedIndicator::onParameterSelected(Parameter * newOne)
 
 void LockedIndicator::onParameterGroupChanged()
 {
-  auto group = Application::get().getPresetManager()->getEditBuffer()->getSelected()->getParentGroup();
+  auto group = Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter()->getParentGroup();
   setText(group->areAllParametersLocked() ? "L" : "");
 }
 

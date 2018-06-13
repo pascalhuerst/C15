@@ -1,8 +1,10 @@
 #include <parameters/ModulateableParameter.h>
+#include <libundo/undo/Scope.h>
 #include "EventSink.h"
 #include "Application.h"
 #include "presets/PresetManager.h"
 #include "presets/EditBuffer.h"
+#include "parameters/MacroControlParameter.h"
 #include "parameters/Parameter.h"
 #include "proxies/hwui/HWUI.h"
 
@@ -24,18 +26,27 @@ namespace DescriptiveLayouts
 
   EventSinkBroker::EventSinkBroker()
   {
-    auto eb = Application::get().getPresetManager()->getEditBuffer(); // Warum crasht? bei inc dec mc?!
+    auto eb = Application::get().getPresetManager()->getEditBuffer();
     auto hwui = Application::get().getHWUI();
 
     registerEvent(EventSinks::IncParam, [eb, hwui]()
     {
-      if(auto p = eb->getSelected())
+      if(auto p = eb->getSelectedParameter())
       p->getValue().inc(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
+    });
+
+    registerEvent(EventSinks::IncMCPos, [eb, hwui](){
+      if(auto mc = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter())->getMacroControl())
+      {
+        UNDO::Scope::tTransactionScopePtr rootScope = eb->getParent()->getUndoScope().startTransaction("Big Bang");
+        auto trans = rootScope->getTransaction();
+        mc->stepCPFromHwui(trans, 1, hwui->getButtonModifiers());
+      }
     });
 
     registerEvent(EventSinks::DecParam, [eb, hwui]()
     {
-      if(auto p = eb->getSelected())
+      if(auto p = eb->getSelectedParameter())
       p->getValue().dec(Initiator::EXPLICIT_HWUI, hwui->getButtonModifiers());
     });
 
@@ -49,23 +60,58 @@ namespace DescriptiveLayouts
       hwui->undoableSetFocusAndMode(UIMode::Select);
     });
 
-    registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui]()
+    registerEvent(EventSinks::SwitchToMCSelectDetail, [hwui, eb]()
     {
-      hwui->setUiModeDetail(UIDetail::MCSelect);
+      if(dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()) != nullptr)
+      {
+        hwui->setUiModeDetail(UIDetail::MCSelect);
+      }
     });
 
     registerEvent(EventSinks::SwitchToInitDetail, [hwui](){
       hwui->setUiModeDetail(UIDetail::Init);
     });
 
+    registerEvent(EventSinks::SwitchToMCModRangeDetail, [hwui, eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
+      {
+        if(modParam->getModulationSource() != ModulateableParameter::ModulationSource::NONE)
+        {
+          hwui->setUiModeDetail(UIDetail::MCModRange);
+        }
+      }
+    });
+
     registerEvent(EventSinks::IncMCSel, [eb](){
-      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
         modParam->undoableIncrementMCSelect(1);
     });
 
     registerEvent(EventSinks::DecMCSel, [eb](){
-      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelected()))
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
         modParam->undoableIncrementMCSelect(-1);
+    });
+
+    registerEvent(EventSinks::SwitchToMCAmtDetail, [hwui, eb]() {
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter()))
+      {
+        if(modParam->getModulationSource() != ModulateableParameter::ModulationSource::NONE)
+        {
+          hwui->setUiModeDetail(UIDetail::MCAmount);
+        }
+      }
+    });
+
+    registerEvent(EventSinks::DecMCAmt, [hwui, eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter())) {
+        modParam->undoableIncrementMCAmount(-1);
+      }
+    });
+
+    registerEvent(EventSinks::IncMCAmt, [hwui, eb](){
+      if(auto modParam = dynamic_cast<ModulateableParameter*>(eb->getSelectedParameter())) {
+        modParam->undoableIncrementMCAmount(1);
+      }
     });
   }
 

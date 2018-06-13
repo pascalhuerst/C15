@@ -79,7 +79,7 @@ void MCPositionLabel::setSuffixFontColor (FrameBuffer &fb) const
 
 void MCPositionLabel::onModifiersChanged ()
 {
-  onParameterSelected (Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ());
+  onParameterSelected (Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter());
 }
 
 void MCPositionLabel::ensureDisconnectedModulationSourceIfApplicable(const Parameter *parameter)

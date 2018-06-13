@@ -35,7 +35,7 @@ void MacroControlEditButtonMenu::setup()
   addButton("Rename", bind(&MacroControlEditButtonMenu::rename, this));
   addButton("Mod Reset", bind(&MacroControlEditButtonMenu::reset, this));
 
-  if(eb->getSelected()->getParentGroup()->areAllParametersLocked())
+  if(eb->getSelectedParameter()->getParentGroup()->areAllParametersLocked())
     addButton("Unlock Group", bind(&MacroControlEditButtonMenu::unlockGroup, this));
   else
     addButton("Lock Group", bind(&MacroControlEditButtonMenu::lockGroup, this));
@@ -74,7 +74,7 @@ void MacroControlEditButtonMenu::rename()
 void MacroControlEditButtonMenu::smoothing()
 {
   auto eb = Application::get().getPresetManager()->getEditBuffer();
-  const auto currentID = eb->getSelected()->getID();
+  const auto currentID = eb->getSelectedParameter()->getID();
   const auto diffBetweenMacroControlIDAndItsSmoothing = 81;
   const auto smoothingID = currentID + diffBetweenMacroControlIDAndItsSmoothing;
   eb->undoableSelectParameter(smoothingID);
@@ -87,7 +87,7 @@ void MacroControlEditButtonMenu::editInfo()
 
 void MacroControlEditButtonMenu::reset()
 {
-  if(auto p = dynamic_cast<MacroControlParameter*>(Application::get().getPresetManager()->getEditBuffer()->getSelected()))
+  if(auto p = dynamic_cast<MacroControlParameter*>(Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter()))
   {
     p->undoableResetConnectionsToTargets();
   }
@@ -97,14 +97,14 @@ void MacroControlEditButtonMenu::unlockGroup()
 {
   auto eb = Application::get().getPresetManager()->getEditBuffer();
   auto scope = Application::get().getUndoScope()->startTransaction("Unlock Group");
-  eb->getSelected()->getParentGroup()->undoableUnlock(scope->getTransaction());
+  eb->getSelectedParameter()->getParentGroup()->undoableUnlock(scope->getTransaction());
 }
 
 void MacroControlEditButtonMenu::lockGroup()
 {
   auto eb = Application::get().getPresetManager()->getEditBuffer();
   auto scope = Application::get().getUndoScope()->startTransaction("Lock Group");
-  eb->getSelected()->getParentGroup()->undoableLock(scope->getTransaction());
+  eb->getSelectedParameter()->getParentGroup()->undoableLock(scope->getTransaction());
 }
 
 void MacroControlEditButtonMenu::unlockAll()

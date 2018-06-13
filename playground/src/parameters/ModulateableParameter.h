@@ -2,6 +2,8 @@
 
 #include "Parameter.h"
 
+class MacroControlParameter;
+
 class ModulateableParameter : public Parameter
 {
     typedef Parameter super;
@@ -48,6 +50,7 @@ class ModulateableParameter : public Parameter
     virtual Glib::ustring stringizeModulationAmount () const;
     virtual double getModulationAmountFineDenominator () const;
     virtual double getModulationAmountCoarseDenominator () const;
+    virtual Glib::ustring getModAmountAsDisplayValue() const;
 
     std::pair<Glib::ustring, Glib::ustring> getModRangeAsDisplayValues() const;
 
@@ -57,6 +60,8 @@ class ModulateableParameter : public Parameter
     void *getAmountCookie ();
 
     std::pair<tControlPositionValue, tControlPositionValue> getModulationRange() const;
+
+    MacroControlParameter* getMacroControl() const;
 
   protected:
     void writeDocProperties (Writer &writer, tUpdateID knownRevision) const override;

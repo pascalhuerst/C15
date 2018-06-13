@@ -107,7 +107,7 @@ void BOLED::setupSoundScreen (FocusAndMode focusAndMode)
 
 void BOLED::setupParameterScreen (FocusAndMode focusAndMode)
 {
-  if (auto selParam = Application::get ().getPresetManager ()->getEditBuffer ()->getSelected ())
+  if (auto selParam = Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter())
   {
     auto layout = selParam->createLayout (focusAndMode);
 

@@ -4,6 +4,7 @@
 #include <Application.h>
 #include <proxies/hwui/HWUI.h>
 #include <tools/ExceptionTools.h>
+#include <proxies/hwui/debug-oled/DebugLayout.h>
 #include "ControlClass.h"
 #include "ControlInstance.h"
 #include "Selector.h"
@@ -60,7 +61,12 @@ namespace DescriptiveLayouts
 
   std::shared_ptr<DFBLayout> BoledLayoutFactory::instantiate(FocusAndMode fam)
   {
-    return std::shared_ptr<DFBLayout>(find(fam).instantiate());
+    try {
+      return std::shared_ptr<DFBLayout>(find(fam).instantiate());
+    } catch(...) {
+      auto desc = ExceptionTools::handle_eptr(std::current_exception());
+      return std::make_shared<DebugLayout>(desc);
+    }
   }
 
 }

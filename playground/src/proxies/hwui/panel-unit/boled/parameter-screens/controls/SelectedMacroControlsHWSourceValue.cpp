@@ -72,6 +72,6 @@ void SelectedMacroControlsHWSourceValue::setSuffixFontColor (FrameBuffer &fb) co
 
 void SelectedMacroControlsHWSourceValue::onModifiersChanged ()
 {
-  updateText (Application::get ().getPresetManager ()->getEditBuffer ()->getSelected());
+  updateText (Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter());
 }
 

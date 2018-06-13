@@ -1,10 +1,11 @@
 #include <tools/ExceptionTools.h>
+#include <proxies/hwui/descriptive-layouts/Primitives/Circle.h>
 #include "PrimitivesFactory.h"
 #include "TemplateEnums.h"
 #include "PrimitiveInstance.h"
-#include "Bar.h"
-#include "Border.h"
-#include "Text.h"
+#include "proxies/hwui/descriptive-layouts/Primitives/Bar.h"
+#include "proxies/hwui/descriptive-layouts/Primitives/Border.h"
+#include "proxies/hwui/descriptive-layouts/Primitives/Text.h"
 
 namespace DescriptiveLayouts
 {
@@ -18,6 +19,8 @@ namespace DescriptiveLayouts
         return new Border(primitive);
       case PrimitiveClasses::Text:
         return new Text(primitive);
+      case PrimitiveClasses::Circle:
+        return new Circle(primitive);
       default:
         throw ExceptionTools::TemplateException(Glib::ustring("PrimitiveInstance Type not found: ") + toString(primitive.primitveClass), "__LINE__ __FILE__");
     }

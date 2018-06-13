@@ -175,7 +175,8 @@ bool PanelUnitParameterEditMode::handleMacroControlButton(bool state, int mcPara
   auto &mcStateMachine = getMacroControlAssignmentStateMachine();
   mcStateMachine.setCurrentMCParameter(mcParamId);
 
-  bool isAlreadySelected = Application::get().getPresetManager()->getEditBuffer()->getSelected()->getID() == mcParamId &&
+  bool isAlreadySelected =
+          Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter()->getID() == mcParamId &&
 					Application::get().getHWUI()->getFocusAndMode().focus == UIFocus::Parameters;
 
   if(state)
@@ -265,7 +266,7 @@ bool PanelUnitParameterEditMode::toggleParameterSelection(vector<gint32> ids, bo
 
   if(state)
   {
-    Parameter * selParam = editBuffer->getSelected();
+    Parameter * selParam = editBuffer->getSelectedParameter();
 
     if(tryParameterToggleOnMacroControl(ids, selParam))
       return true;
@@ -358,7 +359,7 @@ bool PanelUnitParameterEditMode::setParameterSelection(gint32 audioID, bool stat
     if(Parameter * p = editBuffer->findParameterByID(audioID))
     {
       DebugLevel::gassy("selecting param");
-      auto old = editBuffer->getSelected();
+      auto old = editBuffer->getSelectedParameter();
       editBuffer->undoableSelectParameter(p);
     }
   }
@@ -385,7 +386,7 @@ void PanelUnitParameterEditMode::bruteForceUpdateLeds()
 
   shared_ptr<EditBuffer> editBuffer = Application::get().getPresetManager()->getEditBuffer();
 
-  if(Parameter * selParam = editBuffer->getSelected())
+  if(Parameter * selParam = editBuffer->getSelectedParameter())
   {
     auto selParamID = selParam->getID();
 
@@ -504,7 +505,7 @@ void PanelUnitParameterEditMode::letMacroControlTargetsBlink()
 {
   auto &panelUnit = Application::get().getHWUI()->getPanelUnit();
   shared_ptr<EditBuffer> editBuffer = Application::get().getPresetManager()->getEditBuffer();
-  Parameter * selParam = editBuffer->getSelected();
+  Parameter * selParam = editBuffer->getSelectedParameter();
 
   if(auto mc = dynamic_cast<MacroControlParameter *>(selParam))
   {

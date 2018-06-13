@@ -8,6 +8,9 @@
 #include <iostream>
 #include <io/network/WebSocketSession.h>
 #include <Application.h>
+#include <cmath>
+#include <complex>
+#include <complex.h>
 
 FrameBuffer::StackScopeGuard::StackScopeGuard(FrameBuffer *fb) :
     m_fb(fb)
@@ -161,6 +164,29 @@ void FrameBuffer::fillRect(const Rect &rect)
 
     for(auto y = fill.getTop(); y <= bottom; y++)
       drawRawHorizontalLine(left, y, width);
+  }
+}
+
+void FrameBuffer::fillCircle(const Point& pos, int radius, int steps)
+{
+  if(radius <= 6) {
+    fillRect(pos.getX() - radius / 2, pos.getY() - radius, radius, radius * 2);
+    fillRect(pos.getX() - radius, pos.getY() - radius / 2, radius * 2, radius);
+  }
+  else {
+    auto theta = 0;
+    auto h = pos.getX();
+    auto k = pos.getY();
+    auto step = steps;
+
+    while(theta <= 360)
+    {
+      const auto x = h + radius*cos(theta);
+      const auto y = k + radius*sin(theta);
+      if(abs(x - h) <= radius + 0.5 && abs(x - h) >= radius - 0.5)
+        setPixel(x, y);
+      theta+=step;
+    }
   }
 }
 

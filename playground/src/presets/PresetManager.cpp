@@ -945,7 +945,7 @@ void PresetManager::stress(int numTransactions)
       auto transactionScope = getUndoScope().startTransaction("Stressing Undo System");
       m_editBuffer->undoableSelectParameter(transactionScope->getTransaction(), to_string(parameterId));
 
-      if(auto p = m_editBuffer->getSelected())
+      if(auto p = m_editBuffer->getSelectedParameter())
       {
         p->stepCPFromHwui (transactionScope->getTransaction(), g_random_boolean() ? -1 : 1, ButtonModifiers());
       }

@@ -26,7 +26,7 @@ bool UpperModulationBoundControl::onRotary (int inc, ButtonModifiers modifiers)
 {
   auto editBuffer = Application::get ().getPresetManager ()->getEditBuffer ();
 
-  if (auto modulatedParam = dynamic_cast<ModulateableParameter*> (editBuffer->getSelected ()))
+  if (auto modulatedParam = dynamic_cast<ModulateableParameter*> (editBuffer->getSelectedParameter()))
   {
     auto mc = modulatedParam->getModulationSource ();
     auto mcID = MacroControlsGroup::modSrcToParamID (mc);

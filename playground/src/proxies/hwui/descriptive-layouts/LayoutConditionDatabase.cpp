@@ -16,7 +16,7 @@ namespace DescriptiveLayouts
       {
         m_conditions[LayoutConditions::IsParameterModulateable] = []()
         {
-          auto p = Application::get().getPresetManager()->getEditBuffer()->getSelected();
+          auto p = Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter();
           return dynamic_cast<ModulateableParameter*>(p) != nullptr;
         };
       }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <proxies/hwui/controls/Control.h>
-#include "PropertyOwner.h"
-#include "Styleable.h"
-#include "PrimitiveInstance.h"
+#include "proxies/hwui/descriptive-layouts/PropertyOwner.h"
+#include "proxies/hwui/descriptive-layouts/Styleable.h"
+#include "proxies/hwui/descriptive-layouts/PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {

@@ -8,4 +8,5 @@ protected:
     using super = DFBLayout;
 public:
     explicit DebugLayout(Glib::ustring e);
+    virtual bool onButton (Buttons i, bool down, ::ButtonModifiers modifiers);
 };

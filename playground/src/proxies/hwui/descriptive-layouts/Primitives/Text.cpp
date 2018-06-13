@@ -1,7 +1,7 @@
 #include <proxies/hwui/FrameBuffer.h>
 #include <tools/ExceptionTools.h>
 #include "Text.h"
-#include "PrimitiveInstance.h"
+#include "proxies/hwui/descriptive-layouts/PrimitiveInstance.h"
 
 namespace DescriptiveLayouts
 {

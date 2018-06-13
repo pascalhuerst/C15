@@ -204,7 +204,7 @@ void HWUI::onKeyboardLineRead(Glib::RefPtr<Gio::AsyncResult> &res)
       }
       else if(line.find("z") == 0)
       {
-        auto p = Application::get().getPresetManager()->getEditBuffer()->getSelected();
+        auto p = Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter();
         p = Application::get().getPresetManager()->getEditBuffer()->findParameterByID(HardwareSourcesGroup::getUpperRibbonParameterID());
 
         if(auto h = dynamic_cast<PhysicalControlParameter *>(p))
@@ -219,7 +219,7 @@ void HWUI::onKeyboardLineRead(Glib::RefPtr<Gio::AsyncResult> &res)
       }
       else if(line.find("x") == 0)
       {
-        auto p = Application::get().getPresetManager()->getEditBuffer()->getSelected();
+        auto p = Application::get().getPresetManager()->getEditBuffer()->getSelectedParameter();
         p = Application::get().getPresetManager()->getEditBuffer()->findParameterByID(HardwareSourcesGroup::getUpperRibbonParameterID());
 
         if(auto h = dynamic_cast<PhysicalControlParameter*>(p))

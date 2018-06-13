@@ -2,11 +2,13 @@
 #include "MacroControlParameter.h"
 #include "groups/MacroControlsGroup.h"
 #include "presets/EditBuffer.h"
+#include "proxies/hwui/HWUI.h"
 #include "proxies/lpc/MessageComposer.h"
 #include <proxies/hwui/panel-unit/boled/parameter-screens/ParameterInfoLayout.h>
 #include <proxies/hwui/panel-unit/boled/parameter-screens/ModulateableParameterLayouts.h>
 #include "xml/Writer.h"
 #include <math.h>
+#include <Application.h>
 #include "testing/TestDriver.h"
 #include "http/UpdateDocumentMaster.h"
 #include "parameters/scale-converters/Linear100PercentScaleConverter.h"
@@ -337,6 +339,16 @@ std::pair<tControlPositionValue, tControlPositionValue> ModulateableParameter::g
   return std::make_pair(modLeft, modRight);
 }
 
+MacroControlParameter* ModulateableParameter::getMacroControl() const {
+  if(getModulationSource() != ModulationSource::NONE) {
+    uint16_t id = MacroControlsGroup::modSrcToParamID(getModulationSource());
+    if (auto mc = Application::get().getPresetManager()->getEditBuffer()->findParameterByID(id)) {
+      return dynamic_cast<MacroControlParameter*>(mc);
+    }
+  }
+  return nullptr;
+}
+
 std::pair<Glib::ustring, Glib::ustring> ModulateableParameter::getModRangeAsDisplayValues() const
 {
   auto range = getModulationRange();
@@ -345,6 +357,25 @@ std::pair<Glib::ustring, Glib::ustring> ModulateableParameter::getModRangeAsDisp
   auto second = modulationValueToDisplayString(range.second);
   return std::make_pair(first, second);
 }
+
+Glib::ustring ModulateableParameter::getModAmountAsDisplayValue() const
+{
+  if (getModulationSource() != ModulateableParameter::NONE)
+  {
+    auto amount = stringizeModulationAmount();
+
+    if (Application::get().getHWUI()->isModifierSet(ButtonModifier::FINE))
+    {
+      return Glib::ustring(amount + " F", 2);
+    }
+    else
+    {
+      return Glib::ustring(amount);
+    }
+  }
+  return "";
+}
+
 
 Glib::ustring ModulateableParameter::modulationValueToDisplayString(tControlPositionValue v) const
 {
