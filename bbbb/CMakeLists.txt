@@ -31,7 +31,7 @@ endforeach(lib)
 
 include_directories(src)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wdouble-promotion -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wdouble-promotion")
   
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp) 
   
