@@ -15,6 +15,7 @@ import com.nonlinearlabs.NonMaps.client.world.Name;
 import com.nonlinearlabs.NonMaps.client.world.NonLinearWorld;
 import com.nonlinearlabs.NonMaps.client.world.maps.LayoutResizingHorizontal;
 import com.nonlinearlabs.NonMaps.client.world.maps.LayoutResizingVertical;
+import com.nonlinearlabs.NonMaps.client.world.maps.MapsLayout;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter.Initiator;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Cabinet.Cabinet;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.CombFilter.CombFilter;
@@ -236,7 +237,7 @@ public class ParameterEditor extends LayoutResizingVertical {
 
 	private void scrollToSelectedParameter() {
 		if (!selectedObject.isVisible())
-			selectedObject.getParameterGroup().scrollToMakeFullyVisible();
+			((MapsLayout) selectedObject.getParameterGroup()).scrollToMakeFullyVisible();
 	}
 
 	public Parameter getSelection() {
@@ -496,11 +497,10 @@ public class ParameterEditor extends LayoutResizingVertical {
 
 		return c != null;
 	}
-	
-	public boolean areAllParametersLocked()
-	{
-		for(Parameter p: parameterMap.values()) {
-			if(p.isLocked() == false)
+
+	public boolean areAllParametersLocked() {
+		for (Parameter p : parameterMap.values()) {
+			if (p.isLocked() == false)
 				return false;
 		}
 		return true;

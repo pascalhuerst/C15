@@ -4,7 +4,7 @@
 <module rename-to='nonmaps'>
 	<inherits name="com.google.gwt.http.HTTP" />
 	<inherits name="com.google.gwt.xml.XML" />
-	<inherits name='com.google.gwt.user.User' /> 
+	<inherits name='com.google.gwt.user.User' />
 	<entry-point class='com.nonlinearlabs.NonMaps.client.NonMaps' />
 	<source path='client' />
 	<add-linker name="xsiframe"/>

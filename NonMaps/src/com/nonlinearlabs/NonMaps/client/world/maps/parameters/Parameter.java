@@ -11,6 +11,7 @@ import com.nonlinearlabs.NonMaps.client.Millimeter;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
 import com.nonlinearlabs.NonMaps.client.ServerProxy;
 import com.nonlinearlabs.NonMaps.client.Tracer;
+import com.nonlinearlabs.NonMaps.client.useCases.EditBuffer;
 import com.nonlinearlabs.NonMaps.client.world.Control;
 import com.nonlinearlabs.NonMaps.client.world.Gray;
 import com.nonlinearlabs.NonMaps.client.world.Name;
@@ -276,15 +277,15 @@ public abstract class Parameter extends LayoutResizingVertical {
 	}
 
 	private native void createStringizer(String body) /*-{
-														this.@com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter::stringizer = new Function(
-														"cpValue", "withUnit", body);
-														}-*/;
+		this.@com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter::stringizer = new Function(
+				"cpValue", "withUnit", body);
+	}-*/;
 
 	private native String stringize(boolean withUnit, double cpValue) /*-{
-																		var stringizer = this.@com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter::stringizer;
-																		var scaledText = stringizer(cpValue, withUnit);
-																		return scaledText;
-																		}-*/;
+		var stringizer = this.@com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter::stringizer;
+		var scaledText = stringizer(cpValue, withUnit);
+		return scaledText;
+	}-*/;
 
 	public void addListener(ParameterListener l) {
 		listeners.add(l);
@@ -353,11 +354,16 @@ public abstract class Parameter extends LayoutResizingVertical {
 	}
 
 	public void onValueChanged(Initiator initiator, double diff) {
-		if (initiator == Initiator.EXPLICIT_USER_ACTION)
-			getNonMaps().getServerProxy().onParameterChanged(Parameter.this);
+		if (initiator == Initiator.EXPLICIT_USER_ACTION) {
+			EditBuffer.get().setParameterValue(getParameterGroupID(), getParameterID(), getValue().getQuantizedClipped(), isOracle());
+		}
 
 		notifyListeners();
 		invalidate(INVALIDATION_FLAG_UI_CHANGED);
+	}
+
+	public String getParameterGroupID() {
+		return getParameterGroup().getID();
 	}
 
 	public boolean isBoolean() {
@@ -400,11 +406,11 @@ public abstract class Parameter extends LayoutResizingVertical {
 		return findInParents(c.getParent());
 	}
 
-	public MapsLayout getParameterGroup() {
+	public ParameterGroupIface getParameterGroup() {
 		Control p = getParent();
 		while (p != null) {
 			if (p instanceof ParameterGroupIface)
-				return (MapsLayout) p;
+				return (ParameterGroupIface) p;
 
 			p = p.getParent();
 		}
