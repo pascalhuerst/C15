@@ -1,5 +1,7 @@
 package com.nonlinearlabs.NonMaps.client.world;
 
+import java.util.function.Function;
+
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.nonlinearlabs.NonMaps.client.Checksum;
@@ -314,6 +316,17 @@ public abstract class Control {
 	}
 
 	public void beingDropped() {
+	}
+
+	public void recurseParents(Function<Control, Boolean> cb) {
+		Control p = getParent();
+
+		while (p != null) {
+			if (!cb.apply(p))
+				return;
+
+			p = p.getParent();
+		}
 	}
 
 }

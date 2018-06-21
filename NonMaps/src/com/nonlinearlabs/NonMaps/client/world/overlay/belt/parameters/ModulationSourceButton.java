@@ -2,9 +2,6 @@ package com.nonlinearlabs.NonMaps.client.world.overlay.belt.parameters;
 
 import com.nonlinearlabs.NonMaps.client.world.Control;
 import com.nonlinearlabs.NonMaps.client.world.Position;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ModulatableParameter;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter.Initiator;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.MacroControls.Macros.MacroControls;
 import com.nonlinearlabs.NonMaps.client.world.overlay.SVGImage;
 
@@ -24,6 +21,7 @@ public class ModulationSourceButton extends SVGImage {
 
 	@Override
 	public Control mouseDown(Position eventPoint) {
+		/*-
 		if (isVisible() && getParent().isVisible()) {
 			final Parameter p = getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
 			if (p instanceof ModulatableParameter) {
@@ -36,6 +34,7 @@ public class ModulationSourceButton extends SVGImage {
 
 			return this;
 		}
+		-*/
 		return null;
 	}
 
@@ -49,11 +48,12 @@ public class ModulationSourceButton extends SVGImage {
 
 	@Override
 	public int getSelectedPhase() {
+		/*-
 		Parameter p = getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
 		if (p instanceof ModulatableParameter) {
 			ModulatableParameter m = (ModulatableParameter) p;
 			return (m.getModulationSource() == which) ? 0 : 1;
-		}
+		}-*/
 		return 0;
 	}
 }

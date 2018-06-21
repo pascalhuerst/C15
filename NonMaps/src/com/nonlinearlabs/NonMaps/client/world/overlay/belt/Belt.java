@@ -34,7 +34,9 @@ public class Belt extends OverlayLayout {
 	}
 
 	public Parameter getSelectedParameter() {
-		return getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+		// return
+		// getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+		return null;
 	}
 
 	@Override

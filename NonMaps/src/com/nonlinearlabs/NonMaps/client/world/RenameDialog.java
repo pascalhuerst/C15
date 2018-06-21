@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
 import com.nonlinearlabs.NonMaps.client.Renameable;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ParameterEditor;
 import com.nonlinearlabs.NonMaps.client.world.maps.presets.PresetManager;
 import com.nonlinearlabs.NonMaps.client.world.maps.presets.bank.preset.Preset;
 
@@ -44,7 +43,7 @@ public class RenameDialog extends DialogBox {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
 				theDialog = null;
-				NonMaps.get().captureFocus(); //T
+				NonMaps.get().captureFocus(); // T
 			}
 		});
 	}
@@ -134,6 +133,7 @@ public class RenameDialog extends DialogBox {
 	}
 
 	public static void awaitNewPreset(String uuid) {
+		/*-
 		ParameterEditor editBuffer = NonMaps.get().getNonLinearWorld().getParameterEditor();
 		boolean isModified = editBuffer.isModified();
 		boolean storedInPlace = editBuffer.getLoadedPresetUUID().equals(uuid);
@@ -142,6 +142,6 @@ public class RenameDialog extends DialogBox {
 			presetToWaitFor = uuid;
 		} else {
 			presetToWaitFor = "";
-		}
+		}-*/
 	}
 }

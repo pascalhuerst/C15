@@ -30,7 +30,7 @@ class CombFilterCol2 extends ParameterColumn {
 
 		private EnvC(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -45,7 +45,7 @@ class CombFilterCol2 extends ParameterColumn {
 
 		private Keytracking(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new NumericalControlSmall(this));
 		}
 

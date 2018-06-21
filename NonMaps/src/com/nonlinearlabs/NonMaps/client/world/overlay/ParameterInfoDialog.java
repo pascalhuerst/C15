@@ -55,7 +55,7 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 
 		addContent();
 
-		update(NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome());
+		// update(NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome());
 
 		super.pushDialogToFront();
 
@@ -111,9 +111,10 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 					NonMaps.theMaps.getServerProxy().setMacroControlInfo(mc.getParameterID(), infoField.getText());
 				}
 
-				Parameter s = NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+				/*-Parameter s = NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome();
 				if (s != param)
 					update(s);
+					-*/
 			}
 		});
 
@@ -187,10 +188,10 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 					MacroControlParameter mc = (MacroControlParameter) p;
 					mc.setName(paramNameEditEditor.getText());
 				}
-
-				Parameter s = NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome();
-				if (s != param)
-					update(s);
+				/*-
+				 Parameter s = NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+				 if (s != param)
+				 update(s);-*/
 			}
 		});
 		setWidget(panel);
@@ -211,11 +212,12 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 
 		if (isMC) {
 			MacroControlParameter p = (MacroControlParameter) newSelection;
+			/*-
+			 paramNameEditView.setText(p.getGroupName() + "   \u2013   " + p.getName().getShortName());
 
-			paramNameEditView.setText(p.getGroupName() + "   \u2013   " + p.getName().getShortName());
-
-			if (focusOwner != paramNameEditEditor)
-				paramNameEditEditor.setText(p.getName().getEditName());
+			 if (focusOwner != paramNameEditEditor)
+			 paramNameEditEditor.setText(p.getName().getEditName());
+			 -*/
 
 			String info = p.getInfo();
 			if (!info.isEmpty()) {
@@ -240,8 +242,10 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 			while (parent != null) {
 				if (parent instanceof ParameterGroupIface) {
 					ParameterGroupIface group = (ParameterGroupIface) parent;
-					String longText = group.getName().getLongName() + " \u2013 " + p.getName().getLongName();
-					return longText;
+					// String longText = group.getName().getLongName() +
+					// " \u2013 " + p.getName().getLongName();
+					// return longText;
+					return "";
 				}
 				parent = parent.getParent();
 			}
@@ -280,7 +284,7 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 	}
 
 	public static void update() {
-		theDialog.update(NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome());
+		// theDialog.update(NonMaps.theMaps.getNonLinearWorld().getParameterEditor().getSelectedOrSome());
 	}
 
 	static int lastPopupLeft = -1;
@@ -305,12 +309,12 @@ public class ParameterInfoDialog extends GWTDialog implements SelectionListener 
 	@Override
 	protected void onAttach() {
 		super.onAttach();
-		NonMaps.theMaps.getNonLinearWorld().getParameterEditor().registerListener(this);
+		// NonMaps.theMaps.getNonLinearWorld().getParameterEditor().registerListener(this);
 	}
 
 	@Override
 	protected void onDetach() {
-		NonMaps.theMaps.getNonLinearWorld().getParameterEditor().removeListener(this);
+		// NonMaps.theMaps.getNonLinearWorld().getParameterEditor().removeListener(this);
 		super.onDetach();
 	}
 

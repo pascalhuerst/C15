@@ -16,7 +16,7 @@ public abstract class InvertedYModulatableParameter extends ModulatableParameter
 		EditParameterSetting s = getWorld().getViewport().getOverlay().getSetup().getEditParameterDragSetting();
 		boolean noDrag = s.getSettingsControl().getChoiceString().equals("Never");
 
-		if (isSelected() && !noDrag) {
+		if (getPresenter().selected && !noDrag) {
 
 			double xPix = newPoint.getX() - oldPoint.getX();
 			double yPix = newPoint.getY() - oldPoint.getY();
@@ -25,9 +25,9 @@ public abstract class InvertedYModulatableParameter extends ModulatableParameter
 
 			if (Math.abs(yPix) > Math.abs(xPix))
 				pix = yPix;
-
-			if (currentParameterChanger != null)
-				currentParameterChanger.changeBy(fine, pix);
+			/*-
+			 if (currentParameterChanger != null)
+			 currentParameterChanger.changeBy(fine, pix);-*/
 			return this;
 		}
 

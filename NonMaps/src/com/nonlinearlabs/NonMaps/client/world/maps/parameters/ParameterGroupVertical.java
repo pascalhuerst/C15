@@ -37,7 +37,7 @@ public abstract class ParameterGroupVertical extends LayoutResizingVertical impl
 		});
 
 		Parameter p = (Parameter) c;
-		return p.isLocked();
+		return p.getPresenter().locked;
 	}
 
 	@Override

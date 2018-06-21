@@ -3,12 +3,9 @@ package com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.Macr
 import java.util.LinkedList;
 
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.xml.client.Node;
 import com.nonlinearlabs.NonMaps.client.ColorTable;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
 import com.nonlinearlabs.NonMaps.client.Renameable;
-import com.nonlinearlabs.NonMaps.client.ServerProxy;
-import com.nonlinearlabs.NonMaps.client.world.Name;
 import com.nonlinearlabs.NonMaps.client.world.maps.MapsLayout;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.LabelLarge;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ModulatableParameter;
@@ -45,7 +42,7 @@ public abstract class MacroControlParameter extends Parameter implements Renamea
 
 	MacroControlParameter(MacrosCol parent, String defName) {
 		super(parent);
-		addChild(new LabelLarge(this, getName()) {
+		addChild(new LabelLarge(this) {
 			@Override
 			protected double getBasicHeight() {
 				return 23;
@@ -65,7 +62,7 @@ public abstract class MacroControlParameter extends Parameter implements Renamea
 	public void draw(Context2d ctx, int invalidationMask) {
 		super.draw(ctx, invalidationMask);
 
-		if (isSelected())
+		if (getPresenter().selected)
 			getPixRect().drawRoundedRect(ctx, getBackgroundRoundings(), toXPixels(4), toXPixels(1), null,
 					ColorTable.getMacroControlTargetColor());
 	}
@@ -75,15 +72,10 @@ public abstract class MacroControlParameter extends Parameter implements Renamea
 		return true;
 	}
 
-	@Override
-	protected Name createName() {
-		return new MacroParameterName(this);
-	}
-
-	public void applyModulation(Initiator initiator, double delta) {
-		getValue().applyModulation(initiator, delta);
-	}
-
+	/*-	public void applyModulation(Initiator initiator, double delta) {
+	 getValue().applyModulation(initiator, delta);
+	 }
+	 -*/
 	public void addModulatableParameter(ModulatableParameter modulatableParameter) {
 		targets.add(modulatableParameter);
 	}
@@ -92,7 +84,7 @@ public abstract class MacroControlParameter extends Parameter implements Renamea
 		targets.remove(modulatableParameter);
 	}
 
-	@Override
+	/*-@Override
 	public void onValueChanged(Initiator initiator, double diff) {
 		super.onValueChanged(initiator, diff);
 
@@ -100,22 +92,7 @@ public abstract class MacroControlParameter extends Parameter implements Renamea
 			if (Math.abs(diff) > 0.0)
 				for (ModulatableParameter p : targets)
 					p.applyModulation(Initiator.MODULATION, diff);
-	}
-
-	@Override
-	public MacroParameterName getName() {
-		return (MacroParameterName) super.getName();
-	}
-
-	@Override
-	public String getCurrentName() {
-		return getName().getEditName();
-	}
-
-	@Override
-	public String getTitleName() {
-		return getName().getLongName();
-	}
+	}-*/
 
 	@Override
 	public String getEntityName() {
@@ -135,22 +112,6 @@ public abstract class MacroControlParameter extends Parameter implements Renamea
 	@Override
 	public boolean hasContextMenu() {
 		return true;
-	}
-
-	@Override
-	protected boolean updateValues(Node child) {
-		if (super.updateValues(child))
-			return true;
-
-		String nodeName = child.getNodeName();
-		if (nodeName != null && nodeName.equals("info")) {
-			try {
-				setInfo(ServerProxy.getText(child));
-			} catch (Exception e) {
-			}
-		}
-
-		return false;
 	}
 
 	public void setInfo(String text) {

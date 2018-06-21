@@ -22,9 +22,6 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ParameterEditor;
-import com.nonlinearlabs.NonMaps.client.world.maps.presets.PresetManager;
-import com.nonlinearlabs.NonMaps.client.world.maps.presets.bank.preset.Preset;
 import com.nonlinearlabs.NonMaps.client.world.overlay.GWTDialog;
 
 public class AppendOverwriteInsertPresetDialog extends GWTDialog {
@@ -221,6 +218,7 @@ public class AppendOverwriteInsertPresetDialog extends GWTDialog {
 	}
 
 	private boolean shouldUseOriginalName() {
+		/*-
 		ParameterEditor paramEdit = NonMaps.theMaps.getNonLinearWorld().getParameterEditor();
 		PresetManager mgr = NonMaps.theMaps.getNonLinearWorld().getPresetManager();
 		boolean modified = paramEdit.isModified();
@@ -228,7 +226,8 @@ public class AppendOverwriteInsertPresetDialog extends GWTDialog {
 		Preset p = mgr.findLoadedPreset();
 		boolean storeInPlace = mgr.findSelectedPreset() == p;
 
-		return !modified || (storeInPlace && overwrite);
+		return !modified || (storeInPlace && overwrite);-*/
+		return true;
 	}
 
 	@Override

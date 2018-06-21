@@ -1,8 +1,7 @@
-package com.nonlinearlabs.NonMaps.client.world.maps.parameters.value;
+package com.nonlinearlabs.NonMaps.client.dataModel.value;
 
 import com.google.gwt.xml.client.Node;
 import com.nonlinearlabs.NonMaps.client.ServerProxy;
-import com.nonlinearlabs.NonMaps.client.dataModel.ValueDataModelEntity;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter.Initiator;
 
 public class QuantizedClippedValue extends ClippedValue {
@@ -13,55 +12,6 @@ public class QuantizedClippedValue extends ClippedValue {
 		public void onQuantizedValueChanged(Initiator initiator, double oldQuantizedValue, double newQuantizedValue);
 
 		public void onRawValueChanged(Initiator initiator, double oldRawValue, double newRawValue);
-	}
-
-	public class IncrementalChanger {
-		private double lastQuantizedValue = 0;
-		private double pendingAmount = 0;
-		private double pixPerRange = 0;
-
-		IncrementalChanger(double pixPerRange) {
-			this.lastQuantizedValue = getQuantizedClipped();
-			this.pixPerRange = pixPerRange;
-		}
-
-		public QuantizedClippedValue getValue() {
-			return QuantizedClippedValue.this;
-		}
-
-		public void changeBy(boolean fine, double amount) {
-
-			amount /= pixPerRange;
-
-			if (isBipolar())
-				amount *= 2;
-
-			if (fine)
-				amount = amount * getCoarseDenominator() / getFineDenominator();
-
-			pendingAmount += amount;
-
-			double newVal = getQuantizedValue(lastQuantizedValue + pendingAmount, fine);
-			newVal = clip(newVal);
-
-			if (newVal != lastQuantizedValue) {
-
-				if (isBoolean()) {
-					if (newVal > lastQuantizedValue)
-						newVal = 1.0;
-					else if (newVal < lastQuantizedValue)
-						newVal = 0.0;
-				}
-
-				setRawValue(Initiator.EXPLICIT_USER_ACTION, newVal);
-				pendingAmount = 0;
-				lastQuantizedValue = newVal;
-			}
-		}
-
-		public void finish() {
-			QuantizedClippedValue.this.onEditingFinished();
-		}
 	}
 
 	private int coarseDenominator = 100;
@@ -150,10 +100,6 @@ public class QuantizedClippedValue extends ClippedValue {
 		setRawValue(initiator, getRawValue() + delta);
 	}
 
-	public IncrementalChanger startUserEdit(double pixPerRange) {
-		return new IncrementalChanger(pixPerRange);
-	}
-
 	public void update(Node child) {
 		super.update(child);
 
@@ -194,10 +140,10 @@ public class QuantizedClippedValue extends ClippedValue {
 		listener.onQuantizedValueChanged(initiator, oldFine, newFine);
 	}
 
-	public void update(ValueDataModelEntity e) {
+	/*-public void update(ValueDataModelEntity e) {
 		coarseDenominator = e.metaData.coarseDenominator.getValue();
 		fineDenominator = e.metaData.fineDenominator.getValue();
 		super.update(e);
-	}
+	}-*/
 
 }

@@ -277,6 +277,7 @@ public class CompareDialog extends GWTDialog {
 	}
 
 	private void updateLoadButtonStates() {
+		/*-
 		if (xml != null) {
 			Element root = xml.getDocumentElement();
 			Node hashNode = ServerProxy.getChild(root, "hash");
@@ -287,6 +288,7 @@ public class CompareDialog extends GWTDialog {
 			loadPresetA.setEnabled(!(presetAXml == null || a.equals(ebHash)));
 			loadPresetB.setEnabled(!(presetBXml == null || b.equals(ebHash)));
 		}
+		-*/
 	}
 
 	public void addLoadButtons(int row, FlexTable table) {

@@ -25,22 +25,23 @@ public class PedalSlider extends OverlayControl {
 	@Override
 	public void draw(Context2d ctx, int invalidationMask) {
 		Parameter p = getParameter();
+		/*-
+		 double value = p.getValue().getQuantizedClipped();
+		 boolean isBiPolar = p.isBiPolar();
 
-		double value = p.getValue().getQuantizedClipped();
-		boolean isBiPolar = p.isBiPolar();
+		 getPixRect().fillAndStroke(ctx, new Gray(25), 1, new Gray(0));
 
-		getPixRect().fillAndStroke(ctx, new Gray(25), 1, new Gray(0));
+		 if (isBiPolar)
+		 drawCenterMark(ctx);
 
-		if (isBiPolar)
-			drawCenterMark(ctx);
-
-		if (!p.shouldHaveHandleOnly()) {
-			drawIndicator(ctx, value, isBiPolar);
-			drawHandle(ctx, value, isBiPolar);
-		} else {
-			drawRoundHandle(ctx, value, isBiPolar);
-			drawReturnIndicators(ctx, p);
-		}
+		 if (!p.shouldHaveHandleOnly()) {
+		 drawIndicator(ctx, value, isBiPolar);
+		 drawHandle(ctx, value, isBiPolar);
+		 } else {
+		 drawRoundHandle(ctx, value, isBiPolar);
+		 drawReturnIndicators(ctx, p);
+		 }
+		 -*/
 	}
 
 	protected Parameter getParameter() {

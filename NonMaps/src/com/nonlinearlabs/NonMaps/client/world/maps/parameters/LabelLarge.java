@@ -13,6 +13,10 @@ public class LabelLarge extends LabelSmall {
 		super(parent, text);
 	}
 
+	public LabelLarge(MapsLayout parent) {
+		super(parent, "");
+	}
+
 	@Override
 	protected double getFontHeight() {
 		return 12;

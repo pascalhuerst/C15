@@ -25,7 +25,7 @@ class FMColumn extends ParameterColumn {
 
 		private AB(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new LittleKnobSlider(this));
 			addChild(new ValueDisplaySmall(this));
 		}

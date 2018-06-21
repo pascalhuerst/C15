@@ -27,7 +27,9 @@ class EnvACol1 extends ParameterColumn {
 			// so there is code in Parameter() to not register params with
 			// paramID 0
 			// so the real param-0 has to register by itself
-			getSelectionRoot().registerSelectable(this);
+			/*-
+			 * getSelectionRoot().registerSelectable(this);
+			 */
 		}
 
 		@Override
@@ -45,7 +47,7 @@ class EnvACol1 extends ParameterColumn {
 
 		private Curve(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new KnobSmall(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -60,7 +62,7 @@ class EnvACol1 extends ParameterColumn {
 
 		private Velocity(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}

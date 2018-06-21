@@ -33,7 +33,7 @@ class DriveColumn extends ParameterColumn {
 		}
 
 		@Override
-		protected int getBackgroundRoundings() {
+		public int getBackgroundRoundings() {
 			return Rect.ROUNDING_LEFT;
 		}
 	}

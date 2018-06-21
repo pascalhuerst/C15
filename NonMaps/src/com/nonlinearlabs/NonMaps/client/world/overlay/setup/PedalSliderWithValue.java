@@ -16,7 +16,8 @@ public class PedalSliderWithValue extends OverlayLayout {
 
 			@Override
 			public String getDrawText(Context2d ctx) {
-				return getPedal().getDecoratedValue(true);
+				/*-return getPedal().getDecoratedValue(true);-*/
+				return "";
 			}
 		});
 		addChild(slider = new PedalSlider(this));

@@ -1,42 +1,37 @@
 package com.nonlinearlabs.NonMaps.client.world.maps.parameters;
 
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.xml.client.Node;
 import com.nonlinearlabs.NonMaps.client.Checksum;
 import com.nonlinearlabs.NonMaps.client.ColorTable;
-import com.nonlinearlabs.NonMaps.client.ServerProxy;
 import com.nonlinearlabs.NonMaps.client.world.maps.MapsLayout;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.MacroControls.MacroControlParameter;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.MacroControls.Macros.MacroControls;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.value.ModulationAmount;
 
 public abstract class ModulatableParameter extends Parameter {
+	/*-
+	 private ModulationAmount amount = new ModulationAmount(new ModulationAmount.ChangeListener() {
 
-	private ModulationAmount amount = new ModulationAmount(new ModulationAmount.ChangeListener() {
+	 @Override
+	 public void onClippedValueChanged(Initiator initiator, double oldClippedValue, double newClippedValue) {
+	 }
 
-		@Override
-		public void onClippedValueChanged(Initiator initiator, double oldClippedValue, double newClippedValue) {
-		}
+	 @Override
+	 public void onQuantizedValueChanged(Initiator initiator, double oldQuantizedValue, double newQuantizedValue) {
+	 if (initiator == Initiator.EXPLICIT_USER_ACTION)
+	 getNonMaps().getServerProxy().setModulationAmount(ModulatableParameter.this);
 
-		@Override
-		public void onQuantizedValueChanged(Initiator initiator, double oldQuantizedValue, double newQuantizedValue) {
-			if (initiator == Initiator.EXPLICIT_USER_ACTION)
-				getNonMaps().getServerProxy().setModulationAmount(ModulatableParameter.this);
+	 notifyListeners();
+	 invalidate(INVALIDATION_FLAG_UI_CHANGED);
+	 }
 
-			notifyListeners();
-			invalidate(INVALIDATION_FLAG_UI_CHANGED);
-		}
-
-		@Override
-		public void onRawValueChanged(Initiator initiator, double oldRawValue, double newRawValue) {
-		}
-	});
-
-	private MacroControls modulationSource = MacroControls.NONE;
+	 @Override
+	 public void onRawValueChanged(Initiator initiator, double oldRawValue, double newRawValue) {
+	 }
+	 });-*/
 
 	public ModulatableParameter(MapsLayout parent) {
 		super(parent);
-		addChild(new ParameterName(this, getName()));
+		addChild(new ParameterName(this));
 	}
 
 	public ModulatableParameter(MapsLayout parent, String name) {
@@ -44,28 +39,15 @@ public abstract class ModulatableParameter extends Parameter {
 		addChild(new ParameterName(this, name));
 	}
 
-	public ModulationAmount getModulationAmount() {
-		return amount;
-	}
-
-	public void setModulationAmount(Initiator initiator, double amount) {
-		this.amount.setRawValue(initiator, amount);
-	}
-
-	public MacroControls getModulationSource() {
-		return modulationSource;
-	}
-
 	@Override
 	public void getStateHash(Checksum crc) {
 		super.getStateHash(crc);
-		crc.eat(amount.getQuantizedClipped());
-		crc.eat(modulationSource.hashCode());
+		crc.eat(getPresenter().hash);
 		crc.eat(isSelectedParameterMyMacroControl());
 	}
 
 	public boolean isSelectedParameterMyMacroControl() {
-		Parameter selectedParam = getNonMaps().getNonLinearWorld().getParameterEditor().getSelection();
+		/*-Parameter selectedParam = getNonMaps().getNonLinearWorld().getParameterEditor().getSelection();
 
 		if (selectedParam != null && selectedParam instanceof MacroControlParameter) {
 			MacroControlParameter myParam = getNonMaps().getNonLinearWorld().getParameterEditor().getMacroControls()
@@ -74,7 +56,7 @@ public abstract class ModulatableParameter extends Parameter {
 			if (myParam != null && myParam.equals(selectedParam))
 				return true;
 		}
-
+		-*/
 		return false;
 	}
 
@@ -88,6 +70,7 @@ public abstract class ModulatableParameter extends Parameter {
 	}
 
 	public void setModulationSource(MacroControls src, Initiator initiator) {
+		/*-
 		if (modulationSource != src) {
 
 			MacroControlParameter modSrcParam = getModulationSourceParameter();
@@ -107,46 +90,17 @@ public abstract class ModulatableParameter extends Parameter {
 
 			getValue().setRawValue(Initiator.INDIRECT_USER_ACTION, getValue().getQuantizedClipped());
 			invalidate(INVALIDATION_FLAG_UI_CHANGED);
-		}
+		}-*/
 	}
 
 	private MacroControlParameter getModulationSourceParameter() {
-		return getNonMaps().getNonLinearWorld().getParameterEditor().getMacroControls().getControl(getModulationSource());
-	}
-
-	@Override
-	public boolean updateValues(Node child) {
-		if (super.updateValues(child))
-			return true;
-
-		String nodeName = child.getNodeName();
-
-		try {
-			String value = ServerProxy.getText(child);
-
-			if (nodeName.equals("modAmount")) {
-				setModulationAmount(Initiator.INDIRECT_USER_ACTION, Double.parseDouble(value));
-			} else if (nodeName.equals("modSrc")) {
-				setModulationSource(MacroControls.fromInt(Integer.parseInt(value)), Initiator.INDIRECT_USER_ACTION);
-			} else if (nodeName.equals("mod-amount-stringizer")) {
-				amount.setStringizer(value);
-			} else if (nodeName.equals("mod-amount-coarse")) {
-				amount.setCoarseDenominator(Double.parseDouble(value));
-			} else if (nodeName.equals("mod-amount-fine")) {
-				amount.setFineDenominator(Double.parseDouble(value));
-			} else {
-				return false;
-			}
-
-			return true;
-		} catch (Exception e) {
-
-		}
-
-		return false;
+		// return
+		// getNonMaps().getNonLinearWorld().getParameterEditor().getMacroControls().getControl(getModulationSource());
+		return null;
 	}
 
 	protected String getModSourceString() {
+		/*-
 		switch (getModulationSource()) {
 		case A:
 			return "\u24b6";
@@ -161,21 +115,22 @@ public abstract class ModulatableParameter extends Parameter {
 			return "\u24b9";
 
 		default:
-		}
+		}-*/
 
 		return "";
 	}
 
 	public void applyModulation(Initiator initiator, double diff) {
-		getValue().applyModulation(initiator, amount.getQuantizedClipped() * diff);
+		// getValue().applyModulation(initiator, amount.getQuantizedClipped() *
+		// diff);
 	}
 
 	public void modulationAmountInc(boolean fine) {
-		amount.inc(Initiator.EXPLICIT_USER_ACTION, fine);
+		// amount.inc(Initiator.EXPLICIT_USER_ACTION, fine);
 	}
 
 	public void modulationAmountDec(boolean fine) {
-		amount.dec(Initiator.EXPLICIT_USER_ACTION, fine);
+		// amount.dec(Initiator.EXPLICIT_USER_ACTION, fine);
 	}
 
 }

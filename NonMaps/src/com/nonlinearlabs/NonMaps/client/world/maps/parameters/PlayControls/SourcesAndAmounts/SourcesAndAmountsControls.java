@@ -65,6 +65,6 @@ class SourcesAndAmountsControls extends ParameterGroupControls {
 		});
 
 		Parameter p = (Parameter) c;
-		return p.isLocked();
+		return p.getPresenter().locked;
 	}
 }

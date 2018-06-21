@@ -23,7 +23,7 @@ class ValueDisplay extends ValueControl {
 	}
 
 	private RGB getFontColor() {
-		if (getParentParameterLayout().isSelected())
+		if (getParentParameterLayout().getPresenter().selected)
 			return getColorFontValueDisplaySelected();
 		return getColorFontValueDisplay();
 	}

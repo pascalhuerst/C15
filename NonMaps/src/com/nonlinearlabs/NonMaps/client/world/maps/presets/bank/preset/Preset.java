@@ -205,7 +205,9 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 			return this == getParent().getParent().getStoreSelectMode().getOriginalPreset();
 		}
 
-		return uuid.equals(getNonMaps().getNonLinearWorld().getParameterEditor().getLoadedPresetUUID());
+		// return
+		// uuid.equals(getNonMaps().getNonLinearWorld().getParameterEditor().getLoadedPresetUUID());
+		return false;
 	}
 
 	public boolean isInStoreSelectMode() {

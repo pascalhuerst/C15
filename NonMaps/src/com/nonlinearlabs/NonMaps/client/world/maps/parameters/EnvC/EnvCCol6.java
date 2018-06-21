@@ -26,7 +26,7 @@ class EnvCCol6 extends ParameterColumn {
 
 		private Velocity(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}

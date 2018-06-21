@@ -6,10 +6,9 @@ import com.nonlinearlabs.NonMaps.client.world.maps.SVGImage;
 public class ModulationRoutingButton extends SVGImage {
 
 	public ModulationRoutingButton(ModulationRoutingParameter parent) {
-		this(parent, "Control_Through_Disabled.svg", "Control_Through_Enabled.svg",
-				"Control_Through_Active.svg");
+		this(parent, "Control_Through_Disabled.svg", "Control_Through_Enabled.svg", "Control_Through_Active.svg");
 	}
-	
+
 	public ModulationRoutingButton(ModulationRoutingParameter parent, String... images) {
 		super(parent, images);
 	}
@@ -22,12 +21,13 @@ public class ModulationRoutingButton extends SVGImage {
 	@Override
 	public void getStateHash(Checksum crc) {
 		super.getStateHash(crc);
-		crc.eat(getParent().getValue().getQuantizedClipped());
+		// crc.eat(getParent().getValue().getQuantizedClipped());
 	}
 
 	@Override
 	public int getSelectedPhase() {
-		return getParent().getValue().getQuantizedClipped() != 0.0 ? 1 : 0;
+		// return getParent().getValue().getQuantizedClipped() != 0.0 ? 1 : 0;
+		return 0;
 	}
 
 	@Override

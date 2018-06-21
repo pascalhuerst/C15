@@ -1,11 +1,8 @@
 package com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.SourcesAndAmounts.Sources;
 
-import com.google.gwt.xml.client.Node;
-import com.nonlinearlabs.NonMaps.client.ServerProxy;
 import com.nonlinearlabs.NonMaps.client.world.maps.MapsLayout;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ParameterEditor;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PhysicalControlParameter;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.SourcesAndAmounts.SourcesAndAmounts;
 import com.nonlinearlabs.NonMaps.client.world.overlay.Overlay;
 import com.nonlinearlabs.NonMaps.client.world.overlay.belt.parameters.PedalContextMenu;
 
@@ -27,31 +24,13 @@ public abstract class Pedal extends PhysicalControlParameter {
 		return true;
 	}
 
-	@Override
-	protected boolean updateValues(Node child) {
-		if (super.updateValues(child))
-			return true;
-
-		String nodeName = child.getNodeName();
-
-		String value = ServerProxy.getText(child);
-
-		if (nodeName.equals("pedal-mode")) {
-			int m = Integer.parseInt(value);
-			if (m != currentMode) {
-				currentMode = m;
-				onPedalModeChanged();
-			}
-			return true;
-		}
-		return getName().update(child);
-	}
-
 	private void onPedalModeChanged() {
 		ParameterEditor eddi = (ParameterEditor) getSelectionRoot();
+		/*-
 		SourcesAndAmounts mappings = (SourcesAndAmounts) eddi.findParameterGroup("MCM");
 		mappings.onReturningModeChanged(this);
 		invalidate(INVALIDATION_FLAG_UI_CHANGED);
+		-*/
 	}
 
 	@Override

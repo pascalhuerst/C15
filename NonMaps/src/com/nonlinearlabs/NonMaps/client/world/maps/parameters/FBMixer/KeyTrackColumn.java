@@ -26,7 +26,7 @@ class KeyTrackColumn extends ParameterColumn {
 
 		private KeyTrack(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}

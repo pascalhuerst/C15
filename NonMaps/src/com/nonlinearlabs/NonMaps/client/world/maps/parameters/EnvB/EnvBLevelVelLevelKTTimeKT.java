@@ -14,7 +14,7 @@ class EnvBLevelVelLevelKTTimeKT extends ParameterGroupControls {
 
 		private LvlVel(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -34,7 +34,7 @@ class EnvBLevelVelLevelKTTimeKT extends ParameterGroupControls {
 
 		private LvlKT(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -54,7 +54,7 @@ class EnvBLevelVelLevelKTTimeKT extends ParameterGroupControls {
 
 		private TimeKT(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}

@@ -1,6 +1,5 @@
-package com.nonlinearlabs.NonMaps.client.world.maps.parameters.value;
+package com.nonlinearlabs.NonMaps.client.dataModel.value;
 
-import com.nonlinearlabs.NonMaps.client.dataModel.ValueDataModelEntity;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter.Initiator;
 
 class ClippedValue extends Value {
@@ -34,10 +33,4 @@ class ClippedValue extends Value {
 
 	protected void onClippedValueChanged(Initiator initiator, double oldClippedValue, double newClippedValue) {
 	}
-
-	public void update(ValueDataModelEntity e) {
-		super.update(e);
-
-	}
-
 }

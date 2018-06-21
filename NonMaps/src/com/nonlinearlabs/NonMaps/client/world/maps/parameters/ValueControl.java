@@ -17,15 +17,15 @@ abstract class ValueControl extends ZoomReactingControl {
 	}
 
 	protected boolean isBiPolar() {
-		return getParentParameterLayout().isBiPolar();
+		return getParentParameterLayout().getPresenter().bipolar;
 	}
 
 	public double getValue() {
-		return getParentParameterLayout().getValue().getQuantizedClipped();
+		return getParentParameterLayout().getPresenter().valueRange.value;
 	}
 
 	public String getDisplayValue() {
-		return getParentParameterLayout().getDecoratedValue(false);
+		return getParentParameterLayout().getPresenter().displayValue;
 	}
 
 	public Parameter getParentParameterLayout() {

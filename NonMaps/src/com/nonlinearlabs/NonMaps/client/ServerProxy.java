@@ -27,7 +27,6 @@ import com.nonlinearlabs.NonMaps.client.world.maps.NonDimension;
 import com.nonlinearlabs.NonMaps.client.world.maps.NonPosition;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ModulatableParameter;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.ParameterEditor;
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.PlayControls.MacroControls.MacroControlParameter;
 import com.nonlinearlabs.NonMaps.client.world.maps.presets.PresetManager.SearchQueryCombination;
 import com.nonlinearlabs.NonMaps.client.world.maps.presets.bank.Bank;
@@ -93,7 +92,6 @@ public class ServerProxy {
 			Tracer.log("ServerProxy.applyChanges -> omitOracles = " + omitOracles);
 
 			nonMaps.getNonLinearWorld().getClipboardManager().update(clipboardInfo);
-			nonMaps.getNonLinearWorld().getParameterEditor().update(editBufferNode, omitOracles);
 			nonMaps.getNonLinearWorld().getPresetManager().update(presetManagerNode);
 			nonMaps.getNonLinearWorld().getViewport().getOverlay()
 					.update(settingsNode, editBufferNode, presetManagerNode, deviceInfo, undoNode);
@@ -144,17 +142,10 @@ public class ServerProxy {
 		return false;
 	}
 
-	public void onParameterSelectionChanged(final ParameterEditor root) {
-		Parameter pl = root.getSelection();
-		if (pl != null) {
-			StaticURI.Path path = new StaticURI.Path("presets", "param-editor", "select-param");
-			StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("id", pl.getParameterID()));
-			queueJob(uri, true);
-		}
-	}
-
-	public void onParameterChanged(Parameter pl) {
-		setParameter(pl.getParameterID(), pl.getValue().getQuantizedClipped(), pl.isOracle());
+	public void selectParameter(int id) {
+		StaticURI.Path path = new StaticURI.Path("presets", "param-editor", "select-param");
+		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("id", id));
+		queueJob(uri, true);
 	}
 
 	public void setParameter(int id, double v, boolean oracle) {
@@ -340,9 +331,9 @@ public class ServerProxy {
 		StaticURI.Path path = new StaticURI.Path("presets", "banks", "overwrite-preset-with-editbuffer");
 		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("presetToOverwrite", actionAnchor.getUUID()));
 		queueJob(uri, false);
-
-		if (actionAnchor.getUUID() != nonMaps.getNonLinearWorld().getParameterEditor().getLoadedPresetUUID())
-			RenameDialog.awaitNewPreset(actionAnchor.getUUID());
+		/*-
+		 if (actionAnchor.getUUID() != nonMaps.getNonLinearWorld().getParameterEditor().getLoadedPresetUUID())
+		 RenameDialog.awaitNewPreset(actionAnchor.getUUID());-*/
 	}
 
 	public void deletePreset(IPreset preset) {
@@ -435,16 +426,15 @@ public class ServerProxy {
 		RenameDialog.awaitNewPreset(uuid);
 	}
 
-	public void setModulationAmount(final ModulatableParameter modulatableParameter) {
+	public void setModulationAmount(double amount) {
 		StaticURI.Path path = new StaticURI.Path("presets", "param-editor", "set-mod-amount");
-		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("amount", modulatableParameter.getModulationAmount()
-				.getQuantizedClipped()));
+		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("amount", amount));
 		queueJob(uri, true);
 	}
 
-	public void setModulationSource(ModulatableParameter modulatableParameter) {
+	public void setModulationSource(int src) {
 		StaticURI.Path path = new StaticURI.Path("presets", "param-editor", "set-mod-src");
-		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("source", modulatableParameter.getModulationSource().toInt()));
+		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("source", src));
 		queueJob(uri, true);
 	}
 

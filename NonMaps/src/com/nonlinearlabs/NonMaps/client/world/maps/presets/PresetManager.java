@@ -39,7 +39,6 @@ import com.nonlinearlabs.NonMaps.client.world.overlay.ParameterInfoDialog;
 import com.nonlinearlabs.NonMaps.client.world.overlay.PresetInfoDialog;
 import com.nonlinearlabs.NonMaps.client.world.overlay.SearchQueryDialog;
 import com.nonlinearlabs.NonMaps.client.world.overlay.belt.EditBufferDraggingButton;
-import com.nonlinearlabs.NonMaps.client.world.overlay.menu.GlobalMenu;
 
 public class PresetManager extends MapsLayout {
 
@@ -143,7 +142,7 @@ public class PresetManager extends MapsLayout {
 	public void update(Node presetManagerNode) {
 
 		boolean shouldUpdateFilter = false;
-		
+
 		if (ServerProxy.didChange(presetManagerNode)) {
 			readPlaygroundFileVersion(presetManagerNode);
 
@@ -156,14 +155,14 @@ public class PresetManager extends MapsLayout {
 				if (child.getNodeName().equals("banks"))
 					shouldUpdateFilter = updateBanks(child) || shouldUpdateFilter;
 			}
-			
+
 			Preset newPresetSelection = getSelectedPreset();
 
 			if (oldPresetSelection != newPresetSelection) {
 				onPresetSelectionChanged(newPresetSelection);
 			}
-			
-			if(shouldUpdateFilter)
+
+			if (shouldUpdateFilter)
 				refreshFilter(false);
 
 			RenameDialog.onPresetManagerUpdate(this);
@@ -210,7 +209,7 @@ public class PresetManager extends MapsLayout {
 
 	private boolean updateBanks(Node banks) {
 		boolean banksChanged = false;
-		
+
 		clearDockingRelations();
 
 		ArrayList<MapsControl> currentChildren = new ArrayList<MapsControl>();
@@ -237,7 +236,7 @@ public class PresetManager extends MapsLayout {
 
 		if (BankInfoDialog.isShown())
 			BankInfoDialog.update();
-		
+
 		return banksChanged;
 	}
 
@@ -572,7 +571,7 @@ public class PresetManager extends MapsLayout {
 			ParameterInfoDialog.toggle();
 		} else if (keyCode == com.google.gwt.event.dom.client.KeyCodes.KEY_H && NonMaps.get().getNonLinearWorld().isCtrlDown()) {
 			Window.open("/NonMaps/war/online-help/index.html", "", "");
-		} else if( keyCode == com.google.gwt.event.dom.client.KeyCodes.KEY_ESCAPE) {
+		} else if (keyCode == com.google.gwt.event.dom.client.KeyCodes.KEY_ESCAPE) {
 			NonMaps.get().getNonLinearWorld().getViewport().getOverlay().removeExistingContextMenus();
 			NonMaps.get().getNonLinearWorld().getViewport().getOverlay().collapseGlobalMenu();
 		} else {
@@ -726,7 +725,7 @@ public class PresetManager extends MapsLayout {
 			refreshFilter(true);
 		}
 	}
-	
+
 	private void refreshFilter(final boolean autoZoom) {
 		if (this.query.isEmpty()) {
 			clearFilter();
@@ -925,8 +924,9 @@ public class PresetManager extends MapsLayout {
 				NumberFormat f = NumberFormat.getFormat("000");
 				String ret = b.getOrderNumber() + "-" + f.format(p.getNumber());
 
-				if (NonMaps.theMaps.getNonLinearWorld().getParameterEditor().isModified())
-					ret += " *";
+				// if
+				// (NonMaps.theMaps.getNonLinearWorld().getParameterEditor().isModified())
+				ret += " *";
 
 				return ret;
 			}

@@ -8,8 +8,8 @@ import com.nonlinearlabs.NonMaps.client.world.Rect;
 
 public class ParameterName extends LabelLarge {
 
-	public ParameterName(ModulatableParameter p, Name name) {
-		super(p, name);
+	public ParameterName(ModulatableParameter p) {
+		super(p);
 	}
 
 	public ParameterName(ModulatableParameter p, String name) {
@@ -28,7 +28,7 @@ public class ParameterName extends LabelLarge {
 	}
 
 	private RGB getNameBackgroundColor() {
-		return getParent().isSelected() ? getColorObjectContourSelected() : new Gray(87);
+		return getParent().getPresenter().selected ? getColorObjectContourSelected() : new Gray(87);
 	}
 
 	private int getBackgroundRoundings() {
@@ -37,7 +37,7 @@ public class ParameterName extends LabelLarge {
 
 	@Override
 	public RGB getColorFont() {
-		return getParent().isSelected() ? getColorSliderBackground() : super.getColorFont();
+		return getParent().getPresenter().selected ? getColorSliderBackground() : super.getColorFont();
 	}
 
 	@Override

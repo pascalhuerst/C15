@@ -14,7 +14,7 @@ class DriveExtColumn extends ParameterColumn {
 
 		private Fold(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new KnobSmall(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -34,7 +34,7 @@ class DriveExtColumn extends ParameterColumn {
 
 		private Asym(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new KnobSmall(this));
 			addChild(new ValueDisplaySmall(this));
 		}

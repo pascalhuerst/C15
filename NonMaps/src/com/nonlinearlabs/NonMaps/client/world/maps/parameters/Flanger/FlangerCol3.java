@@ -26,7 +26,7 @@ class FlangerCol3 extends ParameterColumn {
 
 		private Stereo(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new KnobSmall(this));
 			addChild(new ValueDisplaySmall(this));
 		}

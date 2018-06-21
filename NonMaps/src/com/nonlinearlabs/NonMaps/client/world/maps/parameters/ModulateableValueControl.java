@@ -21,7 +21,7 @@ abstract class ModulateableValueControl extends ValueControl {
 		drawBackgroundAndOutline(ctx);
 
 		if (shouldDrawCorona() && getParentParameterLayout() instanceof ModulatableParameter) {
-
+			/*-
 			ModulatableParameter p = (ModulatableParameter) getParentParameterLayout();
 			Parameter mc = getNonMaps().getNonLinearWorld().getParameterEditor().getMacroControls().getControl(p.getModulationSource());
 
@@ -54,7 +54,7 @@ abstract class ModulateableValueControl extends ValueControl {
 				}
 
 				drawCorona(ctx, adaptValue(modLeft), adaptValue(modRight));
-			}
+			}-*/
 		}
 
 		drawActiveArea(ctx);
@@ -109,23 +109,23 @@ abstract class ModulateableValueControl extends ValueControl {
 	public void getStateHash(Checksum crc) {
 		super.getStateHash(crc);
 		crc.eat(drawThicker);
+		/*-
+		 if (getParentParameterLayout() instanceof ModulatableParameter) {
+		 ModulatableParameter p = (ModulatableParameter) getParentParameterLayout();
 
-		if (getParentParameterLayout() instanceof ModulatableParameter) {
-			ModulatableParameter p = (ModulatableParameter) getParentParameterLayout();
+		 double modAmount = p.getModulationAmount().getQuantizedClipped();
+		 double modSrcValue = 0;
+		 Parameter mc = getNonMaps().getNonLinearWorld().getParameterEditor().getMacroControls().getControl(p.getModulationSource());
 
-			double modAmount = p.getModulationAmount().getQuantizedClipped();
-			double modSrcValue = 0;
-			Parameter mc = getNonMaps().getNonLinearWorld().getParameterEditor().getMacroControls().getControl(p.getModulationSource());
+		 if (mc != null)
+		 modSrcValue = mc.getValue().getQuantizedClipped();
 
-			if (mc != null)
-				modSrcValue = mc.getValue().getQuantizedClipped();
-
-			crc.eat(modAmount);
-			crc.eat(modSrcValue);
-			crc.eat(getModSourceString());
-			crc.eat(drawCorona);
-		}
-
+		 crc.eat(modAmount);
+		 crc.eat(modSrcValue);
+		 crc.eat(getModSourceString());
+		 crc.eat(drawCorona);
+		 }
+		 -*/
 		crc.eat(getValue());
 		crc.eat(getModAmount());
 	}
@@ -133,7 +133,7 @@ abstract class ModulateableValueControl extends ValueControl {
 	private double getModAmount() {
 		if (getParentParameterLayout() instanceof ModulatableParameter) {
 			ModulatableParameter p = (ModulatableParameter) getParentParameterLayout();
-			return p.getModulationAmount().getQuantizedClipped();
+			// return p.getModulationAmount().getQuantizedClipped();
 		}
 		return 0;
 	}

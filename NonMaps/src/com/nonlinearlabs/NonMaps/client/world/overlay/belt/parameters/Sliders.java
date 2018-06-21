@@ -38,15 +38,19 @@ public class Sliders extends OverlayLayout {
 	}
 
 	protected Parameter getParameter() {
-		return getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+		// return
+		// getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+		return null;
 	}
 
 	@Override
 	public Control wheel(Position eventPoint, double amount, boolean fine) {
+		/*-
 		if (amount > 0)
 			getParameter().inc(fine);
 		else if (amount < 0)
 			getParameter().dec(fine);
+			-*/
 
 		return this;
 	}

@@ -25,6 +25,7 @@ public class ParameterValueSlider extends OverlayControl {
 	@Override
 	public void draw(Context2d ctx, int invalidationMask) {
 		Parameter p = getParameter();
+		/*-
 
 		double value = p.getValue().getQuantizedClipped();
 		boolean isBiPolar = p.isBiPolar();
@@ -53,10 +54,13 @@ public class ParameterValueSlider extends OverlayControl {
 			drawReturnIndicators(ctx, p);
 
 		}
+		-*/
 	}
 
 	protected Parameter getParameter() {
-		return getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+		// return
+		// getNonMaps().getNonLinearWorld().getParameterEditor().getSelectedOrSome();
+		return null;
 	}
 
 	protected void drawReturnIndicators(Context2d ctx, Parameter p) {

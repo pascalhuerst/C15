@@ -19,7 +19,7 @@ class UnisonColumn extends ParameterColumn {
 
 		private Voices(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelLarge(this, getName()));
+			addChild(new LabelLarge(this));
 			addChild(new NumericalControlSmall(this));
 		}
 
@@ -59,7 +59,7 @@ class UnisonColumn extends ParameterColumn {
 
 		private Phase(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -74,7 +74,7 @@ class UnisonColumn extends ParameterColumn {
 
 		private Pan(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}

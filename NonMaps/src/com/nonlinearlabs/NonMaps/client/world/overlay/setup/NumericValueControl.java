@@ -2,21 +2,16 @@ package com.nonlinearlabs.NonMaps.client.world.overlay.setup;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.xml.client.Node;
 import com.nonlinearlabs.NonMaps.client.Millimeter;
-import com.nonlinearlabs.NonMaps.client.ServerProxy;
-import com.nonlinearlabs.NonMaps.client.dataModel.ValueDataModelEntity;
 import com.nonlinearlabs.NonMaps.client.world.Control;
 import com.nonlinearlabs.NonMaps.client.world.Position;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.Parameter.Initiator;
-import com.nonlinearlabs.NonMaps.client.world.maps.parameters.value.QuantizedClippedValue;
 import com.nonlinearlabs.NonMaps.client.world.overlay.OverlayLayout;
 
-public abstract class NumericValueControl extends OverlayLayout implements QuantizedClippedValue.ChangeListener {
+public abstract class NumericValueControl extends OverlayLayout {
 
 	protected CenteredSetupLabel middle;
-	protected QuantizedClippedValue value = new QuantizedClippedValue(this);
-	private QuantizedClippedValue.IncrementalChanger changer = null;
+	// protected QuantizedClippedValue value = new QuantizedClippedValue(this);
+	// private QuantizedClippedValue.IncrementalChanger changer = null;
 	private JavaScriptObject stringizer;
 
 	public NumericValueControl(Control parent, String initText) {
@@ -42,39 +37,15 @@ public abstract class NumericValueControl extends OverlayLayout implements Quant
 		middle.setText(txt);
 	}
 
-	public void update(Node s) {
-		for (Node child = s.getFirstChild(); child != null; child = child.getNextSibling()) {
-			value.update(child);
-
-			try {
-				if (child.getNodeName().equals("scaling")) {
-					createStringizer(ServerProxy.getText(child));
-					setText(stringize(true, value.getQuantizedClipped()));
-				}
-			} catch (Exception e) {
-			}
-		}
-	}
-
-	private native void createStringizer(String body) /*-{
-		this.@com.nonlinearlabs.NonMaps.client.world.overlay.setup.NumericValueControl::stringizer = new Function(
-				"cpValue", "withUnit", body);
-	}-*/;
-
-	private native String stringize(boolean withUnit, double cpValue) /*-{
-		var stringizer = this.@com.nonlinearlabs.NonMaps.client.world.overlay.setup.NumericValueControl::stringizer;
-		var scaledText = stringizer(cpValue, withUnit);
-		return scaledText;
-	}-*/;
-
 	@Override
 	public Control mouseDown(Position eventPoint) {
-		changer = value.startUserEdit(Millimeter.toPixels(100));
+		// changer = value.startUserEdit(Millimeter.toPixels(100));
 		return this;
 	}
 
 	@Override
 	public Control mouseDrag(Position oldPoint, Position newPoint, boolean fine) {
+		/*-
 		if (changer != null) {
 			double xPix = newPoint.getX() - oldPoint.getX();
 			double yPix = oldPoint.getY() - newPoint.getY();
@@ -85,24 +56,8 @@ public abstract class NumericValueControl extends OverlayLayout implements Quant
 
 			changer.changeBy(fine, pix);
 		}
+		-*/
 		return this;
-	}
-
-	@Override
-	public void onClippedValueChanged(Initiator initiator, double oldClippedValue, double newClippedValue) {
-	}
-
-	@Override
-	public void onRawValueChanged(Initiator initiator, double oldRawValue, double newRawValue) {
-
-	}
-
-	@Override
-	public void onQuantizedValueChanged(Initiator initiator, double oldQuantizedValue, double newQuantizedValue) {
-		setText(stringize(true, newQuantizedValue));
-
-		if (initiator == Initiator.EXPLICIT_USER_ACTION)
-			sendToServer(newQuantizedValue);
 	}
 
 	protected abstract void sendToServer(double newQuantizedValue);
@@ -110,15 +65,6 @@ public abstract class NumericValueControl extends OverlayLayout implements Quant
 	@Override
 	public Control mouseUp(Position eventPoint) {
 		return this;
-	}
-
-	public void update(ValueDataModelEntity e) {
-		if (stringizer == null && e.metaData.scaling.getValue().length() > 0) {
-			createStringizer(e.metaData.scaling.getValue());
-			value.update(e);
-		} else if (stringizer != null) {
-			value.setRawValue(Initiator.INDIRECT_USER_ACTION, e.getValue());
-		}
 	}
 
 }

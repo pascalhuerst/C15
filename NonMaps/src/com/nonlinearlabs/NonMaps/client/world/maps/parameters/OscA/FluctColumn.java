@@ -29,7 +29,7 @@ class FluctColumn extends ParameterColumn {
 
 		private EnvelopeC(MapsLayout parent) {
 			super(parent);
-			addChild(new LabelModulationSource(this, getName()));
+			addChild(new LabelModulationSource(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}
@@ -44,7 +44,7 @@ class FluctColumn extends ParameterColumn {
 
 		private Phase(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new KnobSmall(this));
 			addChild(new ValueDisplaySmall(this));
 		}

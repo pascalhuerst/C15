@@ -39,13 +39,25 @@ abstract class MacrosCol extends ParameterColumn {
 
 			return Rect.ROUNDING_NONE;
 		}
+
+		@Override
+		public String getCurrentName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getTitleName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	private class Smoothing extends ModulationSourceHighPriority {
 
 		private Smoothing(MapsLayout parent) {
 			super(parent);
-			addChild(new SmallParameterName(this, getName()));
+			addChild(new SmallParameterName(this));
 			addChild(new SliderHorizontal(this));
 			addChild(new ValueDisplaySmall(this));
 		}
