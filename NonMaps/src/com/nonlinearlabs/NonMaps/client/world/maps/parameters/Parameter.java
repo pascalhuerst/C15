@@ -1,6 +1,7 @@
 package com.nonlinearlabs.NonMaps.client.world.maps.parameters;
 
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.nonlinearlabs.NonMaps.client.Checksum;
 import com.nonlinearlabs.NonMaps.client.Millimeter;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
 import com.nonlinearlabs.NonMaps.client.Tracer;
@@ -262,6 +263,12 @@ public abstract class Parameter extends LayoutResizingVertical {
 
 	protected int getBackgroundRoundings() {
 		return Rect.ROUNDING_NONE;
+	}
+
+	@Override
+	public void getStateHash(Checksum crc) {
+		super.getStateHash(crc);
+		presenter.getHash(crc);
 	}
 
 }

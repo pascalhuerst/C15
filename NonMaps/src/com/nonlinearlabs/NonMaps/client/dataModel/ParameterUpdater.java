@@ -13,9 +13,15 @@ public class ParameterUpdater extends Updater {
 	}
 
 	public void doUpdate() {
-		target.shortName.setValue(getChildText(root,  "short-name"));
-		target.longName.setValue(getChildText(root,  "long-name"));
-		
+		String shortName = getChildText(root, "short-name");
+		String longName = getChildText(root, "short-name");
+
+		if (!shortName.isEmpty())
+			target.shortName.setValue(shortName);
+
+		if (!longName.isEmpty())
+			target.longName.setValue(longName);
+
 		ValueUpdater vu = new ValueUpdater(target.value);
 		vu.update(root);
 	}

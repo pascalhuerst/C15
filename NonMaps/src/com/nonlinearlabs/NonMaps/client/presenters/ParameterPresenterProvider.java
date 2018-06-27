@@ -16,6 +16,7 @@ public class ParameterPresenterProvider extends Notifier<ParameterPresenter> {
 			boolean isSelected = parameterId == id;
 			if (isSelected != presenter.selected) {
 				presenter.selected = isSelected;
+				presenter.updateHash();
 				notifyChanges();
 			}
 			return true;
@@ -29,7 +30,11 @@ public class ParameterPresenterProvider extends Notifier<ParameterPresenter> {
 		presenter.bipolar = e.value.metaData.bipolar.getValue() == BooleanValues.on;
 		presenter.displayValue = Stringizers.get().stringize(e.value.metaData.scaling.getValue(), e.value.value.getValue());
 		presenter.shortName = e.shortName.getValue();
-		return notifyChanges();
+
+		if (presenter.updateHash())
+			notifyChanges();
+
+		return true;
 	}
 
 	@Override
