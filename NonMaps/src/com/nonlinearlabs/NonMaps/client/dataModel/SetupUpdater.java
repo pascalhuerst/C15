@@ -59,7 +59,7 @@ public class SetupUpdater extends Updater {
 					DataModelEntityBase s = findSettingFromTagName(setting.getNodeName());
 					s.fromString(getText(valueNode));
 
-					if (s instanceof DoubleDataModelEntity) {
+					if (s instanceof ValueDataModelEntity) {
 						ValueUpdater u = new ValueUpdater((ValueDataModelEntity) s);
 						u.update(setting);
 					}

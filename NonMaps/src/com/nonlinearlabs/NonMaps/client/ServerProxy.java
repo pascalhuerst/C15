@@ -147,10 +147,14 @@ public class ServerProxy {
 	public void onParameterSelectionChanged(final ParameterEditor root) {
 		Parameter pl = root.getSelection();
 		if (pl != null) {
-			StaticURI.Path path = new StaticURI.Path("presets", "param-editor", "select-param");
-			StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("id", pl.getParameterID()));
-			queueJob(uri, true);
+			selectParameter(pl.getParameterID());
 		}
+	}
+
+	public void selectParameter(int id) {
+		StaticURI.Path path = new StaticURI.Path("presets", "param-editor", "select-param");
+		StaticURI uri = new StaticURI(path, new StaticURI.KeyValue("id", id));
+		queueJob(uri, true);
 	}
 
 	public void onParameterChanged(Parameter pl) {
@@ -912,4 +916,5 @@ public class ServerProxy {
 		xhr.open("POST", path.toString());
 		xhr.send(uri.getPostData(false));
 	}
+
 }
