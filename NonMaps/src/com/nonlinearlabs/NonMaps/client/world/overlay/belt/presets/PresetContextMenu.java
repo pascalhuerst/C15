@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.nonlinearlabs.NonMaps.client.ClipboardManager.ClipboardContent;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup.BooleanValues;
 import com.nonlinearlabs.NonMaps.client.world.Control;
 import com.nonlinearlabs.NonMaps.client.world.Position;
 import com.nonlinearlabs.NonMaps.client.world.RenameDialog;
@@ -26,8 +28,7 @@ public class PresetContextMenu extends ContextMenu {
 		this.preset = preset;
 		final PresetManager pm = preset.getParent().getParent();
 		final boolean hasMultipleSelection = pm.hasMultiplePresetSelection();
-		final boolean multipleSelectionAllowed = getNonMaps().getNonLinearWorld().getViewport().getOverlay().getSetup()
-				.getPresetDragDropSetting().isEnabled();
+		final boolean multipleSelectionAllowed = Setup.get().localSettings.presetDragDrop.getValue() == BooleanValues.on;
 
 		if (multipleSelectionAllowed) {
 			addChild(new ContextMenuItem(this, pm.hasMultiplePresetSelection() ? "Finish Multiple Selection" : "Start Multiple Selection") {
@@ -76,7 +77,7 @@ public class PresetContextMenu extends ContextMenu {
 			addChild(new PresetContextMenuItem(this, "Copy") {
 				@Override
 				public Control click(Position eventPoint) {
-					getNonMaps().getServerProxy().copyPreset(preset);				
+					getNonMaps().getServerProxy().copyPreset(preset);
 					return super.click(eventPoint);
 				}
 			});
@@ -85,7 +86,7 @@ public class PresetContextMenu extends ContextMenu {
 				addChild(new PresetContextMenuItem(this, "Paste") {
 					@Override
 					public Control click(Position eventPoint) {
-						getNonMaps().getServerProxy().pasteOnPreset(preset);						
+						getNonMaps().getServerProxy().pasteOnPreset(preset);
 						return super.click(eventPoint);
 					}
 				});
@@ -113,7 +114,7 @@ public class PresetContextMenu extends ContextMenu {
 					Preset p1 = pm.findPreset(selPresets.get(0));
 					Preset p2 = pm.findPreset(selPresets.get(1));
 					CompareDialog.open(p1, p2);
-										
+
 					return super.click(eventPoint);
 				}
 			});
@@ -121,7 +122,7 @@ public class PresetContextMenu extends ContextMenu {
 			addChild(new PresetContextMenuItem(this, "Compare to Editbuffer ...") {
 				@Override
 				public Control click(Position eventPoint) {
-					CompareDialog.open(preset);					
+					CompareDialog.open(preset);
 					return super.click(eventPoint);
 				}
 			});

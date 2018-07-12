@@ -11,6 +11,9 @@ import com.nonlinearlabs.NonMaps.client.Millimeter;
 import com.nonlinearlabs.NonMaps.client.NonMaps;
 import com.nonlinearlabs.NonMaps.client.ServerProxy;
 import com.nonlinearlabs.NonMaps.client.Tracer;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup.BooleanValues;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup.EditParameter;
 import com.nonlinearlabs.NonMaps.client.useCases.EditBuffer;
 import com.nonlinearlabs.NonMaps.client.world.Control;
 import com.nonlinearlabs.NonMaps.client.world.Gray;
@@ -25,8 +28,6 @@ import com.nonlinearlabs.NonMaps.client.world.maps.parameters.value.QuantizedCli
 import com.nonlinearlabs.NonMaps.client.world.maps.parameters.value.QuantizedClippedValue.ChangeListener;
 import com.nonlinearlabs.NonMaps.client.world.overlay.ContextMenu;
 import com.nonlinearlabs.NonMaps.client.world.overlay.Overlay;
-import com.nonlinearlabs.NonMaps.client.world.overlay.setup.ContextMenusSetting;
-import com.nonlinearlabs.NonMaps.client.world.overlay.setup.EditParameterSetting;
 import com.nonlinearlabs.NonMaps.client.world.pointer.TouchPinch;
 
 public abstract class Parameter extends LayoutResizingVertical {
@@ -158,11 +159,9 @@ public abstract class Parameter extends LayoutResizingVertical {
 
 	@Override
 	public Control mouseDown(Position eventPoint) {
-		EditParameterSetting s = getWorld().getViewport().getOverlay().getSetup().getEditParameterDragSetting();
-		String choiceString = s.getSettingsControl().getChoiceString();
 
-		switch (choiceString) {
-		case "Always":
+		switch (Setup.get().localSettings.editParameter.getValue()) {
+		case always:
 			select(Initiator.EXPLICIT_USER_ACTION);
 
 			if (isBoolean())
@@ -171,7 +170,7 @@ public abstract class Parameter extends LayoutResizingVertical {
 				currentParameterChanger = getValue().startUserEdit(Millimeter.toPixels(100));
 			return this;
 
-		case "If Selected":
+		case if_selected:
 			if (isSelected()) {
 				if (isBoolean())
 					toggleBoolean();
@@ -182,7 +181,7 @@ public abstract class Parameter extends LayoutResizingVertical {
 
 			break;
 
-		case "Never":
+		case never:
 			break;
 
 		default:
@@ -208,8 +207,7 @@ public abstract class Parameter extends LayoutResizingVertical {
 
 	@Override
 	public Control mouseDrag(Position oldPoint, Position newPoint, boolean fine) {
-		EditParameterSetting s = getWorld().getViewport().getOverlay().getSetup().getEditParameterDragSetting();
-		boolean noDrag = s.getSettingsControl().getChoiceString().equals("Never") || getWorld().isSpaceDown();
+		boolean noDrag = (Setup.get().localSettings.editParameter.getValue() == EditParameter.never) || getWorld().isSpaceDown();
 
 		if (isSelected() && !noDrag) {
 
@@ -419,12 +417,10 @@ public abstract class Parameter extends LayoutResizingVertical {
 
 	@Override
 	public Control onContextMenu(Position pos) {
-
 		select(Initiator.EXPLICIT_USER_ACTION);
+		boolean showContextMenus = Setup.get().localSettings.contextMenus.getValue() == BooleanValues.on;
 
-		ContextMenusSetting contextMenuSettings = NonMaps.theMaps.getNonLinearWorld().getViewport().getOverlay().getSetup()
-				.getContextMenuSettings();
-		if (contextMenuSettings.isEnabled()) {
+		if (showContextMenus) {
 			if (hasContextMenu()) {
 				Overlay o = NonMaps.theMaps.getNonLinearWorld().getViewport().getOverlay();
 				return o.setContextMenu(pos, createContextMenu(o));

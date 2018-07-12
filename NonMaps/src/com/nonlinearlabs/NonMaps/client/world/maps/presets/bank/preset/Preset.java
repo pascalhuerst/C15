@@ -11,6 +11,9 @@ import com.nonlinearlabs.NonMaps.client.Renameable;
 import com.nonlinearlabs.NonMaps.client.ServerProxy;
 import com.nonlinearlabs.NonMaps.client.StoreSelectMode;
 import com.nonlinearlabs.NonMaps.client.Tracer;
+import com.nonlinearlabs.NonMaps.client.dataModel.PresetSearch;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup;
+import com.nonlinearlabs.NonMaps.client.dataModel.Setup.BooleanValues;
 import com.nonlinearlabs.NonMaps.client.world.Control;
 import com.nonlinearlabs.NonMaps.client.world.IPreset;
 import com.nonlinearlabs.NonMaps.client.world.NonLinearWorld;
@@ -29,7 +32,6 @@ import com.nonlinearlabs.NonMaps.client.world.overlay.DragProxy;
 import com.nonlinearlabs.NonMaps.client.world.overlay.Overlay;
 import com.nonlinearlabs.NonMaps.client.world.overlay.PresetInfoDialog;
 import com.nonlinearlabs.NonMaps.client.world.overlay.belt.presets.PresetContextMenu;
-import com.nonlinearlabs.NonMaps.client.world.overlay.setup.ContextMenusSetting;
 
 public class Preset extends LayoutResizingHorizontal implements Renameable, IPreset {
 	private String uuid = null;
@@ -38,11 +40,9 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 	private Number number = null;
 	private HashMap<String, String> attributes = new HashMap<String, String>();
 
-	public enum FilterState {
-		NO_FILTER, FILTER_MATCHES, FILTERED_OUT
-	};
-
-	private FilterState filterSate = FilterState.NO_FILTER;
+	private boolean filterActive = false;
+	private boolean isInFilterSet = false;
+	private boolean isCurrentFilterMatch = false;
 
 	public Preset(Bank parent) {
 		super(parent);
@@ -50,6 +50,34 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 		tag = addChild(new ColorTag(this));
 		number = addChild(new Number(this, ""));
 		name = addChild(new Name(this, ""));
+
+		PresetSearch.get().searchActive.onChange(b -> {
+			boolean a = b == BooleanValues.on;
+			if (a != filterActive) {
+				filterActive = a;
+				invalidate(INVALIDATION_FLAG_UI_CHANGED);
+			}
+			return true;
+		});
+
+		PresetSearch.get().results.onChange(r -> {
+			boolean a = r.contains(uuid);
+
+			if (a != isInFilterSet) {
+				isInFilterSet = a;
+				invalidate(INVALIDATION_FLAG_UI_CHANGED);
+			}
+			return true;
+		});
+
+		PresetSearch.get().currentFilterMatch.onChange(r -> {
+			boolean v = r.equals(uuid);
+			if (isCurrentFilterMatch != v) {
+				isCurrentFilterMatch = v;
+				invalidate(INVALIDATION_FLAG_UI_CHANGED);
+			}
+			return true;
+		});
 	}
 
 	@Override
@@ -71,10 +99,12 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 		if (isOriginPreset)
 			return new RGB(255, 255, 255);
 
-		if (filterSate == FilterState.FILTER_MATCHES)
-			return new RGB(230, 240, 255);
-		else if (filterSate == FilterState.FILTERED_OUT)
-			return new RGB(179, 179, 179);
+		if (filterActive) {
+			if (isInFilterSet)
+				return new RGB(230, 240, 255);
+			else if (!isInFilterSet)
+				return new RGB(179, 179, 179);
+		}
 
 		if (!selected && !loaded)
 			return new RGB(179, 179, 179);
@@ -144,11 +174,11 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 		RGB colorFill = new RGB(25, 25, 25);
 		RGB colorHighlight = getParent().getColorBankInnerBorder();
 
-		if (filterSate == FilterState.FILTER_MATCHES) {
+		if (filterActive && isInFilterSet) {
 
 			colorFill = new RGB(50, 65, 110);
 
-			if (getParent().getParent().isCurrentFilterMatch(this)) {
+			if (isCurrentFilterMatch) {
 				colorContour = new RGB(230, 240, 255);
 			}
 		} else {
@@ -170,12 +200,13 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 
 		super.draw(ctx, invalidationMask);
 
-		if (filterSate == FilterState.FILTERED_OUT) {
-			r.fill(ctx, new RGBA(0, 0, 0, 0.75));
-		} else if (filterSate == FilterState.FILTER_MATCHES) {
-
-			if (getParent().getParent().isCurrentFilterMatch(this)) {
-				r.stroke(ctx, 2 * cp, new RGB(230, 240, 255));
+		if (filterActive) {
+			if (!isInFilterSet) {
+				r.fill(ctx, new RGBA(0, 0, 0, 0.75));
+			} else if (isInFilterSet) {
+				if (isCurrentFilterMatch) {
+					r.stroke(ctx, 2 * cp, new RGB(230, 240, 255));
+				}
 			}
 		}
 	}
@@ -233,9 +264,9 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 		if (isInStoreSelectMode())
 			return null;
 
-		ContextMenusSetting contextMenuSettings = NonMaps.theMaps.getNonLinearWorld().getViewport().getOverlay().getSetup()
-				.getContextMenuSettings();
-		if (contextMenuSettings.isEnabled()) {
+		boolean showContextMenus = Setup.get().localSettings.contextMenus.getValue() == BooleanValues.on;
+
+		if (showContextMenus) {
 			Overlay o = NonMaps.theMaps.getNonLinearWorld().getViewport().getOverlay();
 
 			boolean isInMultiSel = isSelectedInMultiplePresetSelectionMode();
@@ -277,7 +308,7 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 
 	@Override
 	public Control startDragging(Position pos) {
-		if (getNonMaps().getNonLinearWorld().getViewport().getOverlay().getSetup().getPresetDragDropSetting().isEnabled()) {
+		if (Setup.get().localSettings.presetDragDrop.getValue() == BooleanValues.on) {
 			if (isInMultiplePresetSelectionMode()) {
 				return startMultipleSelectionDrag(pos);
 			}
@@ -361,17 +392,6 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 		getNonMaps().getServerProxy().loadPreset(this);
 	}
 
-	public void setFilterState(FilterState state) {
-		if (filterSate != state) {
-			filterSate = state;
-			invalidate(INVALIDATION_FLAG_UI_CHANGED);
-		}
-	}
-
-	public FilterState getFilterState() {
-		return filterSate;
-	}
-
 	private void updateAttributes(Node node) {
 		if (ServerProxy.didChange(node)) {
 			attributes.clear();
@@ -416,6 +436,10 @@ public class Preset extends LayoutResizingHorizontal implements Renameable, IPre
 
 	public void rename() {
 		RenameDialog.open(this);
+	}
+
+	public boolean isInCurrentFilterSet() {
+		return filterActive && isInFilterSet;
 	}
 
 }
