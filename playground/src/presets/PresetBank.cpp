@@ -808,8 +808,13 @@ const Glib::ustring PresetBank::calcStateString() const
 }
 
 const bool PresetBank::isInCluster() const {
-  bool attached = m_attachment.direction == AttachmentDirection::none;
-  bool isParent = Application::get().getPresetManager()->findBank(getAttached().uuid) != nullptr;
+  bool attached = m_attachment.direction != AttachmentDirection::none;
+  bool isParent = [this](){
+    for(auto& bank: getParent()->getBanks())
+      if(bank->getDirectClusterMaster().get() == this)
+        return true;
+    return false;
+  }();
   return attached || isParent;
 }
 
@@ -948,17 +953,27 @@ bool PresetBank::resolveCyclicAttachments(std::vector<PresetBank*> stackedBanks,
 PresetBank::tPresetBankPtr PresetBank::getClusterMaster()
 {
   if(auto master = getParent()->findBank(getAttached().uuid))
-    return master->getClusterMaster();
+    if(master.get() != this)
+      return master->getClusterMaster();
 
-  return getParent()->findBank(this->getUuid());
+  return getParent()->findBank(getUuid());
+}
+
+PresetBank::tPresetBankPtr PresetBank::getDirectClusterMaster()
+{
+  if(auto master = getParent()->findBank(getAttached().uuid))
+    return master;
+
+  return nullptr;
 }
 
 PresetBank *PresetBank::getBottomSlave() {
   auto pm = Application::get().getPresetManager();
   for(auto& bank: pm->getBanks()) {
-    if(bank->getClusterMaster().get() == this)
-      if(bank->getAttached().direction == AttachmentDirection::top)
-        return bank.get();
+    if(auto directMaster = bank->getDirectClusterMaster())
+      if(directMaster.get() == this)
+        if(bank->getAttached().direction == AttachmentDirection::top)
+          return bank.get();
   }
   return nullptr;
 }
@@ -966,9 +981,10 @@ PresetBank *PresetBank::getBottomSlave() {
 PresetBank *PresetBank::getRightSlave() {
   auto pm = Application::get().getPresetManager();
   for(auto& bank: pm->getBanks()) {
-    if(bank->getClusterMaster().get() == this)
-      if(bank->getAttached().direction == AttachmentDirection::left)
-        return bank.get();
+    if(auto directMaster = bank->getDirectClusterMaster())
+      if(directMaster.get() == this)
+        if(bank->getAttached().direction == AttachmentDirection::left)
+          return bank.get();
   }
   return nullptr;
 }
@@ -994,14 +1010,10 @@ std::vector<PresetManager::tBankPtr> PresetBank::getClusterAsSortedVector()
       current = current->getBottomSlave();
     }
 
-    if(!nodeToRight)
-    {
-      finished = true;
-    }
-    else
-    {
+    if(nodeToRight)
       current = nodeToRight;
-    }
+    else
+      finished = true;
   }
   return cluster;
 }
