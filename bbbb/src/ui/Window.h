@@ -5,10 +5,6 @@
 #include <gtkmm-3.0/gtkmm.h>
 #include <io/network/WebSocketServer.h>
 #include "Boled.h"
-#include "PanelUnit.h"
-#include "PlayPanel.h"
-#include "Ribbon.h"
-#include "LowerRibbon.h"
 
 class Window : public Gtk::Window
 {
@@ -18,15 +14,9 @@ class Window : public Gtk::Window
 
   private:
     void onFrameBufferMessageReceived(WebSocketServer::tMessage msg);
-    void onPanelLEDsMessageReceived(WebSocketServer::tMessage msg);
     WebSocketServer::tMessage m_frameBuffer;
 
     Gtk::VBox m_box;
-    Gtk::VBox m_ribbonBox;
-    PlayPanel m_playPanel;
-    PanelUnit m_editPanel;
-    Ribbon m_ribbonUp;
-    LowerRibbon m_ribbonDown;
     Boled m_boled;
 };
 
