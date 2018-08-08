@@ -956,7 +956,7 @@ PresetBank::tPresetBankPtr PresetBank::getClusterMaster()
     if(master.get() != this)
       return master->getClusterMaster();
 
-  return getParent()->findBank(getUuid());
+  return shared_from_this();
 }
 
 PresetBank::tPresetBankPtr PresetBank::getDirectClusterMaster()
