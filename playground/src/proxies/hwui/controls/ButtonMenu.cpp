@@ -87,7 +87,6 @@ void ButtonMenu::clearActions()
 void ButtonMenu::doAction()
 {
   m_items[m_selected].action();
-  bruteForce ();
 }
 
 void ButtonMenu::bruteForce ()
