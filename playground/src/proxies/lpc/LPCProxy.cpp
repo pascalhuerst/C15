@@ -246,7 +246,7 @@ void LPCProxy::queueToLPC(tMessageComposerPtr cmp)
   bool expected = false;
 
   if(m_queueSendingScheduled.compare_exchange_strong(expected, true))
-    Application::get().getMainContext()->signal_idle().connect(sigc::mem_fun(this, &LPCProxy::sendQueue));
+    Application::get().getMainContext()->signal_timeout().connect(sigc::mem_fun(this, &LPCProxy::sendQueue), 0);
 }
 
 bool LPCProxy::sendQueue()

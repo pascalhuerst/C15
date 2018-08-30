@@ -14,7 +14,8 @@ time_t TimeTools::getRealTimestamp()
 
 time_t TimeTools::getAdjustedTimestamp()
 {
-  auto dateTimeSetting = static_pointer_cast<DateTimeAdjustment>(Application::get().getSettings()->getSetting("DateTimeAdjustment"));
+  auto dateTimeSetting
+      = static_pointer_cast<DateTimeAdjustment>(Application::get().getSettings()->getSetting("DateTimeAdjustment"));
   return getRealTimestamp() + dateTimeSetting->get();
 }
 
@@ -35,7 +36,7 @@ Glib::ustring TimeTools::getIsoTime(const time_t stamp)
   return buf;
 }
 
-Glib::ustring TimeTools::getDisplayStringFromIso(const Glib::ustring & iso)
+Glib::ustring TimeTools::getDisplayStringFromIso(const Glib::ustring &iso)
 {
   return formatTime(iso, "%F %R");
 }
@@ -71,4 +72,21 @@ Glib::ustring TimeTools::formatTime(const tm *tm, const Glib::ustring &format)
   return ss.str();
 }
 
+Glib::ustring TimeTools::getPerformanceTimeStamp()
+{
+  struct timeval te;
+  gettimeofday(&te, NULL);
+  uint64_t milliseconds = te.tv_sec * 1000LL + te.tv_usec / 1000;
+  auto seconds = milliseconds / 1000;
+  milliseconds -= seconds * 1000;
+  auto minutes = seconds / 60;
+  seconds -= minutes * 60;
+  auto hours = minutes / 60;
+  minutes -= hours * 60;
+  auto days = hours / 24;
+  hours -= days * 24;
 
+  char txt[256];
+  sprintf(txt, "%zu days, %zu:%02zu:%02zu.%03zu", days, hours, minutes, seconds, milliseconds);
+  return txt;
+}

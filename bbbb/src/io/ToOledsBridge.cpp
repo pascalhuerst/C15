@@ -17,11 +17,7 @@ void ToOledsBridge::transmit(Receiver::tMessage msg)
   gsize l = 0;
   uint32_t *raw = (uint32_t*)msg->get_data(l);
   uint32_t numPacketIDs = raw[0];
-
-  for(uint32_t packetID = 0; packetID < numPacketIDs; packetID++)
-  {
-    TurnAroundStopWatch::stopAndRemove(raw[packetID + 1]);
-  }
+  TurnAroundStopWatch::stop(&raw[1], numPacketIDs);
 
   auto baseMsg = Glib::Bytes::create(&raw[numPacketIDs + 1], l - 4 * (numPacketIDs + 1));
   Bridge::transmit(baseMsg);

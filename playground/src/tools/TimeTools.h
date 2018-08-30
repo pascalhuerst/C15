@@ -16,7 +16,9 @@ class TimeTools
     static Glib::ustring getDisplayStringFromStamp(time_t stamp);
     static Glib::ustring getIsoTime(const time_t stamp);
 
-  private:
+    static Glib::ustring getPerformanceTimeStamp();
+
+   private:
     static Glib::ustring formatTime(time_t secondsSinceUnixEpoch, const Glib::ustring &format);
     static Glib::ustring formatTime(const Glib::ustring &iso, const Glib::ustring &format);
     static Glib::ustring formatTime(const tm *tm, const Glib::ustring &format);

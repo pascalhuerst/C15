@@ -9,14 +9,15 @@
 #include <iostream>
 #include <io/network/WebSocketSession.h>
 #include <Application.h>
+#include <tools/TimeTools.h>
 
-FrameBuffer::StackScopeGuard::StackScopeGuard(FrameBuffer *fb) :
-    m_fb(fb)
+FrameBuffer::StackScopeGuard::StackScopeGuard(FrameBuffer *fb)
+    : m_fb(fb)
 {
 }
 
-FrameBuffer::StackScopeGuard::StackScopeGuard(StackScopeGuard &&other) :
-    m_fb(nullptr)
+FrameBuffer::StackScopeGuard::StackScopeGuard(StackScopeGuard &&other)
+    : m_fb(nullptr)
 {
   swap(m_fb, other.m_fb);
 }
@@ -25,15 +26,15 @@ FrameBuffer::StackScopeGuard::~StackScopeGuard()
 {
 }
 
-FrameBuffer::Clip::Clip(FrameBuffer *fb, const Rect &rect) :
-    StackScopeGuard(fb)
+FrameBuffer::Clip::Clip(FrameBuffer *fb, const Rect &rect)
+    : StackScopeGuard(fb)
 {
   auto intersection = rect.getIntersection(m_fb->m_clips.top());
   fb->m_clips.push(intersection);
 }
 
-FrameBuffer::Clip::Clip(Clip &&other) :
-    StackScopeGuard(std::move(other))
+FrameBuffer::Clip::Clip(Clip &&other)
+    : StackScopeGuard(std::move(other))
 {
 }
 
@@ -48,14 +49,14 @@ bool FrameBuffer::Clip::isEmpty() const
   return m_fb->m_clips.top().isEmpty();
 }
 
-FrameBuffer::Offset::Offset(FrameBuffer *fb, const Point &offset) :
-    StackScopeGuard(fb)
+FrameBuffer::Offset::Offset(FrameBuffer *fb, const Point &offset)
+    : StackScopeGuard(fb)
 {
   m_fb->m_offsets.push(m_fb->m_offsets.top() + offset);
 }
 
-FrameBuffer::Offset::Offset(Offset &&other) :
-    StackScopeGuard(std::move(other))
+FrameBuffer::Offset::Offset(Offset &&other)
+    : StackScopeGuard(std::move(other))
 {
 }
 
@@ -94,7 +95,7 @@ FrameBuffer::~FrameBuffer()
 
 void FrameBuffer::setPixel(tCoordinate x, tCoordinate y)
 {
-  const auto& offset = m_offsets.top();
+  const auto &offset = m_offsets.top();
   setOffsetPixel(x + offset.getX(), y + offset.getY());
 }
 
@@ -117,7 +118,6 @@ inline long FrameBuffer::getIndex(tCoordinate x, tCoordinate y) const
 
 void FrameBuffer::unmapAndClose()
 {
-
 }
 
 void FrameBuffer::clear()
@@ -132,7 +132,7 @@ void FrameBuffer::setColor(const Colors &c)
 
 void FrameBuffer::fiddleColor(tPixel p)
 {
-  m_currentColor = (Colors) (p);
+  m_currentColor = (Colors)(p);
 }
 
 FrameBuffer::Colors FrameBuffer::getColor() const
@@ -233,10 +233,12 @@ void FrameBuffer::swapBuffers()
 
   for(int i = 0; i < numIDs; i++)
   {
+    std::cerr << "playground rendered encoder event " << cp[i] << " at " << TimeTools::getPerformanceTimeStamp()
+              << std::endl;
     memcpy(&buf[4 * (1 + i)], &cp[i], 4);
   }
 
-  memcpy(&buf[+ 4 * (1 + numIDs)], m_backBuffer.data(), m_backBuffer.size());
+  memcpy(&buf[+4 * (1 + numIDs)], m_backBuffer.data(), m_backBuffer.size());
   auto bytes = Glib::Bytes::create(buf, bufSize);
   Application::get().getWebSocketSession()->sendMessage(WebSocketSession::Domain::Oled, bytes);
 }

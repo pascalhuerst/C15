@@ -1,56 +1,66 @@
 #include "TurnAroundStopWatch.h"
+#include "bbbb.h"
 #include <map>
 #include <memory>
 #include <iostream>
+#include <algorithm>
 
 using namespace std::chrono;
-static std::map<uint32_t, std::unique_ptr<TurnAroundStopWatch>> watches;
 
-TurnAroundStopWatch::TurnAroundStopWatch(uint32_t id) :
-    m_id(id)
-{
-  m_start = high_resolution_clock::now();
-}
+static std::map<uint32_t, high_resolution_clock::time_point> watches;
+static std::array<high_resolution_clock::duration, 128> ringBuffer = {};
+static size_t ringBufferIdx = 0;
 
-TurnAroundStopWatch::~TurnAroundStopWatch()
-{
-}
+static std::array<high_resolution_clock::duration, 32> maxRingBuffer = {};
+static size_t maxRingBufferIdx = 0;
 
-void TurnAroundStopWatch::stopAndRemove(uint32_t id)
+void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
 {
-  auto it = watches.find(id);
-  if(it != watches.end())
+  if(numClocks)
   {
-    it->second->stop();
-    watches.erase(it);
+    auto stop = high_resolution_clock::now();
+
+    for(uint32_t packetID = 0; packetID < numClocks; packetID++)
+    {
+      auto id = ids[packetID];
+      auto it = watches.find(id);
+
+      if(it != watches.end())
+      {
+        auto diff = stop - it->second;
+
+        std::cerr << "bbbb rendered encoder event " << id << " at " << getPerformanceTimeStamp() << std::endl;
+
+        if(diff > milliseconds(20))
+          G_BREAKPOINT();
+
+        ringBuffer[ringBufferIdx++ & (ringBuffer.size() - 1)] = diff;
+        watches.erase(it);
+      }
+    }
+
+    auto maxElement = std::max_element(ringBuffer.begin(), ringBuffer.end());
+
+    if((ringBufferIdx % ringBuffer.size()) == 0)
+    {
+      maxRingBuffer[maxRingBufferIdx++ & (maxRingBuffer.size() - 1)] = *maxElement;
+    }
+
+#if 0
+    std::cerr << "\r";
+
+    for(auto p = 1; p < maxRingBuffer.size(); p++)
+    {
+      auto id = (maxRingBufferIdx - p) & (maxRingBuffer.size() - 1);
+      std::cerr << duration_cast<milliseconds>(maxRingBuffer[id]).count() << ", ";
+    }
+#endif
   }
 }
 
-void TurnAroundStopWatch::start()
+TurnAroundStopWatch::ClockID TurnAroundStopWatch::start()
 {
-  m_start = high_resolution_clock::now();
+  static ClockID sID = 0;
+  watches[++sID] = high_resolution_clock::now();
+  return sID;
 }
-
-void TurnAroundStopWatch::stop()
-{
-  using namespace std::chrono;
-  auto stop = high_resolution_clock::now();
-  auto diff = stop - m_start;
-  auto ms = duration_cast<milliseconds>(diff).count();
-  std::cerr << "TurnAroundStopWatch " << m_id << " took " << ms << " ms" << std::endl;
-}
-
-TurnAroundStopWatch& TurnAroundStopWatch::get(uint32_t id)
-{
-  auto it = watches.find(id);
-  if(it == watches.end())
-  {
-    watches[id] = std::make_unique<TurnAroundStopWatch>(id);
-    return get(id);
-  }
-  else
-  {
-    return *(it->second.get());
-  }
-}
-

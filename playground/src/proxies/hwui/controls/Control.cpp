@@ -1,4 +1,5 @@
 #include "Control.h"
+#include <proxies/hwui/Oleds.h>
 
 Control::Control (const Rect &pos) :
     m_rect (pos),
@@ -28,6 +29,7 @@ void Control::setDirty ()
   if (!m_isDirty)
   {
     m_isDirty = true;
+    Oleds::get().setDirty();
   }
 }
 

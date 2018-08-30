@@ -5,18 +5,8 @@
 
 class TurnAroundStopWatch
 {
-  public:
-    static TurnAroundStopWatch& get(uint32_t id);
-    static void stopAndRemove(uint32_t id);
-
-    TurnAroundStopWatch(uint32_t id);
-    virtual ~TurnAroundStopWatch();
-
-    void start();
-    void stop();
-
-  private:
-    uint32_t m_id;
-    std::chrono::high_resolution_clock::time_point m_start;
+ public:
+  using ClockID = uint32_t;
+  static ClockID start();
+  static void stop(ClockID *ids, uint32_t numClocks);
 };
-
