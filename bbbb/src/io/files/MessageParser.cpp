@@ -1,7 +1,7 @@
 #include "MessageParser.h"
 #include <string.h>
 
-MessageParser::MessageParser () 
+MessageParser::MessageParser ()
 {
 }
 
@@ -78,7 +78,7 @@ gsize MessageParser::getNumInitialBytesNeeded ()
 Glib::RefPtr<Glib::Bytes> MessageParser::getMessage () const
 {
   auto len = getMessageLength();
-  auto buf = g_new(uint8_t, len);
+  uint8_t buf[len];
 
   memcpy(buf, &m_header, sizeof(NLMessageHeader));
   memcpy(buf + sizeof(NLMessageHeader), m_params.data(), 2 * m_header.length);

@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <proxies/hwui/controls/Point.h>
 #include <proxies/hwui/FrameBuffer.h>
+#include <proxies/hwui/HWUI.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <string.h>
@@ -220,7 +221,23 @@ void FrameBuffer::drawVerticalLine(tCoordinate x, tCoordinate y, tCoordinate len
 
 void FrameBuffer::swapBuffers()
 {
-  auto bytes = Glib::Bytes::create(m_backBuffer.data(), m_backBuffer.size());
+  auto &knob = Application::get().getHWUI()->getPanelUnit().getEditPanel().getKnob();
+
+  decltype(knob.receivedMessageIDs) cp;
+  std::swap(cp, knob.receivedMessageIDs);
+  uint32_t numIDs = cp.size();
+
+  auto bufSize = m_backBuffer.size() + (1 + cp.size()) * 4;
+  uint8_t buf[bufSize];
+  memcpy(&buf[0], &numIDs, 4);
+
+  for(int i = 0; i < numIDs; i++)
+  {
+    memcpy(&buf[4 * (1 + i)], &cp[i], 4);
+  }
+
+  memcpy(&buf[+ 4 * (1 + numIDs)], m_backBuffer.data(), m_backBuffer.size());
+  auto bytes = Glib::Bytes::create(buf, bufSize);
   Application::get().getWebSocketSession()->sendMessage(WebSocketSession::Domain::Oled, bytes);
 }
 

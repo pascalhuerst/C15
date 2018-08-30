@@ -15,7 +15,7 @@ Boled::~Boled()
 
 void Boled::setBuffer(WebSocketServer::tMessage frameBuffer)
 {
-  m_frameBuffer = frameBuffer;
+  //m_frameBuffer = frameBuffer;
   queue_draw();
 }
 

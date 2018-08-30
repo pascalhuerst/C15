@@ -16,7 +16,7 @@ void FromLPCBridge::sendRibbonPosition(bool m_upperRibon, double value) {
   gint16 ribbonId = m_upperRibon ? (gint16)284 : (gint16)289;
   gint16 val = (gint16)value;
 
-  auto data = new gint16[4];
+  gint16 data[4];
   data[0] = messageType;
   data[1] = 2;
   data[2] = ribbonId;

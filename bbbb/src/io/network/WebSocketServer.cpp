@@ -88,6 +88,5 @@ void WebSocketServer::receiveMessage(SoupWebsocketConnection *self, gint type, G
   gsize len = 0;
   auto data = reinterpret_cast<const uint8_t*>(msg->get_data(len));
   Domain d = (Domain)data[0];
-  auto dup = g_memdup(data + 1, len - 1);
-  pThis->m_onMessageReceived[d](Glib::Bytes::create(dup, len - 1));
+  pThis->m_onMessageReceived[d](Glib::Bytes::create(data + 1, len - 1));
 }

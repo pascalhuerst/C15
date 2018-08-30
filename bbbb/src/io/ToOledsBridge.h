@@ -10,5 +10,7 @@ class ToOledsBridge : public Bridge
     ToOledsBridge();
     virtual ~ToOledsBridge();
 
+    void transmit(Receiver::tMessage msg) override;
+
 };
 

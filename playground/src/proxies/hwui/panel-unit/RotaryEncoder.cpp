@@ -27,6 +27,10 @@ void RotaryEncoder::onMessage(WebSocketSession::tMessage msg)
 
   if(numBytes > 0)
     applyIncrement(buffer[0]);
+
+  uint32_t id = 0;
+  memcpy(&id, &buffer[1], 4);
+  receivedMessageIDs.push_back(id);
 }
 
 void RotaryEncoder::applyIncrement(tIncrement currentInc)

@@ -25,6 +25,8 @@ class RotaryEncoder
 
     static void registerTests ();
 
+    std::vector<uint32_t> receivedMessageIDs;
+
   private:
     void onMessage(WebSocketSession::tMessage msg);
     void open ();
