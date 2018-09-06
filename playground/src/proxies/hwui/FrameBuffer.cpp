@@ -222,6 +222,8 @@ void FrameBuffer::drawVerticalLine(tCoordinate x, tCoordinate y, tCoordinate len
 
 void FrameBuffer::swapBuffers()
 {
+  using namespace std::chrono;
+
   if(Application::get().getOptions()->isTurnAroundStopWatchEnabled())
   {
     auto &knob = Application::get().getHWUI()->getPanelUnit().getEditPanel().getKnob();
@@ -237,6 +239,8 @@ void FrameBuffer::swapBuffers()
     for(int i = 0; i < numIDs; i++)
     {
       memcpy(&buf[4 * (1 + i)], &cp[i], 4);
+      std::cout << "FrameBuffer proxy sends packet " << cp[i] << " at "
+                << duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch()).count() << std::endl;
     }
 
     memcpy(&buf[+4 * (1 + numIDs)], m_backBuffer.data(), m_backBuffer.size());

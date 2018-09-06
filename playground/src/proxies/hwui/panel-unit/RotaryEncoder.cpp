@@ -33,9 +33,13 @@ void RotaryEncoder::onMessage(WebSocketSession::tMessage msg)
 
   if(Application::get().getOptions()->isTurnAroundStopWatchEnabled())
   {
+    using namespace std::chrono;
+
     uint32_t id = 0;
     memcpy(&id, &buffer[1], 4);
     receivedMessageIDs.push_back(id);
+    std::cout << "Rotary proxy received packet " << id << " at "
+              << duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch()).count() << std::endl;
   }
 }
 

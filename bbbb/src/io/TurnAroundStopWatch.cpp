@@ -27,6 +27,9 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
 
       if(it != watches.end())
       {
+        std::cout << "TurnAroundStopWatch received packet " << id << " at "
+                  << duration_cast<milliseconds>(stop.time_since_epoch()).count() << std::endl;
+
         auto diff = stop - it->second;
         ringBuffer[ringBufferIdx++ & (ringBuffer.size() - 1)] = diff;
         watches.erase(it);
@@ -64,5 +67,7 @@ TurnAroundStopWatch::ClockID TurnAroundStopWatch::start()
   sID++;
   auto start = high_resolution_clock::now();
   watches[sID] = start;
+  std::cout << "Send packet " << sID << " at " << duration_cast<milliseconds>(start.time_since_epoch()).count()
+            << std::endl;
   return sID;
 }
