@@ -27,10 +27,14 @@ bool Boled::on_draw(const ::Cairo::RefPtr<::Cairo::Context> &cr)
           { 0x0A, std::make_tuple(179, 142, 21) }, { 0x0B, std::make_tuple(204, 162, 24) },
           { 0x0F, std::make_tuple(255, 203, 31) } };
 
-  if(m_frameBuffer)
+  if(m_frameBuffer && 0)
   {
     gsize len = 0;
     const int8_t *data = reinterpret_cast<const int8_t *>(m_frameBuffer->get_data(len));
+
+    const uint32_t *u32Packets = reinterpret_cast<const uint32_t *>(data);
+    uint32_t numPackets = *u32Packets;
+    data += 4 * (1 + numPackets);
 
     auto frameBufferDimX = framebufferDimX;
     auto frameBufferDimY = framebufferDimY;
