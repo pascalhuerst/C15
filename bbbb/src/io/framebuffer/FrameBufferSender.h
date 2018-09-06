@@ -6,20 +6,24 @@
 
 struct fb_var_screeninfo;
 
-class FrameBufferSender : public Sender
+class FrameBufferSender : public Sender, public sigc::trackable
 {
-    using super = Sender;
+  using super = Sender;
 
-  public:
-    FrameBufferSender();
-    virtual ~FrameBufferSender();
+ public:
+  FrameBufferSender();
+  virtual ~FrameBufferSender();
 
-    void send(tMessage msg) override;
+  void send(tMessage msg) override;
 
-  private:
-    using tPixel = uint8_t;
-    int m_fd = -1;
-    size_t m_buffersize = 0;
-    tPixel *m_frontBuffer = nullptr;
-    struct fb_var_screeninfo m_varInfo;
+ private:
+  bool deferredSend();
+
+  using tPixel = uint8_t;
+
+  tMessage m_currentFrame;
+  int m_fd = -1;
+  size_t m_buffersize = 0;
+  tPixel *m_frontBuffer = nullptr;
+  struct fb_var_screeninfo m_varInfo;
 };

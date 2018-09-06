@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <clipboard/Clipboard.h>
 #include <io/network/WebSocketSession.h>
+#include <serialization/Serializer.h>
 
 Application *Application::theApp = nullptr;
 
@@ -64,6 +65,8 @@ Application::Application(int numArgs, char **argv) :
   m_hwui->setFocusAndMode(FocusAndMode(UIFocus::Parameters, UIMode::Select));
   runWatchDog();
 
+  m_websocketSession->openGate();
+
   getMainContext()->signal_timeout().connect(sigc::mem_fun(this, &Application::heartbeat), 500);
 
   DebugLevel::warning(__PRETTY_FUNCTION__, __LINE__);
@@ -75,6 +78,8 @@ Application::Application(int numArgs, char **argv) :
 
 Application::~Application()
 {
+  Serializer::staticDeInit();
+
   m_hwui->deInit();
   m_hwui.reset();
   m_presetManager.reset();

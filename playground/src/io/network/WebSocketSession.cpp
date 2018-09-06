@@ -67,6 +67,11 @@ void WebSocketSession::onWebSocketConnected(SoupSession *session, GAsyncResult *
   }
 }
 
+void WebSocketSession::openGate()
+{
+  m_receiveGate = true;
+}
+
 void WebSocketSession::reconnect()
 {
   auto sigTimeOut = this->m_messageLoop->get_context()->signal_timeout();
@@ -140,11 +145,14 @@ void WebSocketSession::sendMessage(tMessage msg)
 void WebSocketSession::receiveMessage(SoupWebsocketConnection *self, gint type, GBytes *message,
                                       WebSocketSession *pThis)
 {
-  tMessage msg = Glib::wrap(message);
-  gsize len = 0;
-  auto data = reinterpret_cast<const uint8_t *>(msg->get_data(len));
-  Domain d = (Domain)(data[0]);
-  auto byteMessage = Glib::Bytes::create(data + 1, len - 1);
+  if(pThis->m_receiveGate)
+  {
+    tMessage msg = Glib::wrap(message);
+    gsize len = 0;
+    auto data = reinterpret_cast<const uint8_t *>(msg->get_data(len));
+    Domain d = (Domain)(data[0]);
+    auto byteMessage = Glib::Bytes::create(data + 1, len - 1);
 
-  pThis->m_defaultContextQueue->pushMessage([=]() { pThis->m_onMessageReceived[d](byteMessage); });
+    pThis->m_defaultContextQueue->pushMessage([=]() { pThis->m_onMessageReceived[d](byteMessage); });
+  }
 }
