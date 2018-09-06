@@ -22,6 +22,13 @@ Options::Options(int &argc, char **&argv)
   bbbb.set_description("IP of the device running the BeagleBoneBlackBridge (bbbb)");
   mainGroup.add_entry(bbbb, m_bbbb);
 
+  Glib::OptionEntry turnAroundStopWatch;
+  turnAroundStopWatch.set_long_name("turn-around-stop-watch");
+  turnAroundStopWatch.set_short_name('t');
+  turnAroundStopWatch.set_description(
+      "expects packet ids with encoder events and prepends the ids to frame buffer updates");
+  mainGroup.add_entry(turnAroundStopWatch, m_bTurnAroundStopWatch);
+
   ctx.set_main_group(mainGroup);
   ctx.set_help_enabled(true);
 
@@ -30,7 +37,7 @@ Options::Options(int &argc, char **&argv)
 
 Options::~Options()
 {
-  DebugLevel::warning (__PRETTY_FUNCTION__, __LINE__);
+  DebugLevel::warning(__PRETTY_FUNCTION__, __LINE__);
 }
 
 void Options::setDefaults()
@@ -39,7 +46,7 @@ void Options::setDefaults()
 
   auto file = Gio::File::create_for_path(prefered);
 
-  if (file->query_exists() || makePresetManagerDirectory(file))
+  if(file->query_exists() || makePresetManagerDirectory(file))
   {
     m_pmPath = prefered;
   }

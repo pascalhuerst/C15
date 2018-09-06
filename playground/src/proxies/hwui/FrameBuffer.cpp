@@ -9,6 +9,7 @@
 #include <iostream>
 #include <io/network/WebSocketSession.h>
 #include <Application.h>
+#include <Options.h>
 #include <tools/TimeTools.h>
 
 FrameBuffer::StackScopeGuard::StackScopeGuard(FrameBuffer *fb)
@@ -221,26 +222,32 @@ void FrameBuffer::drawVerticalLine(tCoordinate x, tCoordinate y, tCoordinate len
 
 void FrameBuffer::swapBuffers()
 {
-  auto &knob = Application::get().getHWUI()->getPanelUnit().getEditPanel().getKnob();
-
-  decltype(knob.receivedMessageIDs) cp;
-  std::swap(cp, knob.receivedMessageIDs);
-  uint32_t numIDs = cp.size();
-
-  auto bufSize = m_backBuffer.size() + (1 + cp.size()) * 4;
-  uint8_t buf[bufSize];
-  memcpy(&buf[0], &numIDs, 4);
-
-  for(int i = 0; i < numIDs; i++)
+  if(Application::get().getOptions()->isTurnAroundStopWatchEnabled())
   {
-    std::cerr << "playground rendered encoder event " << cp[i] << " at " << TimeTools::getPerformanceTimeStamp()
-              << std::endl;
-    memcpy(&buf[4 * (1 + i)], &cp[i], 4);
-  }
+    auto &knob = Application::get().getHWUI()->getPanelUnit().getEditPanel().getKnob();
 
-  memcpy(&buf[+4 * (1 + numIDs)], m_backBuffer.data(), m_backBuffer.size());
-  auto bytes = Glib::Bytes::create(buf, bufSize);
-  Application::get().getWebSocketSession()->sendMessage(WebSocketSession::Domain::Oled, bytes);
+    decltype(knob.receivedMessageIDs) cp;
+    std::swap(cp, knob.receivedMessageIDs);
+    uint32_t numIDs = cp.size();
+
+    auto bufSize = m_backBuffer.size() + (1 + cp.size()) * 4;
+    uint8_t buf[bufSize];
+    memcpy(&buf[0], &numIDs, 4);
+
+    for(int i = 0; i < numIDs; i++)
+    {
+      memcpy(&buf[4 * (1 + i)], &cp[i], 4);
+    }
+
+    memcpy(&buf[+4 * (1 + numIDs)], m_backBuffer.data(), m_backBuffer.size());
+    auto bytes = Glib::Bytes::create(buf, bufSize);
+    Application::get().getWebSocketSession()->sendMessage(WebSocketSession::Domain::Oled, bytes);
+  }
+  else
+  {
+    auto bytes = Glib::Bytes::create(m_backBuffer.data(), m_backBuffer.size());
+    Application::get().getWebSocketSession()->sendMessage(WebSocketSession::Domain::Oled, bytes);
+  }
 }
 
 FrameBuffer::Clip FrameBuffer::clip(const Rect &rect)

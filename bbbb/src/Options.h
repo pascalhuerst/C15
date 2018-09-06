@@ -5,9 +5,15 @@
 
 class Options
 {
-  public:
-    Options(int &argc, char **&argv);
-    virtual ~Options();
+ public:
+  Options(int &argc, char **&argv);
+  virtual ~Options();
 
-  private:
+  inline bool isTurnAroundStopWatchEnabled() const
+  {
+    return m_bTurnAroundStopWatch;
+  }
+
+ private:
+  bool m_bTurnAroundStopWatch = false;
 };

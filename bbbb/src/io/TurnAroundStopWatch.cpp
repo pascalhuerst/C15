@@ -11,7 +11,7 @@ static std::map<uint32_t, high_resolution_clock::time_point> watches;
 static std::array<high_resolution_clock::duration, 128> ringBuffer = {};
 static size_t ringBufferIdx = 0;
 
-static std::array<high_resolution_clock::duration, 32> maxRingBuffer = {};
+static std::array<high_resolution_clock::duration, 16> maxRingBuffer = {};
 static size_t maxRingBufferIdx = 0;
 
 void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
@@ -28,12 +28,6 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
       if(it != watches.end())
       {
         auto diff = stop - it->second;
-
-        std::cerr << "bbbb rendered encoder event " << id << " at " << getPerformanceTimeStamp() << std::endl;
-
-        if(diff > milliseconds(20))
-          G_BREAKPOINT();
-
         ringBuffer[ringBufferIdx++ & (ringBuffer.size() - 1)] = diff;
         watches.erase(it);
       }
@@ -46,15 +40,16 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
       maxRingBuffer[maxRingBufferIdx++ & (maxRingBuffer.size() - 1)] = *maxElement;
     }
 
-#if 0
     std::cerr << "\r";
 
     for(auto p = 1; p < maxRingBuffer.size(); p++)
     {
       auto id = (maxRingBufferIdx - p) & (maxRingBuffer.size() - 1);
-      std::cerr << duration_cast<milliseconds>(maxRingBuffer[id]).count() << ", ";
+      std::cerr << duration_cast<milliseconds>(maxRingBuffer[id]).count();
+
+      if(p < (maxRingBuffer.size() - 1))
+        std::cerr << ", ";
     }
-#endif
   }
 }
 

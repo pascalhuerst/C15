@@ -1,4 +1,5 @@
 #include <Application.h>
+#include <Options.h>
 #include <device-settings/DebugLevel.h>
 #include <device-settings/EncoderAcceleration.h>
 #include <device-settings/Settings.h>
@@ -29,11 +30,12 @@ void RotaryEncoder::onMessage(WebSocketSession::tMessage msg)
   if(numBytes > 0)
     applyIncrement(buffer[0]);
 
-  uint32_t id = 0;
-  memcpy(&id, &buffer[1], 4);
-  receivedMessageIDs.push_back(id);
-
-  std::cerr << "received encoder event " << id << " at " << TimeTools::getPerformanceTimeStamp() << std::endl;
+  if(Application::get().getOptions()->isTurnAroundStopWatchEnabled())
+  {
+    uint32_t id = 0;
+    memcpy(&id, &buffer[1], 4);
+    receivedMessageIDs.push_back(id);
+  }
 }
 
 void RotaryEncoder::applyIncrement(tIncrement currentInc)
