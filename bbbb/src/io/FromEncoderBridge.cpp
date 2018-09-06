@@ -4,6 +4,7 @@
 #include <io/FromEncoderBridge.h>
 #include <io/network/WebSocketSender.h>
 #include <io/TurnAroundStopWatch.h>
+#include <string.h>
 
 FromEncoderBridge::FromEncoderBridge()
     : Bridge(new WebSocketSender(Domain::Rotary), new FileIOReceiver("/dev/espi_encoder", 1))
