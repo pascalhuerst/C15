@@ -78,7 +78,7 @@ Application::Application(int numArgs, char **argv) :
 
 Application::~Application()
 {
-  Serializer::staticDeInit();
+  // Serializer::staticDeInit();
 
   m_hwui->deInit();
   m_hwui.reset();
