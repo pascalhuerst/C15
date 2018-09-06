@@ -9,6 +9,15 @@
 FromEncoderBridge::FromEncoderBridge()
     : Bridge(new WebSocketSender(Domain::Rotary), new FileIOReceiver("/dev/espi_encoder", 1))
 {
+
+  Glib::MainContext::get_default()->signal_timeout().connect(
+      [this]() {
+        static bool lastSim = true;
+        sendRotary(lastSim ? -1 : 1);
+        lastSim = !lastSim;
+        return true;
+      },
+      20);
 }
 
 FromEncoderBridge::~FromEncoderBridge()

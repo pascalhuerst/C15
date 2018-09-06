@@ -20,6 +20,8 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
   {
     auto stop = high_resolution_clock::now();
 
+    std::cerr << "stopping at  " << duration_cast<microseconds>(stop.time_since_epoch()).count() << std::endl;
+
     for(uint32_t packetID = 0; packetID < numClocks; packetID++)
     {
       auto id = ids[packetID];
@@ -28,8 +30,13 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
       if(it != watches.end())
       {
         auto diff = stop - it->second;
+        std::cerr << "diff for clock " << packetID << " is " << duration_cast<microseconds>(diff).count() << std::endl;
         ringBuffer[ringBufferIdx++ & (ringBuffer.size() - 1)] = diff;
         watches.erase(it);
+      }
+      else
+      {
+        std::cerr << "did not find clock with id " << packetID << std::endl;
       }
     }
 
@@ -57,5 +64,7 @@ TurnAroundStopWatch::ClockID TurnAroundStopWatch::start()
 {
   static ClockID sID = 0;
   watches[++sID] = high_resolution_clock::now();
+  std::cerr << "start clock id" << sID << " at "
+            << duration_cast<microseconds>(watches[++sID].time_since_epoch()).count() << std::endl;
   return sID;
 }
