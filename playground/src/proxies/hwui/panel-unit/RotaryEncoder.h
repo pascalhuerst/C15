@@ -28,14 +28,14 @@ class RotaryEncoder
     std::vector<uint32_t> receivedMessageIDs;
 
   private:
-    void onMessage(WebSocketSession::tMessage msg);
-    void open ();
-    tIncrement speedUp (tIncrement inc);
-    void applyIncrement(tIncrement currentInc);
+   void onMessage(const WebSocketSession::tMessages &msg);
+   void open();
+   tIncrement speedUp(tIncrement inc);
+   void applyIncrement(tIncrement currentInc);
 
-    Signal<void, tIncrement> m_signalRotaryChanged;
-    Throttler m_throttler;
-    int m_accumulatedIncs = 0;
+   Signal<void, tIncrement> m_signalRotaryChanged;
+   Throttler m_throttler;
+   int m_accumulatedIncs = 0;
 
-    sigc::connection m_stress;
+   sigc::connection m_stress;
 };

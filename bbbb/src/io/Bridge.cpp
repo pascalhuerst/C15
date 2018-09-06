@@ -15,8 +15,9 @@ Bridge::~Bridge()
 {
 }
 
-void Bridge::transmit(Receiver::tMessage msg)
+void Bridge::transmit(const Receiver::tMessages &msgs)
 {
-  m_sender->send(msg);
+  for(auto &msg : msgs)
+    m_sender->send(msg);
 }
 

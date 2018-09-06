@@ -38,7 +38,7 @@ void FileIOReceiver::readStream(Glib::RefPtr<Gio::InputStream> stream)
   if (avail >= m_blockSize)
   {
     auto bytes = stream->read_bytes (m_blockSize, m_cancel);
-    onDataReceived(bytes);
+    onDataReceived({ bytes });
     readStream(stream);
   }
   else
@@ -51,6 +51,6 @@ void FileIOReceiver::readStream(Glib::RefPtr<Gio::InputStream> stream)
 void FileIOReceiver::onStreamRead(Glib::RefPtr<Gio::AsyncResult> &result, Glib::RefPtr<Gio::InputStream> stream)
 {
   auto bytes = stream->read_bytes_finish(result);
-  onDataReceived(bytes);
+  onDataReceived({ bytes });
   readStream(stream);
 }

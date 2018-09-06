@@ -13,7 +13,7 @@ class LPCReceiver : public FileIOReceiver
     virtual ~LPCReceiver();
 
   protected:
-    void onDataReceived(Glib::RefPtr<Glib::Bytes> bytes) override;
+   void onDataReceived(const tMessages &msgs) override;
 
   private:
     std::unique_ptr<MessageParser> m_parser;

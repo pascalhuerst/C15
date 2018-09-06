@@ -32,7 +32,7 @@ void WebSocketSession::backgroundThread()
   this->m_messageLoop->run();
 }
 
-sigc::connection WebSocketSession::onMessageReceived(Domain d, const sigc::slot<void, tMessage> &cb)
+sigc::connection WebSocketSession::onMessageReceived(Domain d, const sigc::slot<void, const tMessages &> &cb)
 {
   return m_onMessageReceived[d].connect(cb);
 }
@@ -152,7 +152,17 @@ void WebSocketSession::receiveMessage(SoupWebsocketConnection *self, gint type, 
     auto data = reinterpret_cast<const uint8_t *>(msg->get_data(len));
     Domain d = (Domain)(data[0]);
     auto byteMessage = Glib::Bytes::create(data + 1, len - 1);
+    pThis->m_incomingMessages[d].push_back(byteMessage);
 
-    pThis->m_defaultContextQueue->pushMessage([=]() { pThis->m_onMessageReceived[d](byteMessage); });
+    if(!pThis->m_incomingMessagesScheduled[d])
+    {
+      pThis->m_incomingMessagesScheduled[d] = true;
+
+      pThis->m_defaultContextQueue->pushMessage([=]() {
+        pThis->m_incomingMessagesScheduled[d] = false;
+        pThis->m_onMessageReceived[d](pThis->m_incomingMessages[d]);
+        pThis->m_incomingMessages[d].clear();
+      });
+    }
   }
 }

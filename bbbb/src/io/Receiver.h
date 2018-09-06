@@ -6,7 +6,8 @@ class Receiver : public sigc::trackable
 {
   public:
     using tMessage = Glib::RefPtr<Glib::Bytes>;
-    using Callback = std::function<void (tMessage)>;
+    using tMessages = std::list<tMessage>;
+    using Callback = std::function<void(const tMessages &)>;
 
     Receiver();
     virtual ~Receiver();
@@ -14,7 +15,7 @@ class Receiver : public sigc::trackable
     void setCallback(Callback cb);
 
   protected:
-    virtual void onDataReceived(Glib::RefPtr<Glib::Bytes> bytes);
+   virtual void onDataReceived(const tMessages &msgs);
 
   private:
     Callback m_callback;

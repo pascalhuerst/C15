@@ -23,28 +23,38 @@ RotaryEncoder::~RotaryEncoder()
   m_stress.disconnect();
 }
 
-void RotaryEncoder::onMessage(WebSocketSession::tMessage msg)
+void RotaryEncoder::onMessage(const WebSocketSession::tMessages &msgs)
 {
-  gsize numBytes = 0;
-  const char *buffer = (const char *) msg->get_data(numBytes);
+  int summedInc = 0;
 
-  if(numBytes > 0)
-    applyIncrement(buffer[0]);
-
-  if(Application::get().getOptions()->isTurnAroundStopWatchEnabled())
+  for(auto &msg : msgs)
   {
-    using namespace std::chrono;
+    gsize numBytes = 0;
+    const char *buffer = (const char *) msg->get_data(numBytes);
 
-    uint32_t id = 0;
-    memcpy(&id, &buffer[1], 4);
-    receivedMessageIDs.push_back(id);
-    std::cout << "Rotary proxy received packet " << id << " at "
-              << duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch()).count() << std::endl;
+    if(numBytes > 0)
+      summedInc += buffer[0];
+
+    if(Application::get().getOptions()->isTurnAroundStopWatchEnabled())
+    {
+      using namespace std::chrono;
+
+      uint32_t id = 0;
+      memcpy(&id, &buffer[1], 4);
+      receivedMessageIDs.push_back(id);
+      std::cout << "Rotary proxy received packet " << id << " at "
+                << duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch()).count() << std::endl;
+    }
   }
+
+  if(summedInc)
+    applyIncrement(summedInc);
 }
 
 void RotaryEncoder::applyIncrement(tIncrement currentInc)
 {
+  m_signalRotaryChanged.send(currentInc);
+
   m_accumulatedIncs += currentInc;
 
   if((currentInc < 0) && (m_accumulatedIncs > 0))
@@ -54,8 +64,6 @@ void RotaryEncoder::applyIncrement(tIncrement currentInc)
     m_accumulatedIncs = 0;
 
   m_throttler.doTask([this]() {
-    m_signalRotaryChanged.send(m_accumulatedIncs);
-
     if(abs(m_accumulatedIncs) > 1)
     {
       m_accumulatedIncs = std::min(m_accumulatedIncs, 10);

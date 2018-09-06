@@ -73,44 +73,44 @@ class LPCProxy
     int getLPCSoftwareVersion() const;
 
   private:
-    void onWebSocketMessage(WebSocketSession::tMessage msg);
-    void onMessageReceived (const MessageParser::NLMessage &msg);
+   void onWebSocketMessage(const WebSocketSession::tMessages &msg);
+   void onMessageReceived(const MessageParser::NLMessage &msg);
 
-    typedef shared_ptr<MessageComposer> tMessageComposerPtr;
-    void queueToLPC (tMessageComposerPtr cmp);
-    void writePendingData ();
-    bool sendQueue ();
+   typedef shared_ptr<MessageComposer> tMessageComposerPtr;
+   void queueToLPC(tMessageComposerPtr cmp);
+   void writePendingData();
+   bool sendQueue();
 
-    gint16 separateSignedBitToComplementary (uint16_t v) const;
-    void traceBytes (const RefPtr<Bytes> bytes) const;
+   gint16 separateSignedBitToComplementary(uint16_t v) const;
+   void traceBytes(const RefPtr<Bytes> bytes) const;
 
-    void notifyRibbonTouch (int ribbonsParameterID);
-    void onParamMessageReceived (const MessageParser::NLMessage &msg);
-    void onEditControlMessageReceived (const MessageParser::NLMessage &msg);
-    void onRelativeEditControlMessageReceived (Parameter *p, gint16 value);
-    void onAbsoluteEditControlMessageReceived (Parameter *p, gint16 value);
-    void applyParamMessageAbsolutely (PhysicalControlParameter *p, gint16 value);
-    void onAssertionMessageReceived (const MessageParser::NLMessage &msg);
-    void onNotificationMessageReceived (const MessageParser::NLMessage &msg);
-    void deliverPendingLPCMessages ();
+   void notifyRibbonTouch(int ribbonsParameterID);
+   void onParamMessageReceived(const MessageParser::NLMessage &msg);
+   void onEditControlMessageReceived(const MessageParser::NLMessage &msg);
+   void onRelativeEditControlMessageReceived(Parameter *p, gint16 value);
+   void onAbsoluteEditControlMessageReceived(Parameter *p, gint16 value);
+   void applyParamMessageAbsolutely(PhysicalControlParameter *p, gint16 value);
+   void onAssertionMessageReceived(const MessageParser::NLMessage &msg);
+   void onNotificationMessageReceived(const MessageParser::NLMessage &msg);
+   void deliverPendingLPCMessages();
 
-    bool m_suppressParamChanges = false;
-    atomic<bool> m_queueSendingScheduled;
-    shared_ptr<MessageParser> m_msgParser;
+   bool m_suppressParamChanges = false;
+   atomic<bool> m_queueSendingScheduled;
+   shared_ptr<MessageParser> m_msgParser;
 
-    list<tMessageComposerPtr> m_queueToLPC;
+   list<tMessageComposerPtr> m_queueToLPC;
 
-    int m_lastTouchedRibbon;
-    Signal<void, int> m_signalRibbonTouched;
+   int m_lastTouchedRibbon;
+   Signal<void, int> m_signalRibbonTouched;
 
-    unique_ptr<QuantizedValue::IncrementalChanger> m_relativeEditControlMessageChanger;
+   unique_ptr<QuantizedValue::IncrementalChanger> m_relativeEditControlMessageChanger;
 
-    int m_lpcSoftwareVersion = 0;
-    Signal<void, int> m_signalLPCSoftwareVersionChanged;
+   int m_lpcSoftwareVersion = 0;
+   Signal<void, int> m_signalLPCSoftwareVersionChanged;
 
-    Throttler m_throttledRelativeParameterChange;
-    gint32 m_throttledRelativeParameterAccumulator = 0;
+   Throttler m_throttledRelativeParameterChange;
+   gint32 m_throttledRelativeParameterAccumulator = 0;
 
-    Throttler m_throttledAbsoluteParameterChange;
-    gint32 m_throttledAbsoluteParameterValue = 0;
+   Throttler m_throttledAbsoluteParameterChange;
+   gint32 m_throttledAbsoluteParameterValue = 0;
 };

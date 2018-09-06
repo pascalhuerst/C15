@@ -10,7 +10,7 @@ class WebSocketSender : public Sender
 
     void send(tMessage msg) override;
 
-  private:
+    private:
     Domain m_domain;
 };
 

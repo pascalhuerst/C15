@@ -53,43 +53,43 @@ class HWUI
     void deInit();
 
     private:
-    void onButtonMessage(WebSocketSession::tMessage msg);
-    void onButtonPressed (int buttonID, bool state);
-    void onKeyboardLineRead (Glib::RefPtr<Gio::AsyncResult>& res);
+     void onButtonMessage(const WebSocketSession::tMessages &msg);
+     void onButtonPressed(int buttonID, bool state);
+     void onKeyboardLineRead(Glib::RefPtr<Gio::AsyncResult> &res);
 
-    void addModifier (ButtonModifier i);
-    void removeModifier (ButtonModifier i);
-    void setModifiers (ButtonModifiers m);
+     void addModifier(ButtonModifier i);
+     void removeModifier(ButtonModifier i);
+     void setModifiers(ButtonModifiers m);
 
-    bool onBlinkTimeout ();
-    void setupFocusAndMode();
+     bool onBlinkTimeout();
+     void setupFocusAndMode();
 
-    void setModifiers(int buttonID, bool state);
-    bool detectAffengriff (int buttonID, bool state);
-    bool isFineAllowed();
+     void setModifiers(int buttonID, bool state);
+     bool detectAffengriff(int buttonID, bool state);
+     bool isFineAllowed();
 
-    FocusAndMode restrictFocusAndMode(FocusAndMode in) const;
+     FocusAndMode restrictFocusAndMode(FocusAndMode in) const;
 
-    PanelUnit m_panelUnit;
-    BaseUnit m_baseUnit;
+     PanelUnit m_panelUnit;
+     BaseUnit m_baseUnit;
 
-    RefPtr<Gio::Cancellable> m_readersCancel;
-    RefPtr<Gio::DataInputStream> m_keyboardInput;
+     RefPtr<Gio::Cancellable> m_readersCancel;
+     RefPtr<Gio::DataInputStream> m_keyboardInput;
 
-    FineButton m_fineButton;
-    ButtonModifiers m_modifiers;
+     FineButton m_fineButton;
+     ButtonModifiers m_modifiers;
 
-    sigc::connection m_blinkTimerConnection;
-    Signal<void, ButtonModifiers> m_modifersChanged;
-    Signal<void, int> m_blinkTimer;
-    std::array<bool, NUM_BUTTONS>  m_buttonStates;
+     sigc::connection m_blinkTimerConnection;
+     Signal<void, ButtonModifiers> m_modifersChanged;
+     Signal<void, int> m_blinkTimer;
+     std::array<bool, NUM_BUTTONS> m_buttonStates;
 
-    int m_affengriffState = 0;
+     int m_affengriffState = 0;
 
-    FocusAndMode m_focusAndMode;
+     FocusAndMode m_focusAndMode;
 
-    int m_blinkCount;
-    Expiration m_switchOffBlockingMainThreadIndicator;
+     int m_blinkCount;
+     Expiration m_switchOffBlockingMainThreadIndicator;
 
-    bool m_focusAndModeFrozen = false;
+     bool m_focusAndModeFrozen = false;
   };

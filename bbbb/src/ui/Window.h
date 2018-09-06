@@ -16,16 +16,16 @@ class Window : public Gtk::Window
     virtual ~Window();
 
   private:
-    void onFrameBufferMessageReceived(WebSocketServer::tMessage msg);
-    void onPanelLEDsMessageReceived(WebSocketServer::tMessage msg);
-    WebSocketServer::tMessage m_frameBuffer;
+   void onFrameBufferMessageReceived(const WebSocketServer::tMessages &msg);
+   void onPanelLEDsMessageReceived(const WebSocketServer::tMessages &msg);
+   WebSocketServer::tMessage m_frameBuffer;
 
-    Gtk::VBox m_box;
-    Gtk::VBox m_ribbonBox;
-    PlayPanel m_playPanel;
-    PanelUnit m_editPanel;
-    Ribbon m_ribbonUp;
-    LowerRibbon m_ribbonDown;
+   Gtk::VBox m_box;
+   Gtk::VBox m_ribbonBox;
+   PlayPanel m_playPanel;
+   PanelUnit m_editPanel;
+   Ribbon m_ribbonUp;
+   LowerRibbon m_ribbonDown;
 };
 
 #endif

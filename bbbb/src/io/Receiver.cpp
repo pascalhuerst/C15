@@ -13,7 +13,7 @@ void Receiver::setCallback(Callback cb)
   m_callback =  cb;
 }
 
-void Receiver::onDataReceived(Glib::RefPtr<Glib::Bytes> bytes)
+void Receiver::onDataReceived(const tMessages &msgs)
 {
-  m_callback(bytes);
+  m_callback(msgs);
 }

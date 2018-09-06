@@ -12,8 +12,3 @@ ToOledsBridge::ToOledsBridge()
 ToOledsBridge::~ToOledsBridge()
 {
 }
-
-void ToOledsBridge::transmit(Receiver::tMessage msg)
-{
-  Bridge::transmit(msg);
-}

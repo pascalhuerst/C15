@@ -22,7 +22,7 @@ void FromLPCBridge::sendRibbonPosition(bool m_upperRibon, double value) {
   data[2] = ribbonId;
   data[3] = val;
   auto msg = Glib::Bytes::create(data,8);
-  m_sender->send(msg);
+  m_sender->send({ msg });
 }
 
 

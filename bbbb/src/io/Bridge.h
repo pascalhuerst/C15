@@ -12,9 +12,9 @@ class Bridge
     Bridge(Sender *sender, Receiver *receiver);
     virtual ~Bridge();
 
-    virtual void transmit(Receiver::tMessage msg);
+    virtual void transmit(const Receiver::tMessages &msgs);
 
-  protected:
+   protected:
     std::unique_ptr<Sender> m_sender;
     std::unique_ptr<Receiver> m_receiver;
 };

@@ -10,7 +10,7 @@ class FileIOSender : public Sender
 
     void send(tMessage msg) override;
 
-  private:
+    private:
     Glib::RefPtr<Glib::IOChannel> m_channel;
     const char *m_path = nullptr;
 };

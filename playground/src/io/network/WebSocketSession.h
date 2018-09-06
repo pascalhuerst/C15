@@ -27,11 +27,12 @@ class WebSocketSession
   virtual ~WebSocketSession();
 
   using tMessage = Glib::RefPtr<Glib::Bytes>;
+  using tMessages = std::list<tMessage>;
 
   void openGate();
 
   void sendMessage(Domain d, tMessage msg);
-  sigc::connection onMessageReceived(Domain d, const sigc::slot<void, tMessage> &cb);
+  sigc::connection onMessageReceived(Domain d, const sigc::slot<void, const tMessages &> &cb);
   sigc::connection onConnectionEstablished(const sigc::slot<void> &cb);
 
  private:
@@ -46,13 +47,16 @@ class WebSocketSession
   using tSessionPtr = std::unique_ptr<SoupSession, decltype(*g_object_unref)>;
   using tWebSocketPtr = std::unique_ptr<SoupWebsocketConnection, decltype(*g_object_unref)>;
   using tMessagePtr = std::unique_ptr<SoupMessage, decltype(*g_object_unref)>;
-  using tSignal = sigc::signal<void, tMessage>;
+  using tSignal = sigc::signal<void, const tMessages &>;
   using tConnectionEstablishedSignal = sigc::signal<void>;
 
   tSessionPtr m_soupSession;
   tMessagePtr m_message;
   tWebSocketPtr m_connection;
   std::map<Domain, tSignal> m_onMessageReceived;
+
+  std::map<Domain, tMessages> m_incomingMessages;
+  std::map<Domain, bool> m_incomingMessagesScheduled;
 
   tConnectionEstablishedSignal m_onConnectionEstablished;
 
