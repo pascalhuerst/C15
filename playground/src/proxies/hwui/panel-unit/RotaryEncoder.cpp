@@ -7,6 +7,7 @@
 #include <testing/TestDriver.h>
 #include <proxies/lpc/LPCProxy.h>
 #include <tools/TimeTools.h>
+#include <string.h>
 
 static TestDriver<RotaryEncoder> tester;
 
