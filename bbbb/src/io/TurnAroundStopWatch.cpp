@@ -30,13 +30,13 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
       if(it != watches.end())
       {
         auto diff = stop - it->second;
-        std::cerr << "diff for clock " << packetID << " is " << duration_cast<microseconds>(diff).count() << std::endl;
+        std::cerr << "diff for clock " << id << " is " << duration_cast<microseconds>(diff).count() << std::endl;
         ringBuffer[ringBufferIdx++ & (ringBuffer.size() - 1)] = diff;
         watches.erase(it);
       }
       else
       {
-        std::cerr << "did not find clock with id " << packetID << std::endl;
+        std::cerr << "did not find clock with id " << id << std::endl;
       }
     }
 
