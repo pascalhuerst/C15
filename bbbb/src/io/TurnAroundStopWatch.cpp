@@ -63,8 +63,12 @@ void TurnAroundStopWatch::stop(ClockID* ids, uint32_t numClocks)
 TurnAroundStopWatch::ClockID TurnAroundStopWatch::start()
 {
   static ClockID sID = 0;
-  watches[++sID] = high_resolution_clock::now();
-  std::cerr << "start clock id" << sID << " at "
-            << duration_cast<microseconds>(watches[++sID].time_since_epoch()).count() << std::endl;
+
+  sID++;
+  auto start = high_resolution_clock::now();
+  std::cerr << "start clock id" << sID << " at " << duration_cast<microseconds>(start.time_since_epoch()).count()
+            << std::endl;
+
+  watches[sID] = start;
   return sID;
 }
